@@ -8,7 +8,7 @@ A curated marketplace of Claude Code plugins.
 
 ```bash
 # Install from this marketplace
-/plugin install jaeyeom/claude-toolbox/plugins/code-review
+/plugin install jaeyeom/claude-toolbox/plugins/makefile-workflow
 
 # Or browse available plugins
 /plugin
