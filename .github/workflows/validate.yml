@@ -1,0 +1,83 @@
+name: Validate Plugins
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          for plugin_json in plugins/*/.claude-plugin/plugin.json; do
+            if [ -f "$plugin_json" ]; then
+              plugin_dir="$(dirname "$plugin_json")/.."
+              if [ ! -f "$plugin_dir/README.md" ]; then
+                echo "ERROR: Missing README.md in $plugin_dir"
+                exit 1
+              fi
+              entrypoint=$(jq -r '.entrypoint // empty' "$plugin_json")
+              if [ -n "$entrypoint" ] && [ ! -f "$plugin_dir/$entrypoint" ]; then
+                echo "ERROR: Missing entrypoint file $plugin_dir/$entrypoint"
+                exit 1
+              fi
+            fi
+          done
+          echo "All required files present"
+
+      - name: Basic plugin.json validation
+        run: |
+          for plugin_json in plugins/*/.claude-plugin/plugin.json; do
+            if [ -f "$plugin_json" ]; then
+              name=$(jq -r '.name // empty' "$plugin_json")
+              version=$(jq -r '.version // empty' "$plugin_json")
+              description=$(jq -r '.description // empty' "$plugin_json")
+              license=$(jq -r '.license // empty' "$plugin_json")
+              if [ -z "$name" ] || [ -z "$version" ] || [ -z "$description" ] || [ -z "$license" ]; then
+                echo "ERROR: Missing required fields in $plugin_json (name/version/description/license)"
+                exit 1
+              fi
+              if ! [[ "$name" =~ ^[a-z0-9-]+$ ]]; then
+                echo "ERROR: Invalid plugin name in $plugin_json (only lowercase, numbers, hyphens)"
+                exit 1
+              fi
+              if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                echo "ERROR: Invalid version in $plugin_json (expected semver)"
+                exit 1
+              fi
+            fi
+          done
+          echo "All plugin.json files passed basic validation"
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check JSON formatting
+        run: |
+          for json_file in plugins/*/.claude-plugin/plugin.json; do
+            if [ -f "$json_file" ]; then
+              echo "Checking $json_file..."
+              python3 -c "import json; json.load(open('$json_file'))" || exit 1
+            fi
+          done
+          echo "All JSON files are valid"
+
+      - name: Check for duplicate plugin names
+        run: |
+          names=$(find plugins -path "*/.claude-plugin/plugin.json" -exec jq -r '.name' {} \;)
+          duplicates=$(echo "$names" | sort | uniq -d)
+          if [ -n "$duplicates" ]; then
+            echo "ERROR: Duplicate plugin names found:"
+            echo "$duplicates"
+            exit 1
+          fi
+          echo "No duplicate plugin names"

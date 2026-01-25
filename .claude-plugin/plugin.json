@@ -1,0 +1,10 @@
+{
+  "name": "claude-toolbox",
+  "version": "0.1.0",
+  "description": "A curated marketplace of Claude Code plugins including skills, commands, agents, and MCP servers",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT"
+}

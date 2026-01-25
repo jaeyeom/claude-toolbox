@@ -1,0 +1,11 @@
+{
+  "name": "makefile-workflow",
+  "version": "1.0.0",
+  "description": "Makefile workflow skill for consistent build, lint, test, and check targets across projects",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["makefile", "build", "lint", "test", "format", "workflow"]
+}

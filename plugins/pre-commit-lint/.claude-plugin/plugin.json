@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit-lint",
+  "version": "1.0.0",
+  "description": "Pre-commit hook that runs linters before Claude Code commits changes",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["hook", "lint", "pre-commit", "quality"]
+}
