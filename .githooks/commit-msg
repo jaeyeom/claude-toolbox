@@ -1,0 +1,17 @@
+#!/bin/sh
+
+INPUT_FILE=$1
+
+FIRST_LINE=$(head -n 1 "$INPUT_FILE")
+FIRST_LINE_LENGTH=${#FIRST_LINE}
+if [ "$FIRST_LINE_LENGTH" -gt 72 ]; then
+    echo "Commit failed: The first line of the commit message must be <= 72 characters."
+    exit 1
+fi
+
+if [ -n "$(sed -n '2p' "$INPUT_FILE")" ] && [ -n "$(sed -n '3p' "$INPUT_FILE")" ]; then
+    echo "Commit failed: The second line must be empty when a commit body is present."
+    exit 1
+fi
+
+exit 0
