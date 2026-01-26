@@ -1,0 +1,30 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-toolbox",
+  "description": "A curated marketplace of Claude Code plugins including skills, commands, agents, and MCP servers",
+  "owner": {
+    "name": "Jaehyun Yeom"
+  },
+  "plugins": [
+    {
+      "name": "makefile-workflow",
+      "description": "Makefile workflow skill for consistent build, lint, test, and check targets across projects",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/makefile-workflow",
+      "category": "development"
+    },
+    {
+      "name": "pre-commit-lint",
+      "description": "Pre-commit hook that runs linters before Claude Code commits changes",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/pre-commit-lint",
+      "category": "development"
+    }
+  ]
+}

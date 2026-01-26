@@ -12,9 +12,14 @@ Thank you for your interest in contributing! This guide will help you create and
 
 ## Plugin Structure
 
-Each plugin is a directory under `plugins/` following the official Claude Code format:
+Each plugin is a directory under `plugins/` following the official Claude Code format.
+
+The root `.claude-plugin/marketplace.json` is the marketplace registry that lists all available plugins.
 
 ```
+.claude-plugin/
+└── marketplace.json         # Marketplace registry (lists all plugins)
+
 plugins/my-plugin/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin metadata (REQUIRED)

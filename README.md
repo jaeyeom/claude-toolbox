@@ -26,6 +26,9 @@ A curated marketplace of Claude Code plugins.
 Each plugin follows the Claude Code plugin format and lives under `plugins/<plugin-name>/`:
 
 ```
+.claude-plugin/
+└── marketplace.json         # Marketplace registry (lists all plugins)
+
 plugins/<plugin-name>/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin metadata (REQUIRED)
