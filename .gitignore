@@ -17,6 +17,7 @@ build/
 *.swp
 *.swo
 *~
+.omc/
 
 # OS
 .DS_Store
