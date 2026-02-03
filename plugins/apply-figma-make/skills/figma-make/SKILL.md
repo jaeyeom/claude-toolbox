@@ -1,5 +1,5 @@
 ---
-name: figma-make
+name: apply-figma-make
 description: Apply Figma Make exported designs to website pages. Converts React/motion code to framework-appropriate code (Astro, Next.js, etc.) with CSS animations.
 argument-hint: "<path-to-zip> [target-page]"
 ---

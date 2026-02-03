@@ -27,13 +27,13 @@
       "category": "development"
     },
     {
-      "name": "figma-make",
+      "name": "apply-figma-make",
       "description": "Apply Figma Make designs to your website pages with framework conversion",
       "version": "1.0.0",
       "author": {
         "name": "Jaehyun Yeom"
       },
-      "source": "./plugins/figma-make",
+      "source": "./plugins/apply-figma-make",
       "category": "development"
     }
   ]

@@ -23,7 +23,7 @@ A curated marketplace of Claude Code plugins.
 | ------------------------------------------------ | ------------------------------ | ---------- |
 | [pre-commit-lint](./plugins/pre-commit-lint)     | Pre-commit linting hook        | Hook       |
 | [makefile-workflow](./plugins/makefile-workflow) | Makefile workflow guidance     | Skill      |
-| [figma-make](./plugins/figma-make)               | Apply Figma Make designs       | Skill      |
+| [apply-figma-make](./plugins/apply-figma-make)               | Apply Figma Make designs       | Skill      |
 
 ## Plugin Structure
 

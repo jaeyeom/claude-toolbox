@@ -1,5 +1,5 @@
 {
-  "name": "figma-make",
+  "name": "apply-figma-make",
   "version": "1.0.0",
   "description": "Apply Figma Make exported designs to website pages with automatic React/motion to CSS conversion",
   "author": {
