@@ -1,0 +1,19 @@
+{
+  "name": "figma-make",
+  "version": "1.0.0",
+  "description": "Apply Figma Make exported designs to website pages with automatic React/motion to CSS conversion",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": [
+    "figma",
+    "design",
+    "react",
+    "astro",
+    "css",
+    "animation",
+    "frontend"
+  ]
+}
