@@ -12,7 +12,9 @@ Automatically run linters before Claude Code commits changes.
 ## Installation
 
 ```bash
-/plugin install jaeyeom/claude-toolbox/plugins/pre-commit-lint
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install pre-commit-lint
 ```
 
 After installation, copy the hook script to your project:

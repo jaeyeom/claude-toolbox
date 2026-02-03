@@ -11,7 +11,9 @@ A focused skill for designing or updating Makefiles with consistent targets and 
 ## Installation
 
 ```bash
-/plugin install jaeyeom/claude-toolbox/plugins/makefile-workflow
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install makefile-workflow
 ```
 
 ## Usage
