@@ -1,0 +1,11 @@
+{
+  "name": "semgrep-review",
+  "version": "1.0.0",
+  "description": "Analyze semgrep findings, fix real issues, and suppress false positives with proper nosemgrep comments",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["semgrep", "security", "sast", "xss", "code-review", "nosemgrep"]
+}

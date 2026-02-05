@@ -35,6 +35,16 @@
       },
       "source": "./plugins/apply-figma-make",
       "category": "development"
+    },
+    {
+      "name": "semgrep-review",
+      "description": "Analyze semgrep findings, fix real issues, and suppress false positives with proper nosemgrep comments",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/semgrep-review",
+      "category": "security"
     }
   ]
 }
