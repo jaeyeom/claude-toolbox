@@ -1,6 +1,6 @@
 {
   "name": "semgrep-review",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Analyze semgrep findings, fix real issues, and suppress false positives with proper nosemgrep comments",
   "author": {
     "name": "Jaehyun Yeom"

@@ -13,11 +13,23 @@ suppress false positives with well-documented `nosemgrep` comments.
 
 ### Step 1: Run Semgrep
 
-If the user hasn't provided semgrep output, run the scan:
+If the user hasn't provided semgrep output, run the scan.
+
+First, check if the project has local semgrep rules (a `.semgrep/` directory or
+`.semgrep.yaml` file in the project root). If local rules exist, include them
+alongside the auto config:
 
 ```bash
+# With local rules (.semgrep/ directory or .semgrep.yaml exists)
+semgrep scan --config auto --config .semgrep <target-directory>
+
+# Without local rules
 semgrep scan --config auto <target-directory>
 ```
+
+Using `--config auto --config .semgrep` ensures local custom rules are applied
+on top of the semgrep registry defaults. Omitting the local config when it
+exists can cause semgrep to fail.
 
 ### Step 2: Triage Each Finding
 
@@ -194,7 +206,7 @@ suppression works.
 
 After all fixes and suppressions:
 
-1. Run `semgrep scan --config auto <target>` to confirm 0 findings
+1. Re-run semgrep (with `--config auto --config .semgrep` if local rules exist) to confirm 0 findings
 2. Run type checking / build to confirm no regressions
 3. Run tests if the changes affect runtime behavior
 
