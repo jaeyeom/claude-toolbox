@@ -1,0 +1,11 @@
+{
+  "name": "go-dev",
+  "version": "1.0.0",
+  "description": "Go development skill with idiomatic patterns, testing, and build system detection",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["go", "golang", "testing", "bazel", "linting", "development"]
+}

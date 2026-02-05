@@ -45,6 +45,16 @@
       },
       "source": "./plugins/semgrep-review",
       "category": "security"
+    },
+    {
+      "name": "go-dev",
+      "description": "Go development skill with idiomatic patterns, testing, and build system detection",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/go-dev",
+      "category": "development"
     }
   ]
 }
