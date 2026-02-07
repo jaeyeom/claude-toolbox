@@ -1,4 +1,7 @@
 {
+  "files": {
+    "includes": ["**", "!!.omc"]
+  },
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 2

@@ -1,0 +1,11 @@
+{
+  "name": "gabyx-githooks-setup",
+  "version": "1.0.0",
+  "description": "Set up shared Git hooks using gabyx/Githooks manager in any repository",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["githooks", "git-hooks", "shared-hooks", "gabyx"]
+}
