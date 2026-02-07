@@ -81,11 +81,49 @@ git hooks shared update
 | `git hooks ignore add` | Exclude specific hooks by pattern |
 | `git hooks shared root ns:<namespace>` | Show shared repo root for a namespace |
 
-### 5. Trust and verification
+### 5. Updating shared hooks
 
-Githooks verifies hook checksums. When new or modified hooks are detected, it prompts for trust confirmation. To pre-trust all hooks in a repo, create a `.githooks/trust-all` file.
+Shared hook repositories update automatically after `post-merge` (i.e., `git pull`). To update manually:
 
-### 6. Shared hook repository structure
+```bash
+git hooks shared update
+```
+
+This pulls the latest from all configured shared hook repositories (both global and repo-specific). Run this after upstream hooks are updated to get fixes.
+
+**Note:** `git hooks shared update` only updates **shared** hooks. Local hooks in the repo's own `.githooks/` directory are part of the repo itself and are updated via normal `git pull`/`git checkout`.
+
+On servers with multiple users, disable automatic updates to avoid parallel invocations:
+
+```bash
+git hooks config disable-shared-hooks-update --set
+```
+
+### 6. Trust and non-interactive mode
+
+Githooks verifies hook checksums. When new or modified hooks are detected, it prompts for trust confirmation. This can block non-interactive operations like `git commit --amend --no-edit` or CI pipelines.
+
+**Non-interactive runner (recommended for local development):**
+
+```bash
+git hooks config non-interactive-runner --enable --global
+```
+
+This takes default answers for all non-fatal prompts without warnings.
+
+**Other trust options:**
+
+| Method | Scope | Effect |
+|--------|-------|--------|
+| `.githooks/trust-all` file | Per-repo, shared | Marks repo as trusted (commit this to share with team) |
+| `git hooks config trust-all-hooks --accept` | Per-repo | Auto-accepts all current and future hooks |
+| `git hooks config trust-all --reset` | Per-repo | Reverts trust-all decision |
+| `GITHOOKS_SKIP_UNTRUSTED_HOOKS=true` | Per-session | Skips untrusted hooks silently |
+| `GITHOOKS_DISABLE=1` | Per-session | Disables all Githooks entirely |
+
+**For CI/automation**, either set `GITHOOKS_DISABLE=1` to skip hooks, or use `non-interactive-runner` with `trust-all-hooks --accept` to run hooks without prompts.
+
+### 7. Shared hook repository structure
 
 Shared repos organize hooks as:
 
