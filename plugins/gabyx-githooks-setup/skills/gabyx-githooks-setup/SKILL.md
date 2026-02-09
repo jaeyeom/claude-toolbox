@@ -31,7 +31,7 @@ git hooks install
 
 This activates Githooks in the current repository. It rewires `.git/hooks` to the Githooks runner, which then discovers and executes both local (`.githooks/`) and globally-configured shared hooks.
 
-After installation, update shared hooks:
+After installation, check for replaced hooks (see section 2a below), then update shared hooks:
 
 ```bash
 git hooks shared update
@@ -42,6 +42,29 @@ Verify with:
 ```bash
 git hooks list
 ```
+
+### 2a. Check for replaced hooks
+
+When `git hooks install` finds existing hook scripts in `.git/hooks/`, it renames them to `*.replaced.githook` (e.g., `pre-commit` → `pre-commit.replaced.githook`). The Githooks runner executes these **in addition to** shared hooks, which causes duplicate checks if the shared hooks already cover the same functionality.
+
+After running `git hooks install`, check for replaced hooks:
+
+```bash
+ls .git/hooks/*.replaced.githook 2>/dev/null
+```
+
+If any are found:
+
+1. **List them** to the user and explain that these are pre-existing hook scripts that Githooks renamed and will continue to execute alongside shared hooks.
+2. **Recommend removal** if the shared hooks repository already covers the same hook types (e.g., if shared hooks include `pre-commit` checks and there is a `pre-commit.replaced.githook`, the pre-commit checks will run twice). Provide the specific `rm` commands, for example:
+
+```bash
+rm .git/hooks/pre-commit.replaced.githook
+rm .git/hooks/commit-msg.replaced.githook
+rm .git/hooks/pre-push.replaced.githook
+```
+
+3. If the user is unsure whether the replaced hooks are redundant, suggest running `git hooks list` to see all hooks that will execute, and comparing the replaced hook contents against the shared hooks.
 
 ### 3. Repo-specific shared hooks
 
@@ -61,13 +84,15 @@ urls:
 git hooks install
 ```
 
-3. Pull the shared hooks:
+3. Check for replaced hooks (see section 2a above) and remove any that are redundant with the shared hooks.
+
+4. Pull the shared hooks:
 
 ```bash
 git hooks shared update
 ```
 
-4. Commit `.githooks/.shared.yaml` so other contributors get the same hooks.
+5. Commit `.githooks/.shared.yaml` so other contributors get the same hooks.
 
 ### 4. Useful commands
 
@@ -115,7 +140,8 @@ This takes default answers for all non-fatal prompts without warnings.
 
 | Method | Scope | Effect |
 |--------|-------|--------|
-| `.githooks/trust-all` file | Per-repo, shared | Marks repo as trusted (commit this to share with team) |
+| `git hooks trust` | Per-repo, per-user | Marks repo as trusted for the current user (each collaborator should run this locally) |
+| `.githooks/trust-all` file | Per-repo | Marks repo as trusted — do **not** commit this file; add it to `.gitignore` instead, as trust is a per-user security decision |
 | `git hooks config trust-all-hooks --accept` | Per-repo | Auto-accepts all current and future hooks |
 | `git hooks config trust-all --reset` | Per-repo | Reverts trust-all decision |
 | `GITHOOKS_SKIP_UNTRUSTED_HOOKS=true` | Per-session | Skips untrusted hooks silently |
