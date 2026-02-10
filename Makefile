@@ -15,11 +15,11 @@ check-format:
 lint:
 	$(BIOME) lint .
 
-fix:
+fix: format
 	$(BIOME) check --write .
 
 validate:
 	./scripts/validate-marketplace.sh
 
-validate-full: validate
+validate-full: fix validate
 	claude plugin validate .
