@@ -35,12 +35,18 @@ Create or refine Makefiles that encode a reliable developer workflow. Mirror the
 8. For frontend projects, prefer `npm run <task>` or `pnpm run <task>` to preserve project scripts.
 9. If generation or formatting changes files, add `check-generated` or `check-format` that fails on a dirty git diff.
 10. For large repos, consider stamp files to avoid repeated work.
+11. Ensure Makefiles work correctly with `make -j` (parallel execution):
+    - Targets that modify files (e.g., `format`, `fix`) must declare dependencies to prevent concurrent writes. For example, `fix` should depend on `format` since both write to the same files.
+    - Validation or check targets that run after writes should depend on the write targets. For example, `validate-full` should depend on `fix`.
+    - Read-only targets (e.g., `check-format`, `lint`, `test`) are safe to run in parallel and need no extra ordering.
+    - If correct ordering cannot be expressed through dependencies, add `.NOTPARALLEL` to the Makefile.
 
 ## Recommended target patterns
 
 ### Minimal workflow
 - `all`: `format fix test build`
 - `check`: `check-format lint test build`
+- Parallel-safety deps: `fix: format` (both mutate files)
 
 ### Go + linters
 - `lint-golangci`, `fix-golangci`, `verify-golangci-config`
