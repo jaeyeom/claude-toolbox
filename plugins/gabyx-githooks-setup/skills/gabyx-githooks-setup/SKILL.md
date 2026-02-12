@@ -142,12 +142,12 @@ This takes default answers for all non-fatal prompts without warnings.
 |--------|-------|--------|
 | `git hooks trust` | Per-repo, per-user | Marks repo as trusted for the current user (each collaborator should run this locally) |
 | `.githooks/trust-all` file | Per-repo | Marks repo as trusted — do **not** commit this file; add it to `.gitignore` instead, as trust is a per-user security decision |
-| `git hooks config trust-all-hooks --accept` | Per-repo | Auto-accepts all current and future hooks |
+| `git hooks config trust-all --accept` | Per-repo | Auto-accepts all current and future hooks |
 | `git hooks config trust-all --reset` | Per-repo | Reverts trust-all decision |
 | `GITHOOKS_SKIP_UNTRUSTED_HOOKS=true` | Per-session | Skips untrusted hooks silently |
 | `GITHOOKS_DISABLE=1` | Per-session | Disables all Githooks entirely |
 
-**For CI/automation**, either set `GITHOOKS_DISABLE=1` to skip hooks, or use `non-interactive-runner` with `trust-all-hooks --accept` to run hooks without prompts.
+**For CI/automation**, either set `GITHOOKS_DISABLE=1` to skip hooks, or use `non-interactive-runner` with `trust-all --accept` to run hooks without prompts.
 
 ### 7. Shared hook repository structure
 
