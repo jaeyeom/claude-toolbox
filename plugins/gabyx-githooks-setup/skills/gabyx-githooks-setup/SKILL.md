@@ -136,13 +136,29 @@ git hooks config non-interactive-runner --enable --global
 
 This takes default answers for all non-fatal prompts without warnings.
 
+**Trusting a specific shared hook repository (recommended):**
+
+Prefer trusting hooks selectively by namespace rather than trusting everything blindly. Each shared hook repo has a namespace (defined in `.githooks/.namespace`, or a SHA1 prefix of its URL if not set). Use `git hooks list` to see namespace paths, then trust by pattern:
+
+```bash
+# See namespace paths for all hooks
+git hooks list
+
+# Trust all hooks from a specific shared repo by namespace
+git hooks trust hooks --pattern "ns:jaeyeom-shared-githooks/**"
+```
+
+This is safer than `trust-all` because it only trusts hooks from a known, authored source. When the shared repo updates, you may need to re-run this command to trust the new checksums.
+
 **Other trust options:**
 
 | Method | Scope | Effect |
 |--------|-------|--------|
+| `git hooks trust hooks --pattern "ns:<namespace>/**"` | Per-repo, per-user | Trusts hooks matching a namespace pattern — **preferred approach** |
+| `git hooks trust hooks --all` | Per-repo, per-user | Trusts all currently active hooks |
 | `git hooks trust` | Per-repo, per-user | Marks repo as trusted for the current user (each collaborator should run this locally) |
 | `.githooks/trust-all` file | Per-repo | Marks repo as trusted — do **not** commit this file; add it to `.gitignore` instead, as trust is a per-user security decision |
-| `git hooks config trust-all --accept` | Per-repo | Auto-accepts all current and future hooks |
+| `git hooks config trust-all --accept` | Per-repo | Auto-accepts **all** current and future hooks (use with caution — prefer namespace-based trust instead) |
 | `git hooks config trust-all --reset` | Per-repo | Reverts trust-all decision |
 | `GITHOOKS_SKIP_UNTRUSTED_HOOKS=true` | Per-session | Skips untrusted hooks silently |
 | `GITHOOKS_DISABLE=1` | Per-session | Disables all Githooks entirely |
