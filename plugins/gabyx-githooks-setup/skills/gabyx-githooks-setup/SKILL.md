@@ -18,8 +18,10 @@ The `git hooks` CLI (note the space) is provided by gabyx/Githooks. Do **not** c
 
 Ask which setup the user wants:
 
-- **Global shared hooks** — The shared hook repository (`jaeyeom/shared-githooks`) is already registered in the global Githooks configuration. Just activate Githooks in the current repo.
+- **Global shared hooks** — A shared hook repository is already registered in the global Githooks configuration. Just activate Githooks in the current repo.
 - **Repo-specific shared hooks** — Add a `.githooks/.shared.yaml` file so the repo pulls hooks from a specific shared repository, independent of the user's global config.
+
+If the user doesn't already have a shared hook repository in mind, ask if they'd like to use [`jaeyeom/shared-githooks`](https://github.com/jaeyeom/shared-githooks) (authored by the same person who wrote this plugin). It includes pre-commit checks (whitespace, non-ASCII filenames, Go linting) and commit-msg checks (subject length, conventional format). The user should review its contents before opting in.
 
 ### 2. Global shared hooks (already configured globally)
 
@@ -70,12 +72,12 @@ rm .git/hooks/pre-push.replaced.githook
 
 To configure a shared hook repository for a single repo without depending on global config:
 
-1. Create the shared config file:
+1. Create the shared config file (replace the URL with the chosen shared hook repository):
 
 ```yaml
 # .githooks/.shared.yaml
 urls:
-  - "https://github.com/jaeyeom/shared-githooks.git@main"
+  - "https://github.com/<owner>/<shared-hooks-repo>.git@main"
 ```
 
 2. Install Githooks in the repo (if not already active):
