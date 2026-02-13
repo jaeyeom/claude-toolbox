@@ -1,17 +1,46 @@
 # Claude Toolbox
 
-A curated marketplace of Claude Code plugins.
+A curated marketplace of Claude Code plugins that help you **commit and push with confidence**.
+
+## The Workflow
+
+These plugins work together to create a reliable development workflow:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  gabyx-githooks-setup                                       │
+│  Shared Git hooks run automatically on commit and push      │
+│                         │                                   │
+│                         ▼                                   │
+│  makefile-workflow                                          │
+│  Hooks call `make check` — format, lint, test, build        │
+│                         │                                   │
+│                         ▼                                   │
+│  *-dev (e.g. go-dev)                                        │
+│  Language-specific conventions the checks enforce            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+1. **[gabyx-githooks-setup](./plugins/gabyx-githooks-setup)** sets up [gabyx/Githooks](https://github.com/gabyx/Githooks), a shared hooks manager. Once installed, every contributor runs the same pre-commit and commit-msg checks without manual configuration.
+
+2. **[makefile-workflow](./plugins/makefile-workflow)** defines the targets those hooks call — `make check`, `make format`, `make lint`, `make test`, `make build` — with a consistent naming convention across Go, Node, Bazel, and mixed stacks.
+
+3. **[go-dev](./plugins/go-dev)** (and future `*-dev` plugins) encodes language-specific best practices: idiomatic patterns, error handling, testing conventions, and build system detection. These are the standards that the Makefile targets and hook checks enforce.
+
+The result: you run `git commit` and the hooks verify everything automatically. No broken builds, no forgotten linters.
 
 ## Quick Start
 
 ### Install a Plugin
 
 ```bash
-# Add a marketplace
+# Add the marketplace
 /plugin marketplace add jaeyeom/claude-toolbox
 
 # Install from this marketplace
+/plugin install gabyx-githooks-setup
 /plugin install makefile-workflow
+/plugin install go-dev
 
 # Or browse available plugins
 /plugin
@@ -19,11 +48,21 @@ A curated marketplace of Claude Code plugins.
 
 ## Available Plugins
 
-| Plugin                                           | Description                    | Components |
-| ------------------------------------------------ | ------------------------------ | ---------- |
-| [pre-commit-lint](./plugins/pre-commit-lint)     | Pre-commit linting hook        | Hook       |
-| [makefile-workflow](./plugins/makefile-workflow) | Makefile workflow guidance     | Skill      |
-| [apply-figma-make](./plugins/apply-figma-make)               | Apply Figma Make designs       | Skill      |
+### Workflow Plugins
+
+| Plugin | Description | Type |
+| --- | --- | --- |
+| [gabyx-githooks-setup](./plugins/gabyx-githooks-setup) | Set up shared Git hooks using [gabyx/Githooks](https://github.com/gabyx/Githooks) manager | Skill |
+| [makefile-workflow](./plugins/makefile-workflow) | Consistent `check`, `format`, `lint`, `test`, and `build` Makefile targets | Skill |
+| [go-dev](./plugins/go-dev) | Go development expertise — idiomatic patterns, testing, build system detection | Skill |
+
+### Complementary Plugins
+
+| Plugin | Description | Type |
+| --- | --- | --- |
+| [pre-commit-lint](./plugins/pre-commit-lint) | Pre-commit hook that runs linters before Claude Code commits | Hook |
+| [semgrep-review](./plugins/semgrep-review) | Triage semgrep findings — fix real issues, suppress false positives | Skill |
+| [apply-figma-make](./plugins/apply-figma-make) | Apply Figma Make exported designs to website pages | Skill |
 
 ## Plugin Structure
 
