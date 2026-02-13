@@ -15,7 +15,7 @@ curl -sL https://raw.githubusercontent.com/gabyx/githooks/main/scripts/install.s
 For non-interactive installation (no prompts):
 
 ```bash
-curl -sL https://raw.githubusercontent.com/gabyx/githooks/main/scripts/install.sh | bash -s -- --non-interactive
+curl -sL https://raw.githubusercontent.com/gabyx/githooks/main/scripts/install.sh | bash -s -- -- --non-interactive
 ```
 
 ### Nix
@@ -24,6 +24,10 @@ curl -sL https://raw.githubusercontent.com/gabyx/githooks/main/scripts/install.s
 nix profile install "github:gabyx/githooks?dir=nix&ref=v3.0.4"
 githooks-cli installer
 ```
+
+> **Note:** `ref=v3.0.4` pins to a specific release. Check the
+> [upstream releases](https://github.com/gabyx/Githooks/releases) for the
+> latest version tag.
 
 ### Ansible
 

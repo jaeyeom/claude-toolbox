@@ -86,6 +86,7 @@ To configure a shared hook repository for a single repo without depending on glo
 
 ```yaml
 # .githooks/.shared.yaml
+version: 1
 urls:
   - "https://github.com/<owner>/<shared-hooks-repo>.git@main"
 ```
