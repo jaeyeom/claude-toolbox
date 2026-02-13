@@ -10,9 +10,19 @@ Set up and configure shared Git hooks using the [gabyx/Githooks](https://github.
 
 ## Important
 
-The `git hooks` CLI (note the space) is provided by gabyx/Githooks. Do **not** confuse it with standard git hook configuration. All commands below assume Githooks is already installed on the system.
+The `git hooks` CLI (note the space) is provided by gabyx/Githooks. Do **not** confuse it with standard git hook configuration.
 
 ## Instructions
+
+### 0. Verify Githooks is installed
+
+Before proceeding, check whether gabyx/Githooks is installed:
+
+```bash
+git hooks --version 2>/dev/null
+```
+
+If this command fails or is not found, Githooks is **not** installed. Refer to `INSTALL.md` in this skill directory for installation methods, then return here to continue setup.
 
 ### 1. Determine the user's intent
 
