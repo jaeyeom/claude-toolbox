@@ -7,18 +7,18 @@ A curated marketplace of Claude Code plugins that help you **commit and push wit
 These plugins work together to create a reliable development workflow:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  gabyx-githooks-setup                                       │
-│  Shared Git hooks run automatically on commit and push      │
-│                         │                                   │
-│                         ▼                                   │
-│  makefile-workflow                                          │
-│  Hooks call `make check` — format, lint, test, build        │
-│                         │                                   │
-│                         ▼                                   │
-│  *-dev (e.g. go-dev)                                        │
-│  Language-specific conventions the checks enforce            │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  gabyx-githooks-setup                                   │
+│  Shared Git hooks run automatically on commit and push  │
+│                         │                               │
+│                         ▼                               │
+│  makefile-workflow                                      │
+│  Hooks call `make check` — format, lint, test, build    │
+│                         │                               │
+│                         ▼                               │
+│  *-dev (e.g. go-dev)                                    │
+│  Language-specific conventions the checks enforce       │
+└─────────────────────────────────────────────────────────┘
 ```
 
 1. **[gabyx-githooks-setup](./plugins/gabyx-githooks-setup)** sets up [gabyx/Githooks](https://github.com/gabyx/Githooks), a shared hooks manager. Once installed, every contributor runs the same pre-commit and commit-msg checks without manual configuration.
