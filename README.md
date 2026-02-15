@@ -14,10 +14,12 @@ These plugins work together to create a reliable development workflow:
 │                         ▼                               │
 │  makefile-workflow                                      │
 │  Hooks call `make check` — format, lint, test, build    │
-│                         │                               │
-│                         ▼                               │
-│  *-dev (e.g. go-dev)                                    │
-│  Language-specific conventions the checks enforce       │
+│                    │              │                      │
+│                    ▼              ▼                      │
+│  *-dev (e.g. go-dev)      ci-workflow                   │
+│  Language-specific     CI calls the same                │
+│  conventions the       Makefile targets                 │
+│  checks enforce        via GitHub Actions               │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -25,9 +27,11 @@ These plugins work together to create a reliable development workflow:
 
 2. **[makefile-workflow](./plugins/makefile-workflow)** defines the targets those hooks call — `make check`, `make format`, `make lint`, `make test`, `make build` — with a consistent naming convention across Go, Node, Bazel, and mixed stacks.
 
-3. **[go-dev](./plugins/go-dev)** (and future `*-dev` plugins) encodes language-specific best practices: idiomatic patterns, error handling, testing conventions, and build system detection. These are the standards that the Makefile targets and hook checks enforce.
+3. **[ci-workflow](./plugins/ci-workflow)** generates GitHub Actions workflows that call the same Makefile targets (`make check`, `make build`), so CI mirrors your local environment exactly.
 
-The result: you run `git commit` and the hooks verify everything automatically. No broken builds, no forgotten linters.
+4. **[go-dev](./plugins/go-dev)** (and future `*-dev` plugins) encodes language-specific best practices: idiomatic patterns, error handling, testing conventions, and build system detection. These are the standards that the Makefile targets and hook checks enforce.
+
+The result: you run `git commit` and the hooks verify everything locally. Push, and CI runs the same checks. No broken builds, no forgotten linters, no drift between local and CI.
 
 ## Quick Start
 
@@ -40,6 +44,7 @@ The result: you run `git commit` and the hooks verify everything automatically. 
 # Install from this marketplace
 /plugin install gabyx-githooks-setup
 /plugin install makefile-workflow
+/plugin install ci-workflow
 /plugin install go-dev
 
 # Or browse available plugins
@@ -54,6 +59,7 @@ The result: you run `git commit` and the hooks verify everything automatically. 
 | --- | --- | --- |
 | [gabyx-githooks-setup](./plugins/gabyx-githooks-setup) | Set up shared Git hooks using [gabyx/Githooks](https://github.com/gabyx/Githooks) manager | Skill |
 | [makefile-workflow](./plugins/makefile-workflow) | Consistent `check`, `format`, `lint`, `test`, and `build` Makefile targets | Skill |
+| [ci-workflow](./plugins/ci-workflow) | GitHub Actions CI workflows that mirror local Makefile targets | Skill |
 | [go-dev](./plugins/go-dev) | Go development expertise — idiomatic patterns, testing, build system detection | Skill |
 
 ### Complementary Plugins

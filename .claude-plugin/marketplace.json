@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, pre-commit linting, Figma design application, semgrep security review, Go development, and gabyx/Githooks setup"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, and gabyx/Githooks setup"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -16,6 +16,16 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/makefile-workflow",
+      "category": "development"
+    },
+    {
+      "name": "ci-workflow",
+      "description": "GitHub Actions CI workflow generation that mirrors local Makefile targets for consistent local and CI behavior",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/ci-workflow",
       "category": "development"
     },
     {

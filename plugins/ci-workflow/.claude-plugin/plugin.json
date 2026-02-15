@@ -1,0 +1,17 @@
+{
+  "name": "ci-workflow",
+  "version": "1.0.0",
+  "description": "GitHub Actions CI workflow generation that mirrors local Makefile targets for consistent local and CI behavior",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": [
+    "ci",
+    "github-actions",
+    "workflow",
+    "makefile",
+    "continuous-integration"
+  ]
+}
