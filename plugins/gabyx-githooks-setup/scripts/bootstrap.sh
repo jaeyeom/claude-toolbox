@@ -41,6 +41,33 @@ warn()  { printf '\033[1;33m  !\033[0m %s\n' "$*"; }
 fail()  { printf '\033[1;31m  ✗\033[0m %s\n' "$*" >&2; }
 
 # ------------------------------------------------------------------
+# 0. Ensure jq is available (needed by the Githooks installer)
+# ------------------------------------------------------------------
+if ! command -v jq &>/dev/null; then
+  if command -v go &>/dev/null; then
+    info "jq not found — installing gojq via Go"
+    go install github.com/itchyny/gojq/cmd/gojq@latest
+
+    # Resolve GOBIN so we can place the symlink next to gojq.
+    gobin="${GOBIN:-${GOPATH:-$HOME/go}/bin}"
+    export PATH="$gobin:$PATH"
+
+    if command -v gojq &>/dev/null; then
+      ln -sf "$gobin/gojq" "$gobin/jq"
+      ok "gojq installed and symlinked as jq"
+    else
+      fail "gojq installation failed"
+      exit 1
+    fi
+  else
+    fail "jq is required but not found, and go is not available to install gojq"
+    exit 1
+  fi
+else
+  ok "jq already available: $(command -v jq)"
+fi
+
+# ------------------------------------------------------------------
 # 1. Install gabyx/Githooks if missing
 # ------------------------------------------------------------------
 info "Checking for gabyx/Githooks"
