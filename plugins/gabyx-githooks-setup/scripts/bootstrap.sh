@@ -41,31 +41,39 @@ warn()  { printf '\033[1;33m  !\033[0m %s\n' "$*"; }
 fail()  { printf '\033[1;31m  ✗\033[0m %s\n' "$*" >&2; }
 
 # ------------------------------------------------------------------
-# 0. Ensure jq is available (needed by the Githooks installer)
+# 0. Ensure required tools are available (needed by the Githooks installer)
 # ------------------------------------------------------------------
-if ! command -v jq &>/dev/null; then
-  if command -v go &>/dev/null; then
-    info "jq not found — installing gojq via Go"
-    go install github.com/itchyny/gojq/cmd/gojq@latest
 
-    # Resolve GOBIN so we can place the symlink next to gojq.
-    gobin="${GOBIN:-${GOPATH:-$HOME/go}/bin}"
+# ensure_tool CMD GO_PKG GO_BIN
+#   If CMD is missing, install GO_PKG via "go install" and symlink GO_BIN as CMD.
+ensure_tool() {
+  local cmd="$1" go_pkg="$2" go_bin="$3"
+  if command -v "$cmd" &>/dev/null; then
+    ok "$cmd already available: $(command -v "$cmd")"
+    return
+  fi
+  if command -v go &>/dev/null; then
+    info "$cmd not found — installing $go_bin via Go"
+    go install "$go_pkg"
+
+    local gobin="${GOBIN:-${GOPATH:-$HOME/go}/bin}"
     export PATH="$gobin:$PATH"
 
-    if command -v gojq &>/dev/null; then
-      ln -sf "$gobin/gojq" "$gobin/jq"
-      ok "gojq installed and symlinked as jq"
+    if command -v "$go_bin" &>/dev/null; then
+      ln -sf "$gobin/$go_bin" "$gobin/$cmd"
+      ok "$go_bin installed and symlinked as $cmd"
     else
-      fail "gojq installation failed"
+      fail "$go_bin installation failed"
       exit 1
     fi
   else
-    fail "jq is required but not found, and go is not available to install gojq"
+    fail "$cmd is required but not found, and go is not available to install $go_bin"
     exit 1
   fi
-else
-  ok "jq already available: $(command -v jq)"
-fi
+}
+
+ensure_tool jq    github.com/itchyny/gojq/cmd/gojq@latest        gojq
+ensure_tool unzip github.com/jaeyeom/gozip/cmd/gounzip@latest    gounzip
 
 # ------------------------------------------------------------------
 # 1. Install gabyx/Githooks if missing
