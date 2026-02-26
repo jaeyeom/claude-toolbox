@@ -1,0 +1,11 @@
+{
+  "name": "cloudflare-macos-fix",
+  "version": "1.0.0",
+  "description": "Fix sharp native module installation failure on macOS Apple Silicon when setting up Cloudflare Workers projects with wrangler",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["cloudflare", "wrangler", "sharp", "macos", "apple-silicon", "arm64", "native-module"]
+}
