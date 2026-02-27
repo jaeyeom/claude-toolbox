@@ -7,5 +7,13 @@
   },
   "repository": "https://github.com/jaeyeom/claude-toolbox",
   "license": "MIT",
-  "keywords": ["cloudflare", "wrangler", "sharp", "macos", "apple-silicon", "arm64", "native-module"]
+  "keywords": [
+    "cloudflare",
+    "wrangler",
+    "sharp",
+    "macos",
+    "apple-silicon",
+    "arm64",
+    "native-module"
+  ]
 }
