@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, and Cloudflare macOS fix"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, and language-dev skill creation"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -86,6 +86,16 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/cloudflare-macos-fix",
+      "category": "development"
+    },
+    {
+      "name": "create-lang-dev-skill",
+      "description": "Create language-specific development skills by mining PR reviews, codebase conventions, and team documentation",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/create-lang-dev-skill",
       "category": "development"
     }
   ]

@@ -1,0 +1,11 @@
+{
+  "name": "create-lang-dev-skill",
+  "version": "1.0.0",
+  "description": "Create language-specific development skills by mining PR reviews, codebase conventions, and team documentation",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["skill", "development", "conventions", "pr-review"]
+}
