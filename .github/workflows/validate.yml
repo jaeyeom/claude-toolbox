@@ -13,6 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run marketplace validation
-        run: ./scripts/validate-marketplace.sh
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+
+      - name: Run checks
+        run: make check
 
