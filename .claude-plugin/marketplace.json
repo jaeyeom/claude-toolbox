@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, and todo management"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, and GitHub issue resolution"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -105,6 +105,16 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/todo",
+      "category": "development"
+    },
+    {
+      "name": "gh-issue-resolver",
+      "description": "Resolve GitHub issues using the gh CLI with dependency checking, self-assignment, codebase investigation, and automatic commits",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/gh-issue-resolver",
       "category": "development"
     }
   ]
