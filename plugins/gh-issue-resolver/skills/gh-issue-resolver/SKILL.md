@@ -116,8 +116,20 @@ Follow the repository's commit message conventions. Include
 `Resolves #<issue-number>` or `Fixes #<issue-number>` in the commit body so
 GitHub automatically links the commit to the issue.
 
-### Step 7 — Leave the issue open
+### Step 7 — Clean up the "in progress" label
 
-Do **not** close the issue or remove the "in progress" label. The issue will be
-closed automatically when the commit is merged (via the `Resolves #N`
-reference), or the user can close it manually after review.
+After committing, remove the "in progress" label so it does not remain on the
+issue after it is auto-closed:
+
+```bash
+gh issue edit $ARGUMENTS --remove-label "in progress"
+```
+
+If the label was never added (e.g., it could not be created in Step 3), skip
+this step.
+
+### Step 8 — Leave the issue open
+
+Do **not** close the issue. The issue will be closed automatically when the
+commit is merged (via the `Resolves #N` reference), or the user can close it
+manually after review.
