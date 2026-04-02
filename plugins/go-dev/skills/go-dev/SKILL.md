@@ -186,6 +186,35 @@ package health
 
 ## 5. Code Style
 
+### Keep CLI Flag and Command Definitions in `main` or `cmd/` Packages
+
+Library and business-logic packages must not import `flag`, `cobra`, `pflag`, `urfave/cli`, or similar CLI frameworks. CLI concerns belong in `main` or `cmd/` subpackages — library code receives configuration via function parameters or config structs.
+
+```go
+// BAD - library package imports flag
+package auth
+
+import "flag"
+
+var verbose = flag.Bool("verbose", false, "enable verbose logging")
+
+// GOOD - library package accepts config as a parameter
+package auth
+
+type Config struct {
+    Verbose bool
+}
+
+func NewService(cfg Config) *Service { ... }
+```
+
+**Why:**
+- Keeps library packages reusable and testable without implicit global state.
+- Makes dependency injection explicit — config flows down as parameters or structs.
+- Avoids `init()`-time side effects from `flag.Parse()` scattered across packages.
+
+**Cobra and subcommands:** Cobra-style projects typically define subcommands in `cmd/` subpackages (e.g., `cmd/serve/`, `cmd/migrate/`). This is fine — those packages are CLI entry points, not reusable libraries.
+
 ### Error Handling: Handle OR Return, Not Both
 
 Either handle the error or return it, but not both. Logging at error level and returning duplicates logs.
