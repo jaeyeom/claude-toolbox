@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, and GitHub issue resolution"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, and next-action task discovery"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -115,6 +115,16 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/gh-issue-resolver",
+      "category": "development"
+    },
+    {
+      "name": "next-action",
+      "description": "Find the next highest-priority action to work on from local TODO files, GitHub issues, or other task sources",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/next-action",
       "category": "development"
     }
   ]

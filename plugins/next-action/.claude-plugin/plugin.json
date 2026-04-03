@@ -1,0 +1,11 @@
+{
+  "name": "next-action",
+  "version": "1.0.0",
+  "description": "Find the next highest-priority action to work on from local TODO files, GitHub issues, or other task sources",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["next-action", "task", "todo", "github-issues", "priority", "workflow"]
+}
