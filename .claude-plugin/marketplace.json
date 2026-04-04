@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira description editing, and Jira commands"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira description editing, Jira commands, git guardrails, and macOS sandbox helpers"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -155,6 +155,26 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/jira-commands",
+      "category": "development"
+    },
+    {
+      "name": "git-guardrails",
+      "description": "PreToolUse hooks that block dangerous git and find commands: --no-verify, bulk git add, and find -exec/-delete",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/git-guardrails",
+      "category": "safety"
+    },
+    {
+      "name": "sandbox-helpers",
+      "description": "PreToolUse hook that warns about macOS sandbox TLS failures for Go CLI tools (gh, jira) and suggests workarounds",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/sandbox-helpers",
       "category": "development"
     }
   ]
