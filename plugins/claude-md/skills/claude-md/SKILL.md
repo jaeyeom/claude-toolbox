@@ -1,6 +1,6 @@
 ---
 name: claude-md
-description: Write effective CLAUDE.md files containing only tacit knowledge. Use when asked to create, review, or improve a CLAUDE.md file, or when setting up project context for AI agents. Enforces the "tacit knowledge only" quality bar — rejects content derivable from code, linters, or tooling.
+description: Write effective CLAUDE.md files containing only tacit knowledge. Use when asked to create, review, or improve a CLAUDE.md file, or when setting up project context for AI agents. Enforces the "tacit knowledge only" quality bar — rejects content derivable from code, linters, or tooling, with an exception for information that is technically derivable but practically hard to get right.
 argument-hint: "[path-or-action]"
 autouse: false
 ---
@@ -84,12 +84,29 @@ Every piece of content must pass this checklist:
 | Check | Question |
 |---|---|
 | **Tacit knowledge** | Would an agent reading source code and tool configs miss this? |
-| **Non-derivable** | Can `ls`, `grep`, linter output, or config files reproduce this? |
+| **Non-derivable or hard-to-derive** | Can `ls`, `grep`, linter output, or config files reproduce this? If yes, would an agent reliably get it right on the first try? |
 | **Architectural invariant** | Does it describe a rule not enforced by tooling? |
 | **Known violations** | If documenting a rule, are existing violations called out? |
 | **Actionable** | Does it give concrete steps, not vague guidance? |
 | **Not code explanation** | Does it avoid restating what functions do? |
 | **Concise** | Uses tables, short bullets, or headings — not prose walls? |
+
+### Hard-to-Derive Exception
+
+Some information is technically derivable but practically hard to get right. Apply this test:
+
+> Even if an agent *could* find this by searching, would it reliably find the *correct* answer on the first try?
+
+If the answer is **probably not** — because the information is buried, ambiguous, or commonly confused — it belongs in CLAUDE.md despite being technically derivable.
+
+| Category | Example |
+|---|---|
+| **Niche tool flags** | A CLI flag that looks like it does one thing but behaves differently in this project's context |
+| **Subtle config interactions** | Two settings that are individually documented but whose combination produces unexpected behavior |
+| **Error-prone defaults** | A tool where the obvious usage is wrong and the correct invocation requires project-specific knowledge |
+| **Version-pinned behavior** | A tool invocation where the default behavior changed between versions and the project pins an older version |
+
+This exception does **not** apply to content that is straightforward to derive — directory listings, standard lint rules, or well-documented API usage remain excluded.
 
 ### The Natural Language Execution Test
 
@@ -111,6 +128,8 @@ If **yes**, keep it. If **no** — because tooling or code review would catch it
 | **Non-obvious environment setup** | "Must run `gcloud auth` with impersonation flag before local dev works" |
 | **Migration context** | "Package `oldauth` is deprecated — new code must use `auth/v2`. Known users: [list]" |
 | **PR review wisdom** | Recurring reviewer feedback that reveals undocumented rules, boundaries, or gotchas |
+| **Hard-to-derive tool usage** | "Must pass `--legacy-peer-deps` to `npm install` — the default resolver fails on our pinned React 17 peer deps" |
+| **Subtle config interactions** | "Setting `GOMAXPROCS=1` in CI is intentional — the race detector produces false positives with higher values on this codebase" |
 
 ### Content to Reject
 
@@ -122,7 +141,7 @@ If **yes**, keep it. If **no** — because tooling or code review would catch it
 | Language style guides | Derivable from formatter config | Only project-specific deviations |
 | Dependency lists | Derivable from `go.mod`/`package.json` | Only surprising choices and why |
 | API endpoint catalogs | Derivable from specs/routes | Only non-obvious auth, rate limits, ordering |
-| Build commands alone | Derivable from `Makefile`/CI | Only alongside non-obvious flags or env setup |
+| Build commands alone | Derivable from `Makefile`/CI | Only alongside non-obvious flags, env setup, or hard-to-derive interactions |
 
 ## Step 5 — Structure the File
 
@@ -164,10 +183,11 @@ Use this structure (include only sections with genuine content):
 When reviewing an existing CLAUDE.md, evaluate each section:
 
 1. **For each item**, ask: "Can an agent derive this from the codebase?"
-2. **Flag** items that are derivable with a brief explanation of how.
-3. **Flag** items that are vague or non-actionable.
-4. **Suggest** tacit knowledge that is missing based on your codebase exploration.
-5. **Output a verdict**: items to keep, items to remove, items to add.
+2. If derivable, apply the hard-to-derive exception: "Would an agent reliably get this right on the first try?" If not, the item may still belong.
+3. **Flag** items that are derivable *and* easy to get right, with a brief explanation of how.
+4. **Flag** items that are vague or non-actionable.
+5. **Suggest** tacit knowledge that is missing based on your codebase exploration.
+6. **Output a verdict**: items to keep, items to remove, items to add.
 
 Format the review as:
 
