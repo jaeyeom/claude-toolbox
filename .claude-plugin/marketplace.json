@@ -119,7 +119,7 @@
     },
     {
       "name": "next-action",
-      "description": "Find the next highest-priority action to work on from local TODO files, GitHub issues, or other task sources",
+      "description": "Find the next highest-priority action to work on from local TODO files, source code TODO comments, GitHub issues, or other task sources",
       "version": "1.0.0",
       "author": {
         "name": "Jaehyun Yeom"

@@ -1,14 +1,15 @@
 ---
 name: next-action
-description: Find the next highest-priority action to work on. Scans local TODO files, GitHub issues, and other task sources. Checks for blockers, staleness, and priority signals to recommend what to do next. Use when asked "what should I work on next", "next task", "find work", or "what's left to do".
+description: Find the next highest-priority action to work on. Scans local TODO files, source code TODO comments, GitHub issues, and other task sources. Checks for blockers, staleness, and priority signals to recommend what to do next. Use when asked "what should I work on next", "next task", "find work", or "what's left to do".
 autouse: false
 ---
 
 # Next Action
 
 Find and suggest the next highest-priority action to work on by scanning
-multiple task sources, checking for blockers and staleness, and presenting a
-recommended action.
+multiple task sources (TODO files, source code TODO comments, and GitHub
+issues), checking for blockers and staleness, and presenting a recommended
+action.
 
 This skill **suggests only** — it does not begin working on the task unless the
 user explicitly asks.
@@ -60,7 +61,45 @@ For each discovered TODO file:
      referencing closed issues.
    - Flag stale items to the user but do not recommend them.
 
-## Step 3 — Gather candidates from GitHub Issues
+## Step 3 — Gather candidates from source code TODO comments
+
+Run the helper script to scan and score inline TODO comments:
+
+```bash
+bash "${SKILL_DIR}/scan-code-todos.sh" --limit 20 .
+```
+
+where `${SKILL_DIR}` is the directory containing this SKILL.md file.
+
+The script scans for `TODO`, `FIXME`, `HACK`, and `XXX` comments in source code
+(excluding markdown, JSON, lock files, vendored/generated directories), parses
+each match into structured JSON with fields: `tag`, `tracker_id`, `assignee`,
+`description`, `file`, `line`, and `score`.
+
+Scoring rules applied by the script:
+
+- `FIXME` / `XXX` → 80
+- `HACK` → 60
+- `TODO` with `P0` / `URGENT` marker → 70
+- `TODO` with tracker ID → 50
+- plain `TODO` → 35
+- Security keywords (`security`, `vulnerability`, `crash`, `data loss`,
+  `race condition`) boost score to 80
+
+**Post-processing (after receiving script output):**
+
+1. **Deduplication** — If a TODO comment references a tracker ID that matches a
+   GitHub issue gathered in Step 4, merge them: attach the code location to the
+   GitHub issue candidate rather than creating a duplicate entry.  If multiple
+   TODO comments share the same tracker ID, group them as a single candidate
+   with multiple locations.
+
+2. **Staleness check** — If a comment references a GitHub issue (`#123` in the
+   `tracker_id` field), check its state with `gh issue view`. If the issue is
+   closed, the TODO is stale — flag it as needing cleanup rather than
+   recommending it as work.
+
+## Step 4 — Gather candidates from GitHub Issues
 
 If `gh` CLI is available and authenticated:
 
@@ -105,7 +144,7 @@ If `gh` CLI is available and authenticated:
    body, verify they still exist. Flag issues whose context has significantly
    changed.
 
-## Step 4 — Rank and recommend
+## Step 5 — Rank and recommend
 
 Assign a priority score to each non-blocked, non-stale candidate:
 
@@ -114,6 +153,10 @@ Assign a priority score to each non-blocked, non-stale candidate:
 | Local TODO   | High Priority section / P0 / URGENT | 100   |
 | Local TODO   | Medium Priority section / P1        | 50    |
 | Local TODO   | Low Priority section / P2           | 20    |
+| Code TODO    | FIXME / XXX / security-related      | 80    |
+| Code TODO    | TODO with P0 / URGENT marker        | 70    |
+| Code TODO    | TODO with tracker ID                | 50    |
+| Code TODO    | plain TODO                          | 35    |
 | GitHub Issue | P0 / critical / urgent label        | 90    |
 | GitHub Issue | P1 / high-priority label            | 60    |
 | GitHub Issue | assigned to me                      | +15   |
@@ -123,7 +166,7 @@ Assign a priority score to each non-blocked, non-stale candidate:
 Sort candidates by score (descending). Break ties by preferring local TODO
 items over GitHub issues, and older items over newer ones.
 
-## Step 5 — Present the recommendation
+## Step 6 — Present the recommendation
 
 Display the top recommendation clearly:
 
@@ -154,9 +197,10 @@ If any items were flagged as blocked or stale, list them in a separate section:
 ### Blocked / Stale items
 - **TODO**: "Migrate to new API" — BLOCKED BY #15 (still open)
 - **GH #23**: "Fix login flow" — STALE: references `src/old-auth.go` which no longer exists
+- **Code TODO**: `src/auth.go:42` — STALE: references closed issue #15
 ```
 
-## Step 6 — Suggest CLAUDE.md update (if needed)
+## Step 7 — Suggest CLAUDE.md update (if needed)
 
 If Step 1 found no task source configuration in `CLAUDE.md`, suggest appending
 a task source section based on what was discovered:
@@ -180,7 +224,8 @@ Do **not** modify `CLAUDE.md` without user confirmation.
 - Always check for staleness before recommending an item.
 - If zero actionable candidates are found, say so clearly and suggest creating
   tasks or checking the issue tracker directly.
-- If the user provides an argument (e.g., `/next-action todo` or
-  `/next-action github`), limit the scan to that source only.
+- If the user provides an argument (e.g., `/next-action todo`,
+  `/next-action code`, or `/next-action github`), limit the scan to that
+  source only.
 - Respect any filters documented in `CLAUDE.md` task source configuration
   (e.g., specific labels, milestone, Jira project).

@@ -6,7 +6,8 @@ sources.
 ## Features
 
 - **Multi-source scanning** — Checks local TODO files (`TODO.md`, `TASKS.md`,
-  etc.) and GitHub Issues via the `gh` CLI.
+  etc.), inline source code TODO/FIXME/HACK/XXX comments, and GitHub Issues
+  via the `gh` CLI.
 - **Priority ranking** — Scores candidates by priority labels, section headers,
   and inline markers to recommend the most impactful task.
 - **Blocker detection** — Identifies blocked items via `BLOCKED BY` markers in
@@ -25,6 +26,7 @@ sources.
 ```
 /next-action            # Scan all configured sources
 /next-action todo       # Only check local TODO files
+/next-action code       # Only check source code TODO comments
 /next-action github     # Only check GitHub Issues
 ```
 
