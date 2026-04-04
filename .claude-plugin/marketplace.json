@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, and CLAUDE.md authoring"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira description editing, and Jira commands"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -135,6 +135,26 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/claude-md",
+      "category": "development"
+    },
+    {
+      "name": "jira-edit-description",
+      "description": "Jira issue description editor with proper wiki markup formatting",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/jira-edit-description",
+      "category": "development"
+    },
+    {
+      "name": "jira-commands",
+      "description": "Jira slash commands for creating bugs, tasks, resolving issues, updating tickets, and planning projects",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/jira-commands",
       "category": "development"
     }
   ]
