@@ -50,7 +50,12 @@ For each discovered TODO file:
 4. Parse blocker markers: items containing `BLOCKED:`, `BLOCKED BY`, `WAITING
    ON`, or `DEPENDS ON` followed by a description or issue reference are
    considered blocked.
-5. **Staleness check** — For each candidate item, check whether referenced files
+5. **In-progress check** — Detect items already being worked on:
+   - Items using an in-progress checkbox marker (`- [~] ...` or `- [-] ...`)
+   - Items containing `IN PROGRESS`, `WIP`, or `IN REVIEW` markers
+   - Mark these items as in-progress and skip them during recommendation — they
+     are likely being handled by another session.
+6. **Staleness check** — For each candidate item, check whether referenced files
    or functions still exist:
    - If the item mentions a file path (e.g., `src/auth.go`), verify the file
      exists with `ls`.
@@ -133,7 +138,16 @@ If `gh` CLI is available and authenticated:
    For each referenced issue, verify its state. If any blocking issue is still
    open, mark this issue as blocked.
 
-5. **Staleness check** — Search the codebase for references to the issue:
+5. **In-progress check** — Detect issues already being worked on:
+   - Issues with the `in progress` label (the standard label used by the
+     `gh-issue-resolver` skill to mark active work).
+   - Also check for variant labels: `wip`, `in-progress`, `in review`.
+   - Issues that have a linked open pull request (check via
+     `gh issue view <number> --json linkedBranches`).
+   - Mark these issues as in-progress and skip them during recommendation —
+     they are likely being handled by another session or contributor.
+
+6. **Staleness check** — Search the codebase for references to the issue:
 
    ```bash
    rg '#<issue-number>\b' .
@@ -146,7 +160,8 @@ If `gh` CLI is available and authenticated:
 
 ## Step 5 — Rank and recommend
 
-Assign a priority score to each non-blocked, non-stale candidate:
+Assign a priority score to each non-blocked, non-stale, non-in-progress
+candidate:
 
 | Source       | Priority signal                     | Score |
 |------------- |-------------------------------------|-------|
@@ -191,13 +206,16 @@ Then list up to 4 runners-up in a compact table:
 | 3 | GH #42 | P1       | Fix pagination bug   |
 ```
 
-If any items were flagged as blocked or stale, list them in a separate section:
+If any items were flagged as blocked, stale, or in-progress, list them in a
+separate section:
 
 ```
-### Blocked / Stale items
+### Blocked / Stale / In-progress items
 - **TODO**: "Migrate to new API" — BLOCKED BY #15 (still open)
 - **GH #23**: "Fix login flow" — STALE: references `src/old-auth.go` which no longer exists
 - **Code TODO**: `src/auth.go:42` — STALE: references closed issue #15
+- **TODO**: "Add retry logic" — IN PROGRESS (likely being handled by another session)
+- **GH #17**: "Refactor auth" — IN PROGRESS: has linked open PR #31
 ```
 
 ## Step 7 — Suggest CLAUDE.md update (if needed)
@@ -222,6 +240,8 @@ Do **not** modify `CLAUDE.md` without user confirmation.
   confirmation.
 - Always check for blockers before recommending an item.
 - Always check for staleness before recommending an item.
+- Always check for in-progress status before recommending an item — skip
+  items that are likely being handled by another session or contributor.
 - If zero actionable candidates are found, say so clearly and suggest creating
   tasks or checking the issue tracker directly.
 - If the user provides an argument (e.g., `/next-action todo`,
