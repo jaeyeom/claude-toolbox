@@ -7,6 +7,7 @@ Generate GitHub Actions CI workflows that mirror local Makefile targets for cons
 | Component     | Type  | Description                                              |
 | ------------- | ----- | -------------------------------------------------------- |
 | `ci-workflow` | Skill | Guides generation of GitHub Actions CI workflow files     |
+| `check-ci`    | Skill | Diagnose CI failures and suggest fixes                    |
 
 ## Installation
 
@@ -24,6 +25,13 @@ Ask for CI setup and the skill will apply:
 - "Create a CI workflow that runs our Makefile targets"
 - "Add continuous integration to this project"
 - "Generate a CI/CD pipeline for this Go project"
+
+To diagnose CI failures:
+
+- "Why is CI failing?"
+- "Check CI status"
+- "Fix the CI failure"
+- "Diagnose the failed workflow run"
 
 ## How It Works
 
