@@ -11,6 +11,9 @@ build/
 .env.*.local
 .envrc
 
+# Claude Code
+.claude/settings.local.json
+
 # IDE
 .idea/
 .vscode/
