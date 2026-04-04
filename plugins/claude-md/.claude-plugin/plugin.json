@@ -1,0 +1,17 @@
+{
+  "name": "claude-md",
+  "version": "1.0.0",
+  "description": "Write effective CLAUDE.md files containing only tacit knowledge that AI agents cannot derive from the codebase",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": [
+    "claude-md",
+    "documentation",
+    "tacit-knowledge",
+    "conventions",
+    "codebase-context"
+  ]
+}

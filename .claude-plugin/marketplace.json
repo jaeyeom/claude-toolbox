@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, and next-action task discovery"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, and CLAUDE.md authoring"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -125,6 +125,16 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/next-action",
+      "category": "development"
+    },
+    {
+      "name": "claude-md",
+      "description": "Write effective CLAUDE.md files containing only tacit knowledge that AI agents cannot derive from the codebase",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/claude-md",
       "category": "development"
     }
   ]
