@@ -37,3 +37,6 @@ coverage/
 # Temporary files
 tmp/
 temp/
+
+# Local TODO
+TODO.md
