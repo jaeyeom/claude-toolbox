@@ -21,3 +21,7 @@
 
 - A pre-commit hook runs `make -j check` which includes Biome formatting/linting and `scripts/validate-marketplace.sh`.
 - The marketplace validator checks: plugin.json fields, directory/marketplace sync, name and version consistency, SKILL.md frontmatter, and hook script executability.
+
+## Task Sources
+- Local: TODO.md
+- GitHub Issues: state open, repo jaeyeom/claude-toolbox
