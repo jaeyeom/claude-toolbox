@@ -217,28 +217,41 @@ items over GitHub issues, and older items over newer ones.
 
 ## Step 7 — Present the recommendation
 
-Display the top recommendation clearly:
+Display the top recommendation in a visually prominent block that stands out
+from the rest of the output:
 
 ```
 ## Next Action
 
-**[Source]** description-of-task
-Priority: High | Score: 100
-Status: Ready to work on
-
-### Context
-Brief summary of what the task involves and any relevant pointers.
+> ### Recommended
+>
+> **[Source]** description-of-task
+>
+> | Priority | Score | Status           |
+> |----------|-------|------------------|
+> | High     | 100   | Ready to work on |
+>
+> **Context:** Brief summary of what the task involves and any relevant
+> pointers.
 ```
 
-Then list up to 4 runners-up in a compact table:
+The blockquote with a bold heading ensures the recommendation is immediately
+identifiable at a glance, visually separated from the runner-up list below.
+
+Then list up to 4 runners-up in a compact table (the recommended item also
+appears as row #1 for consistent scanning):
 
 ```
-### Other candidates
-| # | Source | Priority | Description          |
-|---|--------|----------|----------------------|
-| 2 | TODO   | Medium   | Refactor auth module |
-| 3 | GH #42 | P1       | Fix pagination bug   |
+### All candidates
+| #   | Source | Priority | Description              |
+|-----|--------|----------|--------------------------|
+| 1 → | TODO   | High     | **Fix auth crash** (recommended) |
+| 2   | TODO   | Medium   | Refactor auth module     |
+| 3   | GH #42 | P1       | Fix pagination bug       |
 ```
+
+The `→` marker and bold text on row #1 reinforce which item is the primary
+recommendation.
 
 If any items were flagged as blocked, stale, or in-progress, list them in a
 separate section:
