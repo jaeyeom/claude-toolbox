@@ -203,3 +203,23 @@ Format the review as:
 ### Add (missing tacit knowledge)
 - <suggested item> — <why an agent would miss this>
 ```
+
+## Step 7 — AGENTS.md Alias (Optional)
+
+Some tools and platforms look for `AGENTS.md` instead of `CLAUDE.md`. If the
+user requests AGENTS.md compatibility, or if the CLAUDE.md being authored
+contains the `<!-- agents-md-compat -->` marker:
+
+1. Check whether `AGENTS.md` already exists in the same directory as the target
+   `CLAUDE.md`.
+2. If it does not exist, create it as a symbolic link:
+   ```bash
+   ln -s CLAUDE.md AGENTS.md
+   ```
+3. If it exists but is a regular file (not a symlink), warn the user and ask
+   whether to replace it with a symlink.
+4. If it exists as a symlink pointing elsewhere, warn the user and ask whether
+   to update it.
+
+This step is limited to creating or verifying the sibling alias. Do not
+duplicate content into AGENTS.md — it must always be a symlink to CLAUDE.md.

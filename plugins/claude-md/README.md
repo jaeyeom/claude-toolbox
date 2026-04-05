@@ -35,3 +35,11 @@ Every item in a CLAUDE.md must pass:
 - Does it give concrete steps, not vague guidance?
 
 See the skill for the full checklist, good/bad examples, and anti-pattern table.
+
+## AGENTS.md Compatibility
+
+The skill supports optional AGENTS.md symlink creation for tools that look for
+`AGENTS.md` instead of `CLAUDE.md`. To opt in, add `<!-- agents-md-compat -->`
+anywhere in your CLAUDE.md. The skill will then offer to create an `AGENTS.md`
+symlink pointing to `CLAUDE.md`. A separate `scripts/check-agents-md.sh`
+validator enforces this convention in CI.
