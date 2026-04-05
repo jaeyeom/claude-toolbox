@@ -16,7 +16,7 @@ Pick the smallest bundle that matches your situation.
 | Solo developer | You want safer commits and a lightweight task loop | `git-guardrails`, `next-action`, `todo` |
 | Go project | You want local quality gates, CI parity, and Go conventions | `git-guardrails`, `next-action`, `go-dev`, `makefile-workflow`, `gabyx-githooks-setup`, `ci-workflow` |
 | Team with Jira | You already have a base bundle and need ticket operations in Claude Code | `jira-commands`, `jira-edit-description` |
-| Full suite | You want the broadest default workflow out of the box | `git-guardrails`, `pre-commit-lint`, `gabyx-githooks-setup`, `makefile-workflow`, `ci-workflow`, `go-dev`, `next-action`, `todo`, `gh-issue-resolver`, `claude-md`, `semgrep-review`, `sandbox-helpers` |
+| Full suite | You want the recommended default workflow (see [all plugins](../README.md) for the complete list) | `git-guardrails`, `pre-commit-lint`, `gabyx-githooks-setup`, `makefile-workflow`, `ci-workflow`, `go-dev`, `next-action`, `todo`, `gh-issue-resolver`, `claude-md`, `semgrep-review`, `sandbox-helpers` |
 
 ## Installation Recipes
 
@@ -56,6 +56,11 @@ Install this on top of one of the bundles above:
 ```
 
 ### Full Suite
+
+This installs the recommended default set. Additional plugins such as
+`create-lang-dev-skill`, `biome-vcs-integration`, `jira-commands`,
+`jira-edit-description`, `apply-figma-make`, and `cloudflare-macos-fix` are
+available in the marketplace — install them individually as needed.
 
 ```bash
 /plugin marketplace add jaeyeom/claude-toolbox
@@ -133,6 +138,15 @@ linters. `gabyx-githooks-setup` and `makefile-workflow` enforce shared checks.
 
 `ci-workflow` runs the same `make check` and `make build` targets in CI, so
 local and remote stay aligned.
+
+5. Track progress.
+
+```text
+> /todo done "Fix pagination bug"
+> /next-action
+```
+
+Move to the next task.
 
 ## Where to Read Next
 
