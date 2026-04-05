@@ -62,21 +62,20 @@ SANDBOX_WARN
 	exit 0
 }
 
-# Fetch issues assigned to current user first
+# Fetch issues assigned to current user
 # shellcheck disable=SC2086
-issues=$(gh issue list --assignee @me --state open \
+assigned=$(gh issue list --assignee @me --state open \
 	--json number,title,labels,body,assignees \
 	--limit "$LIMIT" $REPO_FLAG 2>/dev/null || echo '[]')
 
-assigned_count=$(echo "$issues" | jq 'length')
+# Fetch unassigned issues
+# shellcheck disable=SC2086
+unassigned=$(gh issue list --search "no:assignee" --state open \
+	--json number,title,labels,body,assignees \
+	--limit "$LIMIT" $REPO_FLAG 2>/dev/null || echo '[]')
 
-# If no assigned issues, fall back to all open issues
-if [[ "$assigned_count" -eq 0 ]]; then
-	# shellcheck disable=SC2086
-	issues=$(gh issue list --state open \
-		--json number,title,labels,body,assignees \
-		--limit "$LIMIT" $REPO_FLAG 2>/dev/null || echo '[]')
-fi
+# Combine and deduplicate by issue number
+issues=$(echo "$assigned" "$unassigned" | jq -s 'add | unique_by(.number)')
 
 issue_count=$(echo "$issues" | jq 'length')
 if [[ "$issue_count" -eq 0 ]]; then

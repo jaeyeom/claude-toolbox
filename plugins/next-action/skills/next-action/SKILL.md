@@ -116,7 +116,8 @@ where `${SKILL_DIR}` is the directory containing this SKILL.md file.
 
 The script handles:
 
-- Fetching open issues assigned to the current user (falls back to unassigned)
+- Fetching open issues assigned to the current user and unassigned open issues,
+  deduplicating the combined set
 - Parsing priority signals from labels (`P0`, `P1`, `critical`, `urgent`,
   `high-priority`, `good first issue`, `help wanted`) and title prefixes
   (`[P0]`, `[URGENT]`, etc.)
