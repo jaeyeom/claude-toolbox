@@ -1,0 +1,11 @@
+{
+  "name": "biome-vcs-integration",
+  "version": "1.0.0",
+  "description": "Configure Biome to respect .gitignore via VCS integration, avoiding format/lint errors on local-only files",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["biome", "vcs", "gitignore", "lint", "format", "biome-config"]
+}
