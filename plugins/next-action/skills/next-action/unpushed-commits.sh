@@ -16,16 +16,16 @@
 set -euo pipefail
 
 # Strategy 1: upstream tracking ref
-if output=$(git log '@{upstream}..HEAD' --oneline 2>/dev/null) && [[ -n "$output" ]]; then
-	echo "$output"
+if output=$(git log '@{upstream}..HEAD' --oneline 2>/dev/null); then
+	[[ -n "$output" ]] && echo "$output"
 	exit 0
 fi
 
 # Strategy 2: same branch name on origin
 current_branch=$(git branch --show-current 2>/dev/null)
 if [[ -n "$current_branch" ]]; then
-	if output=$(git log "origin/${current_branch}..HEAD" --oneline 2>/dev/null) && [[ -n "$output" ]]; then
-		echo "$output"
+	if output=$(git log "origin/${current_branch}..HEAD" --oneline 2>/dev/null); then
+		[[ -n "$output" ]] && echo "$output"
 		exit 0
 	fi
 fi
@@ -42,8 +42,8 @@ if [[ -z "$default_ref" ]]; then
 fi
 
 if [[ -n "$default_ref" ]]; then
-	if output=$(git log "${default_ref}..HEAD" --oneline 2>/dev/null) && [[ -n "$output" ]]; then
-		echo "$output"
+	if output=$(git log "${default_ref}..HEAD" --oneline 2>/dev/null); then
+		[[ -n "$output" ]] && echo "$output"
 		exit 0
 	fi
 fi
