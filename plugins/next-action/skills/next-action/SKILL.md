@@ -156,24 +156,21 @@ Check for commits on the current branch that have not been pushed to the remote.
 These represent completed work that still needs to be pushed, or issues that
 were addressed locally but whose corresponding GitHub issues remain open.
 
-1. Detect unpushed commits using the first command that succeeds:
+1. Detect unpushed commits by running the helper script:
 
    ```bash
-   # Try upstream tracking ref first
-   git log @{upstream}..HEAD --oneline 2>/dev/null
-   # Then try the same branch name on origin
-   git log origin/$(git branch --show-current)..HEAD --oneline 2>/dev/null
-   # Fall back to the remote default branch (origin/HEAD, origin/main, or origin/master)
-   git log $(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)..HEAD --oneline 2>/dev/null
+   bash "${SKILL_DIR}/unpushed-commits.sh"
    ```
 
-   The third fallback handles local branches that have no upstream configured
-   and no matching remote branch — a common case for new feature branches.
-   These branches often contain exactly the local-only commits this step is
-   meant to surface.
+   where `${SKILL_DIR}` is the directory containing this SKILL.md file.
 
-   If all three commands fail (e.g., no remote configured at all), skip this
-   step.
+   The script tries three strategies in order: the upstream tracking ref,
+   the same branch name on origin, and the remote default branch. This
+   handles local branches that have no upstream configured — a common case
+   for new feature branches.
+
+   If the script produces no output, there are no unpushed commits — skip
+   this step.
 
 2. For each unpushed commit, extract the commit subject and check:
    - **Issue references** — If the commit message references a GitHub issue
