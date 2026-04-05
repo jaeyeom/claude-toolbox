@@ -25,3 +25,5 @@
 ## Task Sources
 - Local: TODO.md
 - GitHub Issues: state open, repo jaeyeom/claude-toolbox
+
+<!-- agents-md-compat -->
