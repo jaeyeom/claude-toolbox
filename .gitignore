@@ -21,6 +21,7 @@ build/
 *.swo
 *~
 .omc/
+.omx/
 
 # OS
 .DS_Store
