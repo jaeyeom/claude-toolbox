@@ -41,11 +41,13 @@ The result: you run `git commit` and the hooks verify everything locally. Push, 
 # Add the marketplace
 /plugin marketplace add jaeyeom/claude-toolbox
 
-# Install from this marketplace
+# Install plugins you need
 /plugin install gabyx-githooks-setup
 /plugin install makefile-workflow
 /plugin install ci-workflow
 /plugin install go-dev
+/plugin install next-action
+/plugin install git-guardrails
 
 # Or browse available plugins
 /plugin
@@ -61,14 +63,40 @@ The result: you run `git commit` and the hooks verify everything locally. Push, 
 | [makefile-workflow](./plugins/makefile-workflow) | Consistent `check`, `format`, `lint`, `test`, and `build` Makefile targets | Skill |
 | [ci-workflow](./plugins/ci-workflow) | GitHub Actions CI workflows that mirror local Makefile targets | Skill |
 | [go-dev](./plugins/go-dev) | Go development expertise — idiomatic patterns, testing, build system detection | Skill |
+| [create-lang-dev-skill](./plugins/create-lang-dev-skill) | Create language-specific dev skills by mining PR reviews and codebase conventions | Skill |
+| [biome-vcs-integration](./plugins/biome-vcs-integration) | Configure Biome to respect `.gitignore` via VCS integration | Skill |
+| [claude-md](./plugins/claude-md) | Write effective CLAUDE.md files containing only tacit knowledge | Skill |
 
-### Complementary Plugins
+### Task Management Plugins
+
+| Plugin | Description | Type |
+| --- | --- | --- |
+| [todo](./plugins/todo) | Manage a TODO.md file with priorities and task tracking | Skill |
+| [next-action](./plugins/next-action) | Find the next highest-priority action from TODO files, code TODOs, and GitHub issues | Skill |
+| [gh-issue-resolver](./plugins/gh-issue-resolver) | Resolve GitHub issues with dependency checking, investigation, and automatic commits | Skill |
+
+### Jira Plugins
+
+| Plugin | Description | Type |
+| --- | --- | --- |
+| [jira-commands](./plugins/jira-commands) | Slash commands for creating bugs, tasks, resolving issues, and planning projects | Command |
+| [jira-edit-description](./plugins/jira-edit-description) | Jira issue description editor with proper wiki markup formatting | Skill |
+
+### Safety & Security Plugins
 
 | Plugin | Description | Type |
 | --- | --- | --- |
 | [pre-commit-lint](./plugins/pre-commit-lint) | Pre-commit hook that runs linters before Claude Code commits | Hook |
 | [semgrep-review](./plugins/semgrep-review) | Triage semgrep findings — fix real issues, suppress false positives | Skill |
+| [git-guardrails](./plugins/git-guardrails) | Block dangerous git and find commands (`--no-verify`, bulk `git add`, `find -exec`) | Hook |
+| [sandbox-helpers](./plugins/sandbox-helpers) | Warn about macOS sandbox TLS failures for Go CLI tools and suggest workarounds | Hook |
+
+### Other Plugins
+
+| Plugin | Description | Type |
+| --- | --- | --- |
 | [apply-figma-make](./plugins/apply-figma-make) | Apply Figma Make exported designs to website pages | Skill |
+| [cloudflare-macos-fix](./plugins/cloudflare-macos-fix) | Fix sharp module installation failure on macOS Apple Silicon for Cloudflare Workers | Skill |
 
 ## Plugin Structure
 
