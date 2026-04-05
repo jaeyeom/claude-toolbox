@@ -106,48 +106,40 @@ Scoring rules applied by the script:
 
 ## Step 4 — Gather candidates from GitHub Issues
 
-If `gh` CLI is available and authenticated:
+Run the helper script to fetch and score open GitHub issues:
 
-1. Fetch open issues assigned to the current user:
+```bash
+bash "${SKILL_DIR}/scan-github-issues.sh" --limit 20
+```
 
-   ```bash
-   gh issue list --assignee @me --state open --json number,title,labels,body --limit 20
-   ```
+where `${SKILL_DIR}` is the directory containing this SKILL.md file.
 
-2. If no assigned issues exist, fetch unassigned issues (limit 10):
+The script handles:
 
-   ```bash
-   gh issue list --state open --json number,title,labels,body --limit 10
-   ```
+- Fetching open issues assigned to the current user (falls back to unassigned)
+- Parsing priority signals from labels (`P0`, `P1`, `critical`, `urgent`,
+  `high-priority`, `good first issue`, `help wanted`) and title prefixes
+  (`[P0]`, `[URGENT]`, etc.)
+- **Blocker detection** — task list references (`- [ ] #123`), URL references
+  (`- [ ] https://github.com/.../issues/123`), and keywords (`blocked by #123`,
+  `depends on #123`). Each referenced issue is checked; if still open, the
+  issue is marked blocked.
+- **In-progress detection** — issues with `in progress`, `wip`, `in-progress`,
+  or `in review` labels, and issues with linked open pull requests.
+- Scoring per the table in Step 5, including the `+15` assignment bonus.
 
-3. For each issue, extract priority signals:
-   - Labels: `P0`, `P1`, `P2`, `critical`, `urgent`, `high-priority`,
-     `good first issue`, `help wanted`.
-   - Title prefixes: `[P0]`, `[URGENT]`, etc.
+Output: JSON array sorted by score (descending), each entry:
 
-4. **Blocker check** — For each issue, parse the body for blocking
-   relationships:
-   - Task list references: `- [ ] #123` or `- [ ] https://github.com/.../issues/123`
-   - Keywords in body: `blocked by #123`, `depends on #123`
-   - If the GitHub API exposes sub-issue relationships, check those via:
+```json
+{"number": 7, "title": "...", "labels": [...], "score": 55, "status": "ready", "blocked_by": [], "assignees": [...]}
+```
 
-     ```bash
-     gh issue view <number> --json body
-     ```
+Status values: `"ready"`, `"blocked"`, `"in_progress"`.
 
-   For each referenced issue, verify its state. If any blocking issue is still
-   open, mark this issue as blocked.
+**Post-processing (after receiving script output):**
 
-5. **In-progress check** — Detect issues already being worked on:
-   - Issues with the `in progress` label (the standard label used by the
-     `gh-issue-resolver` skill to mark active work).
-   - Also check for variant labels: `wip`, `in-progress`, `in review`.
-   - Issues that have a linked open pull request (check via
-     `gh issue view <number> --json linkedBranches`).
-   - Mark these issues as in-progress and skip them during recommendation —
-     they are likely being handled by another session or contributor.
-
-6. **Staleness check** — Search the codebase for references to the issue:
+1. **Staleness check** — For each issue with status `"ready"`, search the
+   codebase for references:
 
    ```bash
    rg '#<issue-number>\b' .

@@ -48,6 +48,7 @@ fi
 	--glob '!*.min.*' \
 	--glob '!*.lock' \
 	--glob '!scan-code-todos.sh' \
+	--glob '!scan-github-issues.sh' \
 	"$DIR" 2>/dev/null || true; } |
 	sort -t: -k1,1 -k2,2n -u |
 	while IFS= read -r raw_line; do
