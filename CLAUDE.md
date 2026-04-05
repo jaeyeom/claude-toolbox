@@ -4,7 +4,7 @@
 
 - **Bump the version** in both `plugin.json` and `marketplace.json` when making meaningful changes to a plugin (new features, behavior changes, bug fixes).
 - Use [semver](https://semver.org/): patch for fixes, minor for features, major for breaking changes.
-- Commit the version bump separately with the message pattern: `chore(<plugin-name>): bump version to X.Y.Z`.
+- Commit the version bump separately with the message pattern: `chore(<plugin-name>): bump version to X.Y.Z`. If the version was already bumped in the feature/fix commit, do **not** create a separate version-bump commit (it would be a no-op).
 
 ## Commit Messages
 
