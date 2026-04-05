@@ -162,6 +162,10 @@ Agent system prompt...
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed instructions.
 
+## Guides
+
+- **[Vibecoding Setup Guide](./docs/vibecoding-setup-guide.md)** — How to combine plugins into a productive workflow, with recommended bundles and an end-to-end example.
+
 ## Reference Documentation
 
 See [docs/claude/](./docs/claude/) for official Claude Code documentation:
