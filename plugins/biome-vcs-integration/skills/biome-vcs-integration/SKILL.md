@@ -84,10 +84,16 @@ key no longer exists):
 ```json
 {
   "files": {
-    "includes": ["!.claude/settings.local.json"]
+    "includes": ["**", "!.claude/settings.local.json"]
   }
 }
 ```
+
+**Note:** A standalone `!` negation pattern (e.g., `["!path"]`) does not work
+on its own — it requires an earlier include pattern like `"**"` to establish the
+initial file set. Without it, Biome has no files to exclude from. The `!!`
+double-negation prefix is a separate feature reserved for Biome's scanner-level
+force-ignore behavior and should not be confused with regular `!` exclusions.
 
 Remove `!` negation entries that `.gitignore` already covers.
 
@@ -105,6 +111,9 @@ The previously-erroring gitignored files should no longer appear in output.
 If migrating from Biome v1.x to v2.x while applying this fix:
 
 - `files.ignore` is replaced by `files.includes` with `!` prefix for
+  exclusions. Negated entries must be preceded by an include pattern (e.g.,
+  `["**", "!path"]`) — a standalone `["!path"]` has no effect. The `!!` prefix
+  is reserved for scanner-level force-ignore and is distinct from regular `!`
   exclusions.
 - The `vcs` config section works the same in both versions.
 - Run `biome migrate` for automated config migration.
