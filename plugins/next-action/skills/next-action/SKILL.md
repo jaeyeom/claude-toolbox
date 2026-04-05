@@ -1,15 +1,15 @@
 ---
 name: next-action
-description: Find the next highest-priority action to work on. Scans local TODO files, source code TODO comments, GitHub issues, and other task sources. Checks for blockers, staleness, and priority signals to recommend what to do next. Use when asked "what should I work on next", "next task", "find work", or "what's left to do".
+description: Find the next highest-priority action to work on. Scans local TODO files, source code TODO comments, GitHub issues, and unpushed local commits. Checks for blockers, staleness, and priority signals to recommend what to do next. Use when asked "what should I work on next", "next task", "find work", or "what's left to do".
 autouse: false
 ---
 
 # Next Action
 
 Find and suggest the next highest-priority action to work on by scanning
-multiple task sources (TODO files, source code TODO comments, and GitHub
-issues), checking for blockers and staleness, and presenting a recommended
-action.
+multiple task sources (TODO files, source code TODO comments, GitHub issues,
+and unpushed local commits), checking for blockers and staleness, and presenting
+a recommended action.
 
 This skill **suggests only** — it does not begin working on the task unless the
 user explicitly asks.
@@ -126,7 +126,7 @@ The script handles:
   issue is marked blocked.
 - **In-progress detection** — issues with `in progress`, `wip`, `in-progress`,
   or `in review` labels, and issues with linked open pull requests.
-- Scoring per the table in Step 5, including the `+15` assignment bonus.
+- Scoring per the table in Step 6, including the `+15` assignment bonus.
 
 Output: JSON array sorted by score (descending), each entry:
 
@@ -150,30 +150,72 @@ Status values: `"ready"`, `"blocked"`, `"in_progress"`.
    body, verify they still exist. Flag issues whose context has significantly
    changed.
 
-## Step 5 — Rank and recommend
+## Step 5 — Review unpushed local commits
+
+Check for commits on the current branch that have not been pushed to the remote.
+These represent completed work that still needs to be pushed, or issues that
+were addressed locally but whose corresponding GitHub issues remain open.
+
+1. Detect unpushed commits:
+
+   ```bash
+   git log @{upstream}..HEAD --oneline 2>/dev/null || git log origin/$(git branch --show-current)..HEAD --oneline 2>/dev/null
+   ```
+
+   If the branch has no upstream configured and no remote equivalent, skip this
+   step.
+
+2. For each unpushed commit, extract the commit subject and check:
+   - **Issue references** — If the commit message references a GitHub issue
+     (`#123`, `fixes #123`, `closes #123`, `resolves #123`), record the
+     association. These issues may be resolved locally but not yet closed on
+     GitHub because the commits haven't been pushed.
+   - **Conventional commit scope** — Parse the commit type and scope (e.g.,
+     `feat(auth): ...`, `fix(parser): ...`) to understand what area was changed.
+
+3. Cross-reference with GitHub issue candidates from Step 4:
+   - If an unpushed commit references an open GitHub issue (via `fixes #N`,
+     `closes #N`, or `resolves #N`), mark that issue as **locally resolved —
+     needs push**. Do not recommend it as work to do; instead, surface it as a
+     push action.
+   - If an unpushed commit references an issue but without a closing keyword
+     (just `#N`), flag the issue as **partially addressed locally** — it may
+     still need additional work.
+
+4. Generate candidates from unpushed commits:
+   - Unpushed commits that close issues → recommend **"Push to close #N"** as a
+     candidate action with score 85 (high priority — the work is done, just
+     needs delivery).
+   - A batch of unpushed commits with no issue references → recommend **"Push N
+     unpushed commits"** as a single candidate with score 45 (medium — routine
+     delivery).
+
+## Step 6 — Rank and recommend
 
 Assign a priority score to each non-blocked, non-stale, non-in-progress
 candidate:
 
-| Source       | Priority signal                     | Score |
-|------------- |-------------------------------------|-------|
-| Local TODO   | High Priority section / P0 / URGENT | 100   |
-| Local TODO   | Medium Priority section / P1        | 50    |
-| Local TODO   | Low Priority section / P2           | 20    |
-| Code TODO    | FIXME / XXX / security-related      | 80    |
-| Code TODO    | TODO with P0 / URGENT marker        | 70    |
-| Code TODO    | TODO with tracker ID                | 50    |
-| Code TODO    | plain TODO                          | 35    |
-| GitHub Issue | P0 / critical / urgent label        | 90    |
-| GitHub Issue | P1 / high-priority label            | 60    |
-| GitHub Issue | assigned to me                      | +15   |
-| GitHub Issue | help wanted / good first issue      | 30    |
-| GitHub Issue | no priority label                   | 40    |
+| Source          | Priority signal                     | Score |
+|-----------------|-------------------------------------|-------|
+| Local TODO      | High Priority section / P0 / URGENT | 100   |
+| Local TODO      | Medium Priority section / P1        | 50    |
+| Local TODO      | Low Priority section / P2           | 20    |
+| Code TODO       | FIXME / XXX / security-related      | 80    |
+| Code TODO       | TODO with P0 / URGENT marker        | 70    |
+| Code TODO       | TODO with tracker ID                | 50    |
+| Code TODO       | plain TODO                          | 35    |
+| GitHub Issue    | P0 / critical / urgent label        | 90    |
+| GitHub Issue    | P1 / high-priority label            | 60    |
+| GitHub Issue    | assigned to me                      | +15   |
+| GitHub Issue    | help wanted / good first issue      | 30    |
+| GitHub Issue    | no priority label                   | 40    |
+| Unpushed Commit | closes/fixes/resolves an issue      | 85    |
+| Unpushed Commit | no issue reference (batch push)     | 45    |
 
 Sort candidates by score (descending). Break ties by preferring local TODO
 items over GitHub issues, and older items over newer ones.
 
-## Step 6 — Present the recommendation
+## Step 7 — Present the recommendation
 
 Display the top recommendation clearly:
 
@@ -210,7 +252,19 @@ separate section:
 - **GH #17**: "Refactor auth" — IN PROGRESS: has linked open PR #31
 ```
 
-## Step 7 — Suggest CLAUDE.md update (if needed)
+If any unpushed commits were found, list them in a dedicated section:
+
+```
+### Unpushed commits
+- **Push to close #9** — `cc11f06 docs: add vibecoding setup guide` (closes #9, needs push)
+- **3 unpushed commits** — routine delivery, no issue references
+```
+
+For issues marked as **locally resolved — needs push**, do not list them under
+"Other candidates" — show them only in the "Unpushed commits" section to avoid
+confusion.
+
+## Step 8 — Suggest CLAUDE.md update (if needed)
 
 If Step 1 found no task source configuration in `CLAUDE.md`, suggest appending
 a task source section based on what was discovered:
@@ -237,7 +291,7 @@ Do **not** modify `CLAUDE.md` without user confirmation.
 - If zero actionable candidates are found, say so clearly and suggest creating
   tasks or checking the issue tracker directly.
 - If the user provides an argument (e.g., `/next-action todo`,
-  `/next-action code`, or `/next-action github`), limit the scan to that
-  source only.
+  `/next-action code`, `/next-action github`, or `/next-action unpushed`),
+  limit the scan to that source only.
 - Respect any filters documented in `CLAUDE.md` task source configuration
   (e.g., specific labels, milestone, Jira project).
