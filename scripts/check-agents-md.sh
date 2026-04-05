@@ -43,11 +43,14 @@ while IFS= read -r -d '' claude_md; do
 	elif [[ ! -L "$agents_md" ]]; then
 		error "$rel_dir: AGENTS.md exists but is not a symlink (should be a symlink to CLAUDE.md)"
 	else
-		target="$(readlink "$agents_md")"
-		if [[ "$target" != "CLAUDE.md" ]]; then
-			error "$rel_dir: AGENTS.md symlink points to '$target' instead of 'CLAUDE.md'"
+		resolved_agents="$(cd "$dir" && realpath "$(readlink AGENTS.md)")"
+		resolved_claude="$(realpath "$claude_md")"
+		if [[ "$resolved_agents" != "$resolved_claude" ]]; then
+			target="$(readlink "$agents_md")"
+			error "$rel_dir: AGENTS.md symlink resolves to '$resolved_agents' instead of '$resolved_claude'"
 		else
-			info "$rel_dir: AGENTS.md -> CLAUDE.md (OK)"
+			target="$(readlink "$agents_md")"
+			info "$rel_dir: AGENTS.md -> $target (OK)"
 		fi
 	fi
 done < <(find "$REPO_ROOT" -name CLAUDE.md -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 2>/dev/null)
