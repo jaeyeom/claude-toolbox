@@ -1,6 +1,6 @@
 {
   "name": "biome-vcs-integration",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Configure Biome to respect .gitignore via VCS integration, avoiding format/lint errors on local-only files",
   "author": {
     "name": "Jaehyun Yeom"
