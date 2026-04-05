@@ -159,7 +159,7 @@ Install everything:
        ▼
   ┌─ ci-workflow ─────────────────────────┐
   │  Same Makefile targets in GitHub CI   │
-  │  Local = CI. No drift.               │
+  │  Local = CI. No drift.                │
   └───────────────────────────────────────┘
 ```
 

@@ -14,8 +14,8 @@ These plugins work together to create a reliable development workflow:
 │                         ▼                               │
 │  makefile-workflow                                      │
 │  Hooks call `make check` — format, lint, test, build    │
-│                    │              │                      │
-│                    ▼              ▼                      │
+│                    │              │                     │
+│                    ▼              ▼                     │
 │  *-dev (e.g. go-dev)      ci-workflow                   │
 │  Language-specific     CI calls the same                │
 │  conventions the       Makefile targets                 │
@@ -92,7 +92,7 @@ plugins/<plugin-name>/
 ├── hooks/                   # Hook scripts (optional)
 │   └── *.sh
 ├── settings.json            # Hook configuration (optional)
-└── .mcp.json               # MCP server config (optional)
+└── .mcp.json                # MCP server config (optional)
 ```
 
 ## Component Formats
