@@ -1,10 +1,10 @@
-.PHONY: all check format check-format lint fix validate validate-full
+.PHONY: all check format check-format lint fix validate validate-full check-agents-md
 
 BIOME ?= biome
 
 all: format fix validate-full
 
-check: check-format lint validate
+check: check-format lint validate check-agents-md
 
 format:
 	$(BIOME) format --write .
@@ -20,6 +20,9 @@ fix: format
 
 validate:
 	./scripts/validate-marketplace.sh
+
+check-agents-md:
+	./scripts/check-agents-md.sh
 
 validate-full: fix validate
 	claude plugin validate .
