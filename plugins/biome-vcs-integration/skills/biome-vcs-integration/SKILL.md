@@ -78,18 +78,18 @@ entries and remove them.
 
 Remove entries that `.gitignore` already covers.
 
-**Biome v2.x** — uses `includes` with `!!` negation patterns (the old `ignore`
+**Biome v2.x** — uses `includes` with `!` negation patterns (the old `ignore`
 key no longer exists):
 
 ```json
 {
   "files": {
-    "includes": ["!!.claude/settings.local.json"]
+    "includes": ["!.claude/settings.local.json"]
   }
 }
 ```
 
-Remove `!!` negation entries that `.gitignore` already covers.
+Remove `!` negation entries that `.gitignore` already covers.
 
 ### Step 3 — Verify
 
@@ -104,7 +104,7 @@ The previously-erroring gitignored files should no longer appear in output.
 
 If migrating from Biome v1.x to v2.x while applying this fix:
 
-- `files.ignore` is replaced by `files.includes` with `!!` prefix for
+- `files.ignore` is replaced by `files.includes` with `!` prefix for
   exclusions.
 - The `vcs` config section works the same in both versions.
 - Run `biome migrate` for automated config migration.
@@ -114,7 +114,7 @@ If migrating from Biome v1.x to v2.x while applying this fix:
 | Pitfall | Fix |
 |---------|-----|
 | Missing `clientKind` | Always include `"clientKind": "git"` — it's required |
-| Nested `.gitignore` files | Biome respects the root `.gitignore` only by default; add nested ignore files to the root or use manual exclusions |
+| Nested `.gitignore` files | Biome respects nested `.gitignore` files when VCS integration is enabled; ensure `useIgnoreFile` is `true` and each subdirectory's `.gitignore` is committed |
 | `biome.jsonc` vs `biome.json` | VCS config works in both; use whichever the project already has |
 
 ## Reference
