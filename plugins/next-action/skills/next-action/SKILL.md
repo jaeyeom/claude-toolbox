@@ -156,13 +156,23 @@ Check for commits on the current branch that have not been pushed to the remote.
 These represent completed work that still needs to be pushed, or issues that
 were addressed locally but whose corresponding GitHub issues remain open.
 
-1. Detect unpushed commits:
+1. Detect unpushed commits using the first command that succeeds:
 
    ```bash
-   git log @{upstream}..HEAD --oneline 2>/dev/null || git log origin/$(git branch --show-current)..HEAD --oneline 2>/dev/null
+   # Try upstream tracking ref first
+   git log @{upstream}..HEAD --oneline 2>/dev/null
+   # Then try the same branch name on origin
+   git log origin/$(git branch --show-current)..HEAD --oneline 2>/dev/null
+   # Fall back to the remote default branch (origin/HEAD, origin/main, or origin/master)
+   git log $(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)..HEAD --oneline 2>/dev/null
    ```
 
-   If the branch has no upstream configured and no remote equivalent, skip this
+   The third fallback handles local branches that have no upstream configured
+   and no matching remote branch — a common case for new feature branches.
+   These branches often contain exactly the local-only commits this step is
+   meant to surface.
+
+   If all three commands fail (e.g., no remote configured at all), skip this
    step.
 
 2. For each unpushed commit, extract the commit subject and check:
@@ -173,14 +183,23 @@ were addressed locally but whose corresponding GitHub issues remain open.
    - **Conventional commit scope** — Parse the commit type and scope (e.g.,
      `feat(auth): ...`, `fix(parser): ...`) to understand what area was changed.
 
-3. Cross-reference with GitHub issue candidates from Step 4:
-   - If an unpushed commit references an open GitHub issue (via `fixes #N`,
-     `closes #N`, or `resolves #N`), mark that issue as **locally resolved —
-     needs push**. Do not recommend it as work to do; instead, surface it as a
-     push action.
-   - If an unpushed commit references an issue but without a closing keyword
-     (just `#N`), flag the issue as **partially addressed locally** — it may
-     still need additional work.
+3. Cross-reference unpushed commits with GitHub issues:
+   - For each issue number referenced in unpushed commit messages, check
+     whether the issue is open:
+     ```bash
+     gh issue view <number> --json state --jq '.state'
+     ```
+     This lookup is self-contained — it does not depend on the GitHub issue
+     candidates gathered in Step 4. This allows `/next-action unpushed` to
+     work as a standalone mode without running the full GitHub issues scan.
+   - If an unpushed commit references an open issue via a closing keyword
+     (`fixes #N`, `closes #N`, or `resolves #N`), mark that issue as
+     **locally resolved — needs push**. Do not recommend it as work to do;
+     instead, surface it as a push action.
+   - If an unpushed commit references an open issue but without a closing
+     keyword (just `#N`), flag the issue as **partially addressed locally** —
+     it may still need additional work.
+   - If the referenced issue is already closed, skip it — no action needed.
 
 4. Generate candidates from unpushed commits:
    - Unpushed commits that close issues → recommend **"Push to close #N"** as a
