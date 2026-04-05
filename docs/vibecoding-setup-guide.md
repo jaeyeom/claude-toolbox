@@ -1,91 +1,40 @@
 # Vibecoding Setup Guide
 
-Get productive fast with **claude-toolbox** — a curated plugin suite for
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code) that adds quality
-gates, task management, and language-specific dev support to your vibecoding
-workflow.
+Use this guide when the question is "which claude-toolbox plugins should I
+install for my workflow, and in what order?"
 
-This guide is tool-agnostic. Whether you bootstrap your repo with
-[roboco-cli](https://github.com/roboco-io/roboco-cli), manually, or any other
-scaffolding tool, the plugins work the same way.
+This is intentionally a workflow guide, not a full plugin catalog. The root
+[README](../README.md) is the project landing page, and each plugin's
+`README.md` is the source of truth for that plugin's details.
 
-## What Is claude-toolbox?
+## Choose a Bundle
 
-claude-toolbox is a marketplace of Claude Code plugins. Each plugin adds a
-focused capability — a skill, a hook, or a slash command — that Claude Code
-picks up automatically. Plugins layer together so commit quality, task flow, and
-language idioms reinforce each other without manual coordination.
+Pick the smallest bundle that matches your situation.
 
-## Plugin Catalog
+| Bundle | Use when | Install |
+| --- | --- | --- |
+| Solo developer | You want safer commits and a lightweight task loop | `git-guardrails`, `next-action`, `todo` |
+| Go project | You want local quality gates, CI parity, and Go conventions | `git-guardrails`, `next-action`, `go-dev`, `makefile-workflow`, `gabyx-githooks-setup`, `ci-workflow` |
+| Team with Jira | You already have a base bundle and need ticket operations in Claude Code | `jira-commands`, `jira-edit-description` |
+| Full suite | You want the broadest default workflow out of the box | `git-guardrails`, `pre-commit-lint`, `gabyx-githooks-setup`, `makefile-workflow`, `ci-workflow`, `go-dev`, `next-action`, `todo`, `gh-issue-resolver`, `claude-md`, `semgrep-review`, `sandbox-helpers` |
 
-### Quality Gates
-
-| Plugin | What it does |
-|--------|-------------|
-| [git-guardrails](../plugins/git-guardrails) | Hook that blocks dangerous git commands (`--no-verify`, bulk `git add`, `find -exec`) |
-| [pre-commit-lint](../plugins/pre-commit-lint) | Hook that auto-detects staged file types and runs the right linters before commit |
-| [gabyx-githooks-setup](../plugins/gabyx-githooks-setup) | Sets up [gabyx/Githooks](https://github.com/gabyx/Githooks) so every contributor runs the same shared hooks |
-| [semgrep-review](../plugins/semgrep-review) | Triages semgrep security findings — fixes real issues, suppresses false positives |
-
-### Build & CI
-
-| Plugin | What it does |
-|--------|-------------|
-| [makefile-workflow](../plugins/makefile-workflow) | Creates consistent `check`, `format`, `lint`, `test`, `build` Makefile targets |
-| [ci-workflow](../plugins/ci-workflow) | Generates GitHub Actions that call the same Makefile targets, so CI mirrors local |
-
-### Task Management
-
-| Plugin | What it does |
-|--------|-------------|
-| [next-action](../plugins/next-action) | Scans TODO files, code TODOs, and GitHub Issues to recommend what to work on next |
-| [todo](../plugins/todo) | Manages a `TODO.md` file with priorities and completion tracking |
-| [gh-issue-resolver](../plugins/gh-issue-resolver) | Resolves a GitHub issue end-to-end: assigns, investigates, fixes, commits |
-
-### Language & Framework Support
-
-| Plugin | What it does |
-|--------|-------------|
-| [go-dev](../plugins/go-dev) | Go best practices — idiomatic patterns, error handling, testing, build system detection |
-| [create-lang-dev-skill](../plugins/create-lang-dev-skill) | Mines your PR reviews and codebase to create a custom `*-dev` skill for any language |
-| [claude-md](../plugins/claude-md) | Writes effective CLAUDE.md files containing only tacit knowledge |
-| [biome-vcs-integration](../plugins/biome-vcs-integration) | Configures Biome to respect `.gitignore` via VCS integration |
-
-### Integrations
-
-| Plugin | What it does |
-|--------|-------------|
-| [jira-commands](../plugins/jira-commands) | Slash commands for Jira: create bugs/tasks, resolve, update, plan projects |
-| [jira-edit-description](../plugins/jira-edit-description) | Edits Jira descriptions with proper wiki markup formatting |
-| [apply-figma-make](../plugins/apply-figma-make) | Applies Figma Make exported designs to website pages |
-
-### Environment Fixes
-
-| Plugin | What it does |
-|--------|-------------|
-| [sandbox-helpers](../plugins/sandbox-helpers) | Diagnoses macOS sandbox TLS failures for CLI tools like `gh` and `jira` |
-| [cloudflare-macos-fix](../plugins/cloudflare-macos-fix) | Fixes sharp module installation failures on macOS Apple Silicon |
-
-## Recommended Bundles
+## Installation Recipes
 
 ### Solo Developer
 
-For any project where you want safe commits and a task-driven workflow:
-
 ```bash
+/plugin marketplace add jaeyeom/claude-toolbox
 /plugin install git-guardrails
 /plugin install next-action
 /plugin install todo
 ```
 
-**git-guardrails** prevents accidental `--no-verify` and bulk staging.
-**next-action** tells you what to work on. **todo** keeps track of it.
+Use this when you want the shortest path to a safer AI coding loop.
 
 ### Go Project
 
-Everything above, plus Go-specific tooling:
-
 ```bash
+/plugin marketplace add jaeyeom/claude-toolbox
 /plugin install git-guardrails
 /plugin install next-action
 /plugin install go-dev
@@ -94,25 +43,19 @@ Everything above, plus Go-specific tooling:
 /plugin install ci-workflow
 ```
 
-**go-dev** encodes Go idioms. **makefile-workflow** creates the targets.
-**gabyx-githooks-setup** wires them into git hooks. **ci-workflow** generates
-GitHub Actions that call the same targets.
+Use this when you want `git commit`, `make check`, and CI to reinforce the same
+rules.
 
 ### Team with Jira
 
-Add Jira integration to any bundle:
+Install this on top of one of the bundles above:
 
 ```bash
 /plugin install jira-commands
 /plugin install jira-edit-description
 ```
 
-Now you can create and manage Jira tickets directly from Claude Code with
-`/jira new-bug`, `/jira resolve`, etc.
-
 ### Full Suite
-
-Install everything:
 
 ```bash
 /plugin marketplace add jaeyeom/claude-toolbox
@@ -130,77 +73,9 @@ Install everything:
 /plugin install sandbox-helpers
 ```
 
-## How Plugins Layer Together
+## Minimal Configuration
 
-```
-  You type: git commit
-       │
-       ▼
-  ┌─ git-guardrails ──────────────────────┐
-  │  Blocks --no-verify and bulk git add  │
-  └───────────────┬───────────────────────┘
-                  │
-       ▼
-  ┌─ pre-commit-lint ─────────────────────┐
-  │  Detects file types → runs linters    │
-  └───────────────┬───────────────────────┘
-                  │
-       ▼
-  ┌─ gabyx-githooks-setup ────────────────┐
-  │  Shared hooks call make check         │
-  └───────────────┬───────────────────────┘
-                  │
-       ▼
-  ┌─ makefile-workflow ───────────────────┐
-  │  make check = format + lint + test    │
-  │  Rules informed by go-dev idioms      │
-  └───────────────┬───────────────────────┘
-                  │
-       ▼
-  ┌─ ci-workflow ─────────────────────────┐
-  │  Same Makefile targets in GitHub CI   │
-  │  Local = CI. No drift.                │
-  └───────────────────────────────────────┘
-```
-
-The task management layer runs in parallel:
-
-```
-  /next-action  →  Scans TODO.md + code TODOs + GitHub Issues
-       │
-       ▼
-  Pick a task  →  /gh-issue-resolver 42  →  Assigns, fixes, commits
-       │
-       ▼
-  Commit triggers quality gates above
-```
-
-## Installation & Configuration
-
-### Add the Marketplace
-
-```bash
-/plugin marketplace add jaeyeom/claude-toolbox
-```
-
-This registers the marketplace so you can browse and install plugins.
-
-### Install Plugins
-
-```bash
-/plugin install <plugin-name>
-```
-
-Plugins are installed per-project by default. To install globally (available in
-all projects):
-
-```bash
-/plugin install --global <plugin-name>
-```
-
-### Configure Task Sources
-
-After installing **next-action**, add a task sources section to your project's
+After installing `next-action`, give it explicit task sources in your project's
 `CLAUDE.md`:
 
 ```markdown
@@ -209,30 +84,29 @@ After installing **next-action**, add a task sources section to your project's
 - GitHub Issues: state open, assigned to @me
 ```
 
-This tells `/next-action` where to look without re-discovering each time.
+If you use a scaffolding tool such as `roboco-cli`, keep the generated
+`CLAUDE.md` and layer claude-toolbox on top. A good division of responsibility
+is:
+- the scaffolder creates the project foundation
+- claude-toolbox adds task flow, quality gates, and workflow conventions
 
-## Integration with Repo Scaffolding Tools
+## How the Bundle Fits Together
 
-Tools like [roboco-cli](https://github.com/roboco-io/roboco-cli) bootstrap
-repos for AI-native development by setting up `CLAUDE.md`, hooks, and MCP
-servers. claude-toolbox complements these tools:
+Think in layers:
 
-- **roboco-cli creates the foundation** — `CLAUDE.md`, initial project
-  structure, MCP server configuration
-- **claude-toolbox adds the workflow layer** — quality gates, task management,
-  language idioms, CI generation
+1. Task selection: `next-action`, `todo`, and optionally `gh-issue-resolver`.
+2. Commit safety: `git-guardrails` and `pre-commit-lint`.
+3. Shared checks: `gabyx-githooks-setup` calling `make check`.
+4. Project conventions: `go-dev` or another `*-dev` plugin.
+5. CI parity: `ci-workflow` running the same Makefile targets.
 
-They don't conflict. After scaffolding with roboco-cli (or any similar tool),
-install the claude-toolbox plugins you need. The plugins read your existing
-`CLAUDE.md` and adapt to your project's conventions.
+If you are unsure what to add next, fill gaps in that order.
 
 ## Example End-to-End Workflow
 
-Here's a typical vibecoding session using claude-toolbox plugins:
+1. Ask `next-action` what to work on.
 
-**1. Find what to work on**
-
-```
+```text
 > /next-action
 
 ## Next Action
@@ -240,46 +114,28 @@ Here's a typical vibecoding session using claude-toolbox plugins:
 Priority: High | Score: 90
 ```
 
-**2. Resolve the issue**
+2. Resolve the issue.
 
-```
+```text
 > /gh-issue-resolver 42
 ```
 
-Claude assigns the issue, searches the codebase for references, traces the bug,
-implements the fix, and commits with `Resolves #42`.
+3. Let the commit-quality layer run automatically.
 
-**3. Quality gates run automatically**
+`git-guardrails` blocks unsafe git usage. `pre-commit-lint` runs file-aware
+linters. `gabyx-githooks-setup` and `makefile-workflow` enforce shared checks.
 
-The commit triggers:
-- **git-guardrails** ensures no `--no-verify` bypass
-- **pre-commit-lint** runs linters on staged files
-- **gabyx-githooks-setup** runs shared hooks (`make check`)
-- **makefile-workflow** targets run `format`, `lint`, `test`
+4. Push with confidence.
 
-If anything fails, Claude fixes it and re-commits.
-
-**4. Push and CI mirrors local**
-
-```
+```text
 > git push
 ```
 
-**ci-workflow** has already generated GitHub Actions that run the same `make
-check` and `make build` targets. If it passed locally, it passes in CI.
+`ci-workflow` runs the same `make check` and `make build` targets in CI, so
+local and remote stay aligned.
 
-**5. Track progress**
+## Where to Read Next
 
-```
-> /todo complete "Fix pagination bug"
-> /next-action
-```
-
-Move to the next task.
-
-## Further Reading
-
-- [Main README](../README.md) — project overview and plugin structure
-- Individual plugin READMEs linked in the catalog above
-- [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code) —
-  plugins, skills, hooks, and commands
+- [Docs Index](./README.md) for the overall documentation map
+- [Main README](../README.md) for the project overview
+- Plugin `README.md` files under `plugins/` for exact behavior and configuration
