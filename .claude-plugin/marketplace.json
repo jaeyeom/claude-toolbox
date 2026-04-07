@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, pre-commit linting, Figma design application, semgrep security review, Go development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira description editing, Jira commands, git guardrails, macOS sandbox helpers, and Biome VCS integration"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, pre-commit linting, Figma design application, semgrep security review, Go development, Protocol Buffer development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira description editing, Jira commands, git guardrails, macOS sandbox helpers, and Biome VCS integration"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -185,6 +185,16 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/biome-vcs-integration",
+      "category": "development"
+    },
+    {
+      "name": "protobuf-dev",
+      "description": "Protocol Buffer development skill with style guidelines, backward compatibility, design patterns, and build system detection",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/protobuf-dev",
       "category": "development"
     }
   ]
