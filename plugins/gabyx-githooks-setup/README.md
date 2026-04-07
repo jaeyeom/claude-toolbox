@@ -11,7 +11,7 @@ A skill for setting up shared Git hooks using [gabyx/Githooks](https://github.co
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install gabyx-githooks-setup

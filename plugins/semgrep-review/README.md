@@ -12,10 +12,12 @@ security issues, and suppressing false positives with properly documented
 - Documents rationale for every suppression
 - Handles tricky cases like comments inside template literals
 
-## Install
+## Installation
 
-```bash
-claude /install-plugin github:jaeyeom/claude-toolbox/plugins/semgrep-review
+```text
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install semgrep-review
 ```
 
 ## Usage

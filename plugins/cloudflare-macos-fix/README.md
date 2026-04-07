@@ -10,7 +10,7 @@ Fix sharp native module installation failure on macOS Apple Silicon when setting
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install cloudflare-macos-fix

@@ -10,7 +10,7 @@ Expert knowledge for Protocol Buffer development. Provides style guidelines, doc
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install protobuf-dev

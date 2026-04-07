@@ -10,7 +10,7 @@ Expert knowledge for Go development. Provides idiomatic Go patterns, error handl
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install go-dev

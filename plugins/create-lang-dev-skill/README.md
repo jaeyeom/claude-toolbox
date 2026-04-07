@@ -10,7 +10,7 @@ Create language-specific development skills (e.g., rust-dev, go-dev, python-dev)
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install create-lang-dev-skill

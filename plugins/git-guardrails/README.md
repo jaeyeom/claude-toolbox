@@ -13,8 +13,10 @@ PreToolUse hooks that block dangerous command patterns in Claude Code sessions.
 
 ## Installation
 
-```bash
-claude plugin install jaeyeom/claude-toolbox/plugins/git-guardrails
+```text
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install git-guardrails
 ```
 
 ## How it works

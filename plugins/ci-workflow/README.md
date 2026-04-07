@@ -11,7 +11,7 @@ Generate GitHub Actions CI workflows that mirror local Makefile targets for cons
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install ci-workflow

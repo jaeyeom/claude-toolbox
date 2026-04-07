@@ -18,6 +18,8 @@ cleaning up redundant manual exclusions.
 
 Install from the claude-toolbox marketplace:
 
-```
-/install-plugin jaeyeom/claude-toolbox biome-vcs-integration
+```text
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install biome-vcs-integration
 ```

@@ -11,7 +11,7 @@ Automatically run linters before Claude Code commits changes.
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install pre-commit-lint

@@ -14,13 +14,15 @@ formatting using the `jira` CLI tool.
 
 - [jira CLI](https://github.com/ankitpokhrel/jira-cli) installed and configured
 
+## Installation
+
+```text
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install jira-edit-description
+```
+
 ## Usage
-
-Install via Claude Code:
-
-```
-claude install github:jaeyeom/claude-toolbox/plugins/jira-edit-description
-```
 
 The skill activates automatically when you ask to edit or update a Jira issue
 description. It guides Claude to use temporary files and proper wiki markup

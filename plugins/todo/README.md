@@ -10,13 +10,15 @@ priority-based task tracking.
 - List all tasks with a completion summary
 - Work on the next highest-priority item automatically
 
+## Installation
+
+```text
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install todo
+```
+
 ## Usage
-
-Install via Claude Code:
-
-```
-claude install github:jaeyeom/claude-toolbox/plugins/todo
-```
 
 Then use `/todo` followed by a command:
 

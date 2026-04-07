@@ -8,10 +8,12 @@ Slash commands for common Jira operations using the `jira` CLI tool.
 
 ## Commands
 
-Install via Claude Code:
+## Installation
 
-```
-claude install github:jaeyeom/claude-toolbox/plugins/jira-commands
+```text
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install jira-commands
 ```
 
 Then use the following commands:

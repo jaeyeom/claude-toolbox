@@ -18,8 +18,10 @@ Network-free subcommands (`gh help`, `gh completion`, `gh alias`) are excluded f
 
 ## Installation
 
-```bash
-claude plugin install jaeyeom/claude-toolbox/plugins/sandbox-helpers
+```text
+/plugin marketplace add jaeyeom/claude-toolbox
+
+/plugin install sandbox-helpers
 ```
 
 ## Replaces

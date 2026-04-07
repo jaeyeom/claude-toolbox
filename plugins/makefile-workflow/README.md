@@ -10,7 +10,7 @@ A focused skill for designing or updating Makefiles with consistent targets and 
 
 ## Installation
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 
 /plugin install makefile-workflow

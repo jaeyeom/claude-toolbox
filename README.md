@@ -38,7 +38,7 @@ Add the task-management layer on top:
 
 Install the marketplace and a practical starter bundle:
 
-```bash
+```text
 /plugin marketplace add jaeyeom/claude-toolbox
 /plugin install git-guardrails
 /plugin install next-action
@@ -69,6 +69,7 @@ Workflow:
 - [makefile-workflow](./plugins/makefile-workflow)
 - [ci-workflow](./plugins/ci-workflow)
 - [go-dev](./plugins/go-dev)
+- [protobuf-dev](./plugins/protobuf-dev)
 - [create-lang-dev-skill](./plugins/create-lang-dev-skill)
 - [biome-vcs-integration](./plugins/biome-vcs-integration)
 - [claude-md](./plugins/claude-md)
