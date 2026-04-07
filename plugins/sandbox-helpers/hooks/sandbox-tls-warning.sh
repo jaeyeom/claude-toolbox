@@ -47,18 +47,18 @@ fi
 # Print diagnostic warning — allow the command to proceed so the user
 # sees both the warning and the actual TLS error (which triggers Claude
 # to retry with dangerouslyDisableSandbox: true).
-echo "" >&2
-echo "╭─ sandbox-helpers: TLS issue detected ──────────────────────╮" >&2
-echo "│ Claude Code sandbox is active on macOS. Go binaries like   │" >&2
-echo "│ gh/jira cannot verify TLS certs (Security framework        │" >&2
-echo "│ blocked by sandbox).                                       │" >&2
-echo "│                                                            │" >&2
-echo "│ Workarounds:                                               │" >&2
-echo "│   1. Retry with dangerouslyDisableSandbox: true            │" >&2
-echo "│   2. Use /sandbox to manage sandbox restrictions           │" >&2
-echo "│   3. Use curl with \$GH_TOKEN as a fallback:               │" >&2
-echo "│      curl -sH \"Authorization: bearer \$GH_TOKEN\" \\         │" >&2
-echo "│        https://api.github.com/...                         │" >&2
-echo "╰────────────────────────────────────────────────────────────╯" >&2
+echo ""
+echo "╭─ sandbox-helpers: TLS issue detected ──────────────────────╮"
+echo "│ Claude Code sandbox is active on macOS. Go binaries like   │"
+echo "│ gh/jira cannot verify TLS certs (Security framework        │"
+echo "│ blocked by sandbox).                                       │"
+echo "│                                                            │"
+echo "│ Workarounds:                                               │"
+echo "│   1. Retry with dangerouslyDisableSandbox: true            │"
+echo "│   2. Use /sandbox to manage sandbox restrictions           │"
+echo "│   3. Use curl with \$GH_TOKEN as a fallback:               │"
+echo "│      curl -sH \"Authorization: bearer \$GH_TOKEN\" \\         │"
+echo "│        https://api.github.com/...                         │"
+echo "╰────────────────────────────────────────────────────────────╯"
 
 exit 0

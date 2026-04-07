@@ -1,6 +1,6 @@
 {
   "name": "sandbox-helpers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "PreToolUse hook that warns about macOS sandbox TLS failures for Go CLI tools (gh, jira) and suggests workarounds",
   "author": {
     "name": "Jaehyun Yeom"
