@@ -1,4 +1,5 @@
 {
+  "description": "Blocks dangerous git and find commands",
   "hooks": {
     "PreToolUse": [
       {
@@ -6,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/git-guardrails.sh\"",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/git-guardrails.sh\"",
             "timeout": 5
           }
         ]

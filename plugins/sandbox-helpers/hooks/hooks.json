@@ -1,4 +1,5 @@
 {
+  "description": "Warns about macOS sandbox TLS failures for Go CLI tools",
   "hooks": {
     "PreToolUse": [
       {
@@ -6,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/sandbox-tls-warning.sh\"",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/sandbox-tls-warning.sh\"",
             "timeout": 5
           }
         ]

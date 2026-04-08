@@ -1,6 +1,6 @@
 {
   "name": "pre-commit-lint",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pre-commit hook that runs linters before Claude Code commits changes",
   "author": {
     "name": "Jaehyun Yeom"

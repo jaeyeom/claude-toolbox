@@ -24,7 +24,8 @@
 
 ## Plugin Hooks
 
-- In `settings.json` hook commands, use `$CLAUDE_PLUGIN_ROOT` (not `$CLAUDE_PLUGIN_DIR`) to reference files relative to the plugin directory.
+- Define hooks in `hooks/hooks.json` (not `settings.json`). Use the wrapper format: `{"hooks": {"PreToolUse": [...]}}`.
+- Use `${CLAUDE_PLUGIN_ROOT}` (not `$CLAUDE_PLUGIN_DIR`) to reference files relative to the plugin directory.
 
 ## Task Sources
 - Local: TODO.md
