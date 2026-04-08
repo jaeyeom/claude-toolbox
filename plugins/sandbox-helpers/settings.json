@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PLUGIN_DIR/hooks/sandbox-tls-warning.sh\"",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/sandbox-tls-warning.sh\"",
             "timeout": 5
           }
         ]
