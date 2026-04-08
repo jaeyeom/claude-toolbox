@@ -160,7 +160,7 @@
     {
       "name": "git-guardrails",
       "description": "PreToolUse hooks that block dangerous git and find commands: --no-verify, bulk git add, and find -exec/-delete",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": {
         "name": "Jaehyun Yeom"
       },
@@ -170,7 +170,7 @@
     {
       "name": "sandbox-helpers",
       "description": "PreToolUse hook that warns about macOS sandbox TLS failures for Go CLI tools (gh, jira) and suggests workarounds",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "author": {
         "name": "Jaehyun Yeom"
       },

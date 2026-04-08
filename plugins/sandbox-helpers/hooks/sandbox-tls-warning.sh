@@ -44,21 +44,18 @@ if echo "$COMMAND" | grep -qE '\bgh\s+(help|completion|alias)\b'; then
 	exit 0
 fi
 
-# Print diagnostic warning — allow the command to proceed so the user
+# Output JSON warning — allow the command to proceed so the user
 # sees both the warning and the actual TLS error (which triggers Claude
 # to retry with dangerouslyDisableSandbox: true).
-echo ""
-echo "╭─ sandbox-helpers: TLS issue detected ──────────────────────╮"
-echo "│ Claude Code sandbox is active on macOS. Go binaries like   │"
-echo "│ gh/jira cannot verify TLS certs (Security framework        │"
-echo "│ blocked by sandbox).                                       │"
-echo "│                                                            │"
-echo "│ Workarounds:                                               │"
-echo "│   1. Retry with dangerouslyDisableSandbox: true            │"
-echo "│   2. Use /sandbox to manage sandbox restrictions           │"
-echo "│   3. Use curl with \$GH_TOKEN as a fallback:               │"
-echo "│      curl -sH \"Authorization: bearer \$GH_TOKEN\" \\         │"
-echo "│        https://api.github.com/...                         │"
-echo "╰────────────────────────────────────────────────────────────╯"
+MESSAGE="sandbox-helpers: TLS issue detected. Claude Code sandbox is active on macOS. Go binaries like gh/jira cannot verify TLS certs (Security framework blocked by sandbox). Workarounds: (1) Retry with dangerouslyDisableSandbox: true, (2) Use /sandbox to manage sandbox restrictions, (3) Use curl with \$GH_TOKEN as a fallback."
+
+# PreToolUse hooks must output JSON to be visible to Claude
+jq -n --arg msg "$MESSAGE" '{
+  continue: true,
+  hookSpecificOutput: {
+    hookEventName: "PreToolUse",
+    additionalContext: $msg
+  }
+}'
 
 exit 0
