@@ -1,19 +1,19 @@
 #!/bin/bash
-# PreToolUse hook: warns about macOS sandbox TLS failures for Go CLI tools.
+# PreToolUse hook: blocks macOS sandbox TLS failures for Go CLI tools.
 #
-# Replaces the gh shim (~/.local/shims/bin/gh) with a Claude Code
-# PreToolUse hook. On macOS, the Claude Code sandbox blocks the Security
-# framework Mach service that Go's crypto/x509 (cgo) uses for TLS cert
-# verification. This causes gh, jira, and other Go binaries to fail with
-# cryptic x509 OSStatus errors.
+# On macOS, the Claude Code sandbox blocks the Security framework Mach
+# service that Go's crypto/x509 (cgo) uses for TLS cert verification.
+# This causes gh, jira, and other Go binaries to fail with cryptic
+# x509 OSStatus errors.
 #
-# When the command invokes a known Go CLI tool, this hook outputs a JSON
-# warning explaining the cause and workarounds. The dangerouslyDisableSandbox
-# flag is NOT checked because excludedCommands sets it yet the sandbox still
-# blocks Security framework access needed for TLS cert verification.
+# When the command invokes a known Go CLI tool, this hook blocks the
+# first attempt (exit 2, stderr fed back to Claude) so Claude retries
+# with dangerouslyDisableSandbox: true. Subsequent calls in the same
+# session are allowed through (exit 0) to avoid infinite blocking.
 #
 # Exit codes:
-#   0 = allow the command (with optional warning via JSON output)
+#   0 = allow the command
+#   2 = block the command (stderr fed back to Claude)
 
 # Only relevant on macOS
 if [[ "$(uname -s)" != "Darwin" ]]; then
@@ -24,6 +24,7 @@ fi
 INPUT=$(cat)
 
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "default"' 2>/dev/null || true)
 
 if [[ -z "$COMMAND" ]]; then
 	exit 0
@@ -39,18 +40,23 @@ if echo "$COMMAND" | grep -qE '\bgh\s+(help|completion|alias)\b'; then
 	exit 0
 fi
 
-# Output JSON warning — allow the command to proceed so the user
-# sees both the warning and the actual TLS error (which triggers Claude
-# to retry with dangerouslyDisableSandbox: true).
-MESSAGE="sandbox-helpers: TLS issue detected. Claude Code sandbox is active on macOS. Go binaries like gh/jira cannot verify TLS certs (Security framework blocked by sandbox). Workarounds: (1) Retry with dangerouslyDisableSandbox: true, (2) Use /sandbox to manage sandbox restrictions, (3) Use curl with \$GH_TOKEN as a fallback."
+# Track warnings per session to allow retry after first block
+STATE_FILE="/tmp/claude/sandbox-helpers-${SESSION_ID}.warned"
+if [[ -f "$STATE_FILE" ]]; then
+	# Already warned in this session — allow the retry
+	exit 0
+fi
 
-# PreToolUse hooks must output JSON to be visible to Claude
-jq -n --arg msg "$MESSAGE" '{
-  continue: true,
-  hookSpecificOutput: {
-    hookEventName: "PreToolUse",
-    additionalContext: $msg
-  }
-}'
+# Mark as warned for this session
+mkdir -p /tmp/claude 2>/dev/null
+touch "$STATE_FILE" 2>/dev/null
 
-exit 0
+# Block and print diagnostic to stderr (fed back to Claude)
+cat >&2 <<'EOF'
+sandbox-helpers: TLS issue detected. Claude Code sandbox is active on macOS.
+Go binaries like gh/jira cannot verify TLS certs (Security framework blocked).
+
+Retry this command with dangerouslyDisableSandbox: true to run outside the sandbox.
+EOF
+
+exit 2
