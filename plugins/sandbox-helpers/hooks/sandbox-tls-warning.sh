@@ -7,12 +7,13 @@
 # verification. This causes gh, jira, and other Go binaries to fail with
 # cryptic x509 OSStatus errors.
 #
-# When the sandbox is active (dangerouslyDisableSandbox is not true) and
-# the command invokes a known Go CLI tool, this hook prints a diagnostic
-# warning to stderr explaining the cause and workarounds.
+# When the command invokes a known Go CLI tool, this hook outputs a JSON
+# warning explaining the cause and workarounds. The dangerouslyDisableSandbox
+# flag is NOT checked because excludedCommands sets it yet the sandbox still
+# blocks Security framework access needed for TLS cert verification.
 #
 # Exit codes:
-#   0 = allow the command (with optional warning on stderr)
+#   0 = allow the command (with optional warning via JSON output)
 
 # Only relevant on macOS
 if [[ "$(uname -s)" != "Darwin" ]]; then
@@ -23,14 +24,8 @@ fi
 INPUT=$(cat)
 
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
-SANDBOX_DISABLED=$(echo "$INPUT" | jq -r '.tool_input.dangerouslyDisableSandbox // false' 2>/dev/null || true)
 
 if [[ -z "$COMMAND" ]]; then
-	exit 0
-fi
-
-# If sandbox is already disabled for this call, no warning needed
-if [[ "$SANDBOX_DISABLED" == "true" ]]; then
 	exit 0
 fi
 
