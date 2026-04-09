@@ -16,7 +16,7 @@ Pick the smallest bundle that matches your situation.
 | Solo developer | You want safer commits and a lightweight task loop | `git-guardrails`, `next-action`, `todo` |
 | Go project | You want local quality gates, CI parity, and Go conventions | `git-guardrails`, `next-action`, `go-dev`, `makefile-workflow`, `gabyx-githooks-setup`, `ci-workflow` |
 | Team with Jira | You already have a base bundle and need ticket operations in Claude Code | `jira-commands`, `jira-edit-description` |
-| Full suite | You want the recommended default workflow (see [all plugins](../README.md) for the complete list) | `git-guardrails`, `pre-commit-lint`, `gabyx-githooks-setup`, `makefile-workflow`, `ci-workflow`, `go-dev`, `next-action`, `todo`, `gh-issue-resolver`, `claude-md`, `semgrep-review`, `sandbox-helpers` |
+| Full suite | You want the recommended default workflow (see [all plugins](../README.md) for the complete list) | `git-guardrails`, `gabyx-githooks-setup`, `makefile-workflow`, `ci-workflow`, `go-dev`, `next-action`, `todo`, `gh-issue-resolver`, `claude-md`, `semgrep-review`, `sandbox-helpers` |
 
 ## Installation Recipes
 
@@ -65,7 +65,6 @@ available in the marketplace — install them individually as needed.
 ```bash
 /plugin marketplace add jaeyeom/claude-toolbox
 /plugin install git-guardrails
-/plugin install pre-commit-lint
 /plugin install gabyx-githooks-setup
 /plugin install makefile-workflow
 /plugin install ci-workflow
@@ -100,7 +99,7 @@ is:
 Think in layers:
 
 1. Task selection: `next-action`, `todo`, and optionally `gh-issue-resolver`.
-2. Commit safety: `git-guardrails` and `pre-commit-lint`.
+2. Commit safety: `git-guardrails`.
 3. Shared checks: `gabyx-githooks-setup` calling `make check`.
 4. Project conventions: `go-dev` or another `*-dev` plugin.
 5. CI parity: `ci-workflow` running the same Makefile targets.
@@ -127,8 +126,9 @@ Priority: High | Score: 90
 
 3. Let the commit-quality layer run automatically.
 
-`git-guardrails` blocks unsafe git usage. `pre-commit-lint` runs file-aware
-linters. `gabyx-githooks-setup` and `makefile-workflow` enforce shared checks.
+`git-guardrails` blocks unsafe git usage. `gabyx-githooks-setup` and
+`makefile-workflow` enforce shared checks through repository hooks and
+`make check`.
 
 4. Push with confidence.
 

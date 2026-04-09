@@ -54,6 +54,11 @@ That gives you:
 - language-aware coding guidance
 - shared local checks and matching CI
 
+This starter bundle uses `go-dev` as the language-specific plugin example.
+For other setups, start with the bundle guide in
+[Vibecoding Setup Guide](./docs/vibecoding-setup-guide.md), which separates
+solo, Go, Jira, and full-suite installs.
+
 ## Documentation
 
 Start here based on the question you are trying to answer:
@@ -84,7 +89,6 @@ Jira:
 - [jira-edit-description](./plugins/jira-edit-description)
 
 Safety and security:
-- [pre-commit-lint](./plugins/pre-commit-lint)
 - [semgrep-review](./plugins/semgrep-review)
 - [git-guardrails](./plugins/git-guardrails)
 - [sandbox-helpers](./plugins/sandbox-helpers)

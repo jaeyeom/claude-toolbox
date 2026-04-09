@@ -31,8 +31,8 @@ plugins/my-plugin/
 ├── agents/                  # Subagents (optional)
 │   └── my-agent.md
 ├── hooks/                   # Hook scripts (optional)
+│   ├── hooks.json           # Hook configuration (optional)
 │   └── script.sh
-├── settings.json            # Hook configuration (optional)
 ├── .mcp.json               # MCP server config (optional)
 └── README.md               # Documentation (REQUIRED)
 ```
@@ -150,12 +150,13 @@ How to format results...
 - `permissionMode` - `default`, `acceptEdits`, `bypassPermissions`, `plan`
 - `skills` - Skills to auto-load
 
-### Hooks (`settings.json`)
+### Hooks (`hooks/hooks.json`)
 
 Hooks run shell commands at specific events:
 
 ```json
 {
+  "description": "Brief description of what the hook does",
   "hooks": {
     "PreToolUse": [
       {
@@ -163,7 +164,7 @@ Hooks run shell commands at specific events:
         "hooks": [
           {
             "type": "command",
-            "command": "path/to/script.sh",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/script.sh\"",
             "timeout": 30
           }
         ]
@@ -183,6 +184,9 @@ Hooks run shell commands at specific events:
   }
 }
 ```
+
+Use the wrapper format above inside `hooks/hooks.json`, not `settings.json`.
+Use `${CLAUDE_PLUGIN_ROOT}` to reference files shipped with the plugin.
 
 **Hook events:**
 - `PreToolUse` - Before tool calls (can block)
@@ -232,12 +236,43 @@ Follow [Semantic Versioning](https://semver.org/):
 - MINOR: New features (backward compatible)
 - PATCH: Bug fixes
 
+When you make a meaningful change to an existing plugin:
+- Bump the version in both `plugins/<plugin-name>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+- Keep the versions in sync
+- If the version bump is separate from the feature or fix, use `chore(<plugin-name>): bump version to X.Y.Z`
+
+### Commit Messages
+
+- Use [Conventional Commits](https://www.conventionalcommits.org/) with a plugin scope such as `feat(<plugin-name>): ...`, `fix(<plugin-name>): ...`, or `chore(<plugin-name>): ...`
+- Keep the subject line at 72 characters or fewer
+
+### Validation
+
+Before opening a pull request, run the repo checks from the root:
+
+```bash
+make check
+make validate
+```
+
+Use `make validate-full` when you also want Claude's plugin validator to run.
+
+These checks cover:
+- Biome formatting and linting
+- Marketplace and directory sync
+- Name and version consistency between plugin manifests and the marketplace
+- Required frontmatter for skills, commands, and agents
+- Hook script executability
+
+Do not bypass git hooks with `--no-verify`, `GITHOOKS_DISABLE`, or similar flags unless explicitly instructed by a maintainer.
+
 ## Submitting Your Plugin
 
 1. Create your plugin under `plugins/`
-2. Test it locally with Claude Code
-3. Commit and push to your fork
-4. Create a pull request with:
+2. Add or update the matching entry in `.claude-plugin/marketplace.json`
+3. Test it locally with Claude Code
+4. Commit and push to your fork
+5. Create a pull request with:
    - Clear title: `Add <plugin-name> plugin`
    - Description of what the plugin does
    - Any special requirements
