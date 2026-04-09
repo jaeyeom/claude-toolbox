@@ -5,6 +5,8 @@
 # (~/.local/shims/bin/find) with a Claude Code PreToolUse hook.
 #
 # Blocked patterns:
+#   - GITHOOKS_DISABLE env var  (disables all Githooks)
+#   - GITHOOKS_SKIP_UNTRUSTED_HOOKS env var  (skips untrusted hooks silently)
 #   - git commit --no-verify  (skips hooks)
 #   - git add . / -A / --all  (stages unrelated files)
 #   - find -exec/-execdir/-ok/-okdir/-delete/-fls/-fprint/-fprint0/-fprintf
@@ -35,6 +37,16 @@ deny() {
 	}'
 	exit 0
 }
+
+# --- GITHOOKS_DISABLE env var ---
+if echo "$COMMAND" | grep -qE '\bGITHOOKS_DISABLE\b'; then
+	deny "Setting GITHOOKS_DISABLE is not allowed. Git hooks must not be bypassed. If a hook fails, investigate and fix the underlying issue."
+fi
+
+# --- GITHOOKS_SKIP_UNTRUSTED_HOOKS env var ---
+if echo "$COMMAND" | grep -qE '\bGITHOOKS_SKIP_UNTRUSTED_HOOKS\b'; then
+	deny "Setting GITHOOKS_SKIP_UNTRUSTED_HOOKS is not allowed. If hooks are untrusted, ask the user how to proceed. They can trust hooks by namespace with: git hooks trust hooks --pattern 'ns:<namespace>/**'"
+fi
 
 # --- git commit --no-verify ---
 if echo "$COMMAND" | grep -qE '\bgit\b[^|;]*\bcommit\b[^|;]*--no-verify'; then

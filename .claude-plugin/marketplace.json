@@ -159,8 +159,8 @@
     },
     {
       "name": "git-guardrails",
-      "description": "PreToolUse hooks that block dangerous git and find commands: --no-verify, bulk git add, and find -exec/-delete",
-      "version": "1.0.2",
+      "description": "PreToolUse hooks that block dangerous git and find commands: GITHOOKS_DISABLE, GITHOOKS_SKIP_UNTRUSTED_HOOKS, --no-verify, bulk git add, and find -exec/-delete",
+      "version": "1.1.0",
       "author": {
         "name": "Jaehyun Yeom"
       },
