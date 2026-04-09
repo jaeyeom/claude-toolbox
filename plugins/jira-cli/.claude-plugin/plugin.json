@@ -1,0 +1,11 @@
+{
+  "name": "jira-cli",
+  "version": "1.1.0",
+  "description": "Jira skills for creating bugs, tasks, resolving issues, updating tickets, planning projects, and editing descriptions with proper wiki markup",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["jira", "atlassian", "issue-tracking", "wiki-markup"]
+}

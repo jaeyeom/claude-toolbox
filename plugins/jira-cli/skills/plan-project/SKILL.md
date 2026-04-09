@@ -1,6 +1,7 @@
 ---
 name: plan-project
 description: Plan a project by reading a design document and creating Jira tasks with dependencies
+argument-hint: <path/to/design.md>
 ---
 
 Plan a project with the following steps
@@ -12,7 +13,7 @@ Plan a project with the following steps
    with enough background and context to conduct the task. Use web search tools
    if available and necessary.
    - Use actual newlines, not `\n` escape sequences and backslash escapes.
-   - Use Jira wiki markup formatting (see the `jira-edit-description` skill for
+   - Use Jira wiki markup formatting (see the `edit-description` skill for
      detailed formatting rules).
    - Jira supports code blocks with `{code:language}...{code}` syntax
    - Common language options: java, go, python, javascript, bash, etc.

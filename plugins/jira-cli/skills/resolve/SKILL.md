@@ -1,6 +1,7 @@
 ---
 name: resolve
 description: Investigate and resolve a Jira issue by reading the ticket, checking blockers, and making code changes
+argument-hint: <PROJ-123>
 ---
 
 Resolve Jira issue with the following steps

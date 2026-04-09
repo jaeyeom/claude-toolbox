@@ -1,13 +1,14 @@
 ---
 name: new-task
 description: Create a new Jira task with proper wiki markup formatting
+argument-hint: <PROJECT or EPIC-123>
 ---
 
 Create Jira task with the following steps
 
 1. First, write the task description content in a temporary file:
    - Use actual newlines, not `\n` escape sequences and backslash escapes.
-   - Use Jira wiki markup formatting (see the `jira-edit-description` skill for
+   - Use Jira wiki markup formatting (see the `edit-description` skill for
      detailed formatting rules).
    - Jira supports code blocks with `{code:language}...{code}` syntax
    - Common language options: java, go, python, javascript, bash, etc.

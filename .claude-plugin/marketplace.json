@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, Figma design application, semgrep security review, Go development, Protocol Buffer development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira description editing, Jira commands, git guardrails, macOS sandbox helpers, and Biome VCS integration"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, Figma design application, semgrep security review, Go development, Protocol Buffer development, gabyx/Githooks setup, Cloudflare macOS fix, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira CLI, git guardrails, macOS sandbox helpers, and Biome VCS integration"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -128,23 +128,13 @@
       "category": "development"
     },
     {
-      "name": "jira-edit-description",
-      "description": "Jira issue description editor with proper wiki markup formatting",
-      "version": "1.0.0",
+      "name": "jira-cli",
+      "description": "Jira skills for creating bugs, tasks, resolving issues, updating tickets, planning projects, and editing descriptions with proper wiki markup",
+      "version": "1.1.0",
       "author": {
         "name": "Jaehyun Yeom"
       },
-      "source": "./plugins/jira-edit-description",
-      "category": "development"
-    },
-    {
-      "name": "jira-commands",
-      "description": "Jira slash commands for creating bugs, tasks, resolving issues, updating tickets, and planning projects",
-      "version": "1.0.0",
-      "author": {
-        "name": "Jaehyun Yeom"
-      },
-      "source": "./plugins/jira-commands",
+      "source": "./plugins/jira-cli",
       "category": "development"
     },
     {
