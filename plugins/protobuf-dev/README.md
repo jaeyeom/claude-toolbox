@@ -28,7 +28,7 @@ The skill activates automatically when you work with `.proto` files:
 ## What It Covers
 
 - **Build system detection**: Automatically detects buf or Bazel and adapts commands
-- **Proto file style**: Naming conventions, file structure, proto3 best practices
+- **Proto file style**: Naming conventions, file structure, edition 2024 best practices
 - **Documentation**: Fine-print contract philosophy with example values and zero-value behavior
 - **Backward compatibility**: Field number immutability, package name stability, deprecation protocol
 - **Design patterns**: Enums over booleans, nested messages, Well Known Types

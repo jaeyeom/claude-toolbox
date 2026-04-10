@@ -64,7 +64,7 @@ go_proto_library(
 ### Required File Structure
 
 ```protobuf
-syntax = "proto3";
+edition = "2024";
 
 package mycompany.myservice.v1;
 
@@ -128,7 +128,7 @@ string software_version = 3;
 
 ### Specify Zero or Missing Value Behavior
 
-In proto3, unset scalar fields are indistinguishable from zero values. **Document what empty/zero means:**
+By default, unset scalar fields are indistinguishable from zero values (implicit field presence). **Document what empty/zero means:**
 
 ```protobuf
 // The user's preferred language code (ISO 639-1).
@@ -223,7 +223,7 @@ The protobuf package path is orthogonal to language-specific import paths (e.g.,
 - Adding a `package` line where none existed is equally risky.
 
 ```protobuf
-syntax = "proto3";
+edition = "2024";
 package mycompany.myservice.v1;  // Changing this breaks Any compatibility
 ```
 
@@ -373,7 +373,7 @@ message Event {
 | `google.protobuf.Struct` | Arbitrary JSON-like data |
 | `google.protobuf.FieldMask` | Partial updates |
 | `google.protobuf.Empty` | RPCs with no request/response payload |
-| `google.protobuf.StringValue` (wrappers) | Distinguishing "unset" from zero in proto3 |
+| `google.protobuf.StringValue` (wrappers) | Distinguishing "unset" from zero with implicit presence |
 
 ## 6. Linting
 
