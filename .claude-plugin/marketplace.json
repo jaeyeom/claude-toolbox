@@ -129,8 +129,8 @@
     },
     {
       "name": "jira-cli",
-      "description": "Jira skills for creating bugs, tasks, resolving issues, updating tickets, planning projects, and editing descriptions with proper wiki markup",
-      "version": "1.1.0",
+      "description": "Jira skills for creating bugs, tasks, resolving issues, updating tickets, planning projects, and editing descriptions with proper wiki markup. Includes a hook to enforce -p/--project on jira issue create.",
+      "version": "1.2.0",
       "author": {
         "name": "Jaehyun Yeom"
       },
