@@ -11,6 +11,7 @@
 #   - Hook script executability
 #   - settings.json event name validity
 #   - Source path validity in marketplace.json
+#   - Hook-vs-skill compatibility (hooks must not block own skill commands)
 #
 # Requirements: bash 4+, jq
 # Exit code: 0 on success, 1 on any error.
@@ -367,6 +368,86 @@ while IFS= read -r -d '' file; do
 done < <(find "$PLUGINS_DIR" -name '*.md' -print0 2>/dev/null)
 
 info "Checked for --plugin flag ($banned_count occurrence(s) found)"
+echo ""
+
+# ---------------------------------------------------------------------------
+# 12. Hook-vs-skill compatibility: PreToolUse hooks must not block commands
+#     documented in the plugin's own SKILL.md files
+# ---------------------------------------------------------------------------
+echo "--- Checking hook-vs-skill compatibility ---"
+
+compat_count=0
+for plugin_dir in "$PLUGINS_DIR"/*/; do
+	[[ -d "$plugin_dir" ]] || continue
+	hooks_json="$plugin_dir/hooks/hooks.json"
+
+	# Skip plugins without hooks.json
+	[[ -f "$hooks_json" ]] || continue
+
+	# Skip invalid JSON
+	jq empty "$hooks_json" 2>/dev/null || continue
+
+	# Collect PreToolUse Bash hook script paths
+	hook_scripts=()
+	while IFS= read -r hc; do
+		[[ -n "$hc" ]] || continue
+		# Resolve ${CLAUDE_PLUGIN_ROOT} to plugin directory
+		resolved="${hc//\$\{CLAUDE_PLUGIN_ROOT\}/${plugin_dir%/}}"
+		# Extract script path: strip "bash " prefix and quotes
+		script="${resolved#bash }"
+		script="${script//\"/}"
+		[[ -f "$script" ]] && hook_scripts+=("$script")
+	done < <(
+		jq -r '
+			.hooks.PreToolUse[]? |
+			select(.matcher == "Bash") |
+			.hooks[]? |
+			select(.type == "command") |
+			.command
+		' "$hooks_json" 2>/dev/null
+	)
+
+	[[ ${#hook_scripts[@]} -gt 0 ]] || continue
+
+	# Check each SKILL.md in this plugin
+	# shellcheck disable=SC2016
+	backtick_re='`[^`]+`'
+	while IFS= read -r -d '' skill_md; do
+		# Extract backtick-enclosed inline code
+		while IFS= read -r raw_cmd; do
+			# Strip surrounding backticks
+			cmd="${raw_cmd#\`}"
+			cmd="${cmd%\`}"
+			[[ -n "$cmd" ]] || continue
+
+			# Skip non-commands: single words, wiki markup, escape sequences
+			[[ "$cmd" == *" "* ]] || continue
+			[[ "$cmd" != "{"* ]] || continue
+
+			# Substitute $ARGUMENTS with a sample value for testing
+			test_cmd="${cmd//\$ARGUMENTS/SAMPLE}"
+
+			# Build mock PreToolUse JSON input
+			mock_input=$(jq -n --arg cmd "$test_cmd" '{
+				tool_name: "Bash",
+				tool_input: { command: $cmd }
+			}')
+
+			# Test against each hook script
+			for script in "${hook_scripts[@]}"; do
+				hook_output=$(echo "$mock_input" | bash "$script" 2>/dev/null) || true
+
+				if echo "$hook_output" | jq -e '.hookSpecificOutput.permissionDecision == "deny"' &>/dev/null; then
+					deny_reason=$(echo "$hook_output" | jq -r '.hookSpecificOutput.permissionDecisionReason // "unknown"')
+					error "$skill_md: command would be blocked by hook ($(basename "$script")): $cmd — $deny_reason"
+				fi
+			done
+			compat_count=$((compat_count + 1))
+		done < <(grep -oE "$backtick_re" "$skill_md" 2>/dev/null)
+	done < <(find "$plugin_dir" -path '*/skills/*/SKILL.md' -print0 2>/dev/null)
+done
+
+info "Checked $compat_count skill command(s) against hooks"
 echo ""
 
 # ---------------------------------------------------------------------------
