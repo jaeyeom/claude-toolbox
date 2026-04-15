@@ -7,6 +7,8 @@
 # Blocked patterns:
 #   - GITHOOKS_DISABLE env var  (disables all Githooks)
 #   - GITHOOKS_SKIP_UNTRUSTED_HOOKS env var  (skips untrusted hooks silently)
+#   - git config githooks.skipUntrustedHooks  (skips untrusted hooks via config)
+#   - git config githooks.disable  (disables all Githooks via config)
 #   - git commit --no-verify  (skips hooks)
 #   - git add . / -A / --all  (stages unrelated files)
 #   - find -exec/-execdir/-ok/-okdir/-delete/-fls/-fprint/-fprint0/-fprintf
@@ -45,7 +47,17 @@ fi
 
 # --- GITHOOKS_SKIP_UNTRUSTED_HOOKS env var ---
 if echo "$COMMAND" | grep -qE '\bGITHOOKS_SKIP_UNTRUSTED_HOOKS\b'; then
-	deny "Setting GITHOOKS_SKIP_UNTRUSTED_HOOKS is not allowed. If hooks are untrusted, ask the user how to proceed. They can trust hooks by namespace with: git hooks trust hooks --pattern 'ns:<namespace>/**'"
+	deny "Setting GITHOOKS_SKIP_UNTRUSTED_HOOKS is not allowed. If hooks are untrusted, review them and trust by namespace after review: git hooks trust hooks --pattern 'ns:<namespace>/**'"
+fi
+
+# --- git config githooks.skipUntrustedHooks ---
+if echo "$COMMAND" | grep -qE '\bgit\b[^|;]*\bconfig\b[^|;]*\bgithooks\.skipUntrustedHooks\b'; then
+	deny "Setting githooks.skipUntrustedHooks via git config is not allowed. If hooks are untrusted, review them and trust by namespace after review: git hooks trust hooks --pattern 'ns:<namespace>/**'"
+fi
+
+# --- git config githooks.disable ---
+if echo "$COMMAND" | grep -qE '\bgit\b[^|;]*\bconfig\b[^|;]*\bgithooks\.disable\b'; then
+	deny "Setting githooks.disable via git config is not allowed. Git hooks must not be bypassed."
 fi
 
 # --- git commit --no-verify ---
