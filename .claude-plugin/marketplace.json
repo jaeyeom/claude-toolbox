@@ -20,7 +20,7 @@
     {
       "name": "ci-workflow",
       "description": "GitHub Actions CI workflow generation and failure diagnosis — generate workflows that mirror Makefile targets and diagnose CI failures with targeted fixes",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "Jaehyun Yeom"
       },

@@ -60,9 +60,9 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
@@ -93,13 +93,13 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
-      - uses: golangci/golangci-lint-action@v6
+      - uses: golangci/golangci-lint-action@v9
 
       - run: go test ./...
 
@@ -128,9 +128,9 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -164,9 +164,9 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -202,13 +202,13 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -226,8 +226,9 @@ After generating the workflow file:
 
 1. **YAML syntax**: Confirm the file is valid YAML (no tab indentation, correct nesting).
 2. **Referenced targets**: If using Makefile-first strategy, verify the Makefile actually exposes the targets called in the workflow (e.g., `check`, `build`).
-3. **Action versions**: Use pinned major versions (`actions/checkout@v4`, `actions/setup-go@v5`, `actions/setup-node@v4`).
+3. **Action versions**: Use pinned major versions (`actions/checkout@v6`, `actions/setup-go@v6`, `actions/setup-node@v6`).
 4. **Version sources**: Confirm `go-version-file` / `node-version-file` point to files that exist.
+5. **Runner compatibility**: If the repository uses self-hosted runners, confirm the runner version meets the minimum required by the selected action majors before generating the workflow.
 
 ### Step 5 — Explain
 
@@ -245,15 +246,16 @@ After generating, summarize:
 | Matrix builds | Add `strategy.matrix` with Go or Node version arrays |
 | Separate jobs per language | Split into `go:` and `node:` jobs under `jobs:` |
 | Release on tag | Add `on: push: tags: ['v*']` trigger with a `release` job |
-| Coverage upload | Add a step after tests: `uses: codecov/codecov-action@v4` |
-| Caching Go modules | `actions/setup-go@v5` caches by default; no extra step needed |
-| Caching Node modules | Use `cache: npm` (or `pnpm`) in `actions/setup-node@v4` |
+| Coverage upload | Add a step after tests: `uses: codecov/codecov-action@v5` |
+| Caching Go modules | `actions/setup-go@v6` caches by default; no extra step needed |
+| Caching Node modules | Use `cache: npm` (or `pnpm`) in `actions/setup-node@v6` |
 | Branch protection | Recommend requiring the `ci` job to pass before merging |
 
 ## Best practices
 
 - **Concurrency control**: Always include the `concurrency` block to cancel redundant runs on the same branch.
-- **Pin action versions**: Use `@v4` not `@main` for stability; dependabot can update these.
+- **Pin action versions**: Use `@v6` not `@main` for stability; dependabot can update these.
+- **Self-hosted runners**: Newer GitHub-maintained action majors can require newer runner versions; call that out when a repo uses self-hosted runners.
 - **Version from file**: Prefer `go-version-file: go.mod` and `node-version-file: .nvmrc` over hardcoded version strings so CI tracks the same version developers use locally.
 - **Minimal permissions**: Set `permissions: contents: read` at the workflow level; escalate per-job only when needed.
 - **Branch protection**: After the workflow is running, suggest enabling required status checks on the `ci` job.
