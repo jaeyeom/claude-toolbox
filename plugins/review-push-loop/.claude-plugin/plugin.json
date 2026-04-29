@@ -1,0 +1,11 @@
+{
+  "name": "review-push-loop",
+  "version": "0.1.0",
+  "description": "PreToolUse hook that redirects 'git push' to 'review-and-push-loop --output compact', which reviews unpushed commits one by one and stops on blockers. Allows escape hatches for tag pushes and branch deletes.",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["git", "push", "review", "guardrails", "hook"]
+}

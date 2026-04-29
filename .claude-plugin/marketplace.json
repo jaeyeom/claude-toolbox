@@ -176,6 +176,16 @@
       },
       "source": "./plugins/protobuf-dev",
       "category": "development"
+    },
+    {
+      "name": "review-push-loop",
+      "description": "PreToolUse hook that redirects 'git push' to 'review-and-push-loop --output compact', which reviews unpushed commits one by one and stops on blockers. Allows escape hatches for tag pushes and branch deletes.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/review-push-loop",
+      "category": "development"
     }
   ]
 }
