@@ -178,6 +178,37 @@ This is safer than `trust-all` because it only trusts hooks from a known, author
 
 **For CI/automation**, either set `GITHOOKS_DISABLE=1` to skip hooks, or use `non-interactive-runner` with `trust-all --accept` to run hooks without prompts.
 
+### 6a. Shared trust DB across many repos
+
+When a user maintains many repos that all consume the **same** shared hook repository, the per-repo trust model becomes painful:
+
+- Each new clone requires `git hooks trust hooks --pattern "ns:<namespace>/**"`.
+- Every upstream update to the shared hook content invalidates the checksum and forces re-trusting in every repo.
+- This pushes users toward `trust-all` (security-coarse) or `GITHOOKS_SKIP_UNTRUSTED_HOOKS` (security-off) just to keep ergonomic defaults.
+
+The trust database lives at `.git/.githooks.checksums/<sha[:2]>/<sha[2:]>` and is content-addressed by SHA. Each entry's stored `path:` field is decorative — the runner only does a SHA lookup. Pointing every repo's `.git/.githooks.checksums` at a single global directory therefore makes trust granted in one repo apply to every symlinked repo.
+
+**One-time setup per repo:**
+
+```bash
+mkdir -p ~/.githooks/checksums-global
+[ -d .git/.githooks.checksums ] && \
+  cp -R .git/.githooks.checksums/. ~/.githooks/checksums-global/ && \
+  rm -rf .git/.githooks.checksums
+ln -s ~/.githooks/checksums-global .git/.githooks.checksums
+```
+
+After this, running `git hooks trust hooks --pattern "ns:<namespace>/**"` in any one repo immediately applies to all symlinked repos. A fresh clone with zero local checksums correctly inherits trust through the symlink — no prompts, hooks run normally.
+
+**Caveats:**
+
+- The trust DB format is undocumented internal state. If gabyx changes it (JSON, sqlite, etc.) the symlinks will silently break.
+- Local-hook SHA collisions across repos overwrite the (cosmetic) `path:` field — harmless but worth noting.
+- `git clone` and `git init` rebuild `.git/`, so the symlink must be reinstated on every new clone (a wrapper around `git clone` can automate this).
+- This widens trust scope from per-repo to per-user. It does **not** weaken the SHA-based content check itself — the same security primitive applies more broadly. Continue to trust selectively (namespace patterns, not `--all`).
+
+**Upstream tracking:** A proper fix (user-scoped trust store with diff-gated re-trust) is requested at [gabyx/Githooks#200](https://github.com/gabyx/Githooks/issues/200) but is not yet implemented.
+
 ### 7. Shared hook repository structure
 
 Shared repos organize hooks as:
