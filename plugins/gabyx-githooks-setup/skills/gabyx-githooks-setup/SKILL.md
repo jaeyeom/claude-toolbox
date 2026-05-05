@@ -43,6 +43,14 @@ git hooks install
 
 This activates Githooks in the current repository. It rewires `.git/hooks` to the Githooks runner, which then discovers and executes both local (`.githooks/`) and globally-configured shared hooks.
 
+Then enable the non-interactive runner globally (one-time per user):
+
+```bash
+git hooks config non-interactive-runner --enable --global
+```
+
+This makes the runner auto-answer non-fatal prompts with sensible defaults instead of falling back to a blocking GUI dialog when no terminal is attached (the typical case for `git commit --amend --no-edit`, editor integrations, and CI). The trust prompt remains fatal — see section 6.
+
 After installation, check for replaced hooks (see section 2a below), then update shared hooks:
 
 ```bash
@@ -97,15 +105,23 @@ urls:
 git hooks install
 ```
 
-3. Check for replaced hooks (see section 2a above) and remove any that are redundant with the shared hooks.
+3. Enable the non-interactive runner globally (one-time per user):
 
-4. Pull the shared hooks:
+```bash
+git hooks config non-interactive-runner --enable --global
+```
+
+This auto-answers non-fatal prompts with sensible defaults so hooks never block on a GUI dialog when no terminal is attached. The trust prompt stays fatal — see section 6.
+
+4. Check for replaced hooks (see section 2a above) and remove any that are redundant with the shared hooks.
+
+5. Pull the shared hooks:
 
 ```bash
 git hooks shared update
 ```
 
-5. Commit `.githooks/.shared.yaml` so other contributors get the same hooks.
+6. Commit `.githooks/.shared.yaml` so other contributors get the same hooks.
 
 ### 4. Useful commands
 
@@ -137,21 +153,15 @@ On servers with multiple users, disable automatic updates to avoid parallel invo
 git hooks config disable-shared-hooks-update --set
 ```
 
-### 6. Trust and non-interactive mode
+### 6. Trust handling
 
-Githooks verifies hook checksums. When new or modified hooks are detected, it prompts for trust confirmation. This can block non-interactive operations like `git commit --amend --no-edit` or CI pipelines.
+Githooks verifies hook checksums. When new or modified hooks are detected, it prompts for trust confirmation — and unlike other prompts, the trust prompt is **fatal** under the non-interactive runner enabled in steps 2 and 3. That is intentional: a hard failure tells the user a trust decision is required, instead of silently popping a GUI dialog or hanging a script.
 
-**Non-interactive runner (recommended for local development):**
-
-```bash
-git hooks config non-interactive-runner --enable --global
-```
-
-This takes default answers for all non-fatal prompts without warnings.
+To resolve a trust failure, trust hooks selectively by namespace.
 
 **Trusting a specific shared hook repository (recommended):**
 
-Prefer trusting hooks selectively by namespace rather than trusting everything blindly. Each shared hook repo has a namespace (defined in `.githooks/.namespace`, or a SHA1 prefix of its URL if not set). Use `git hooks list` to see namespace paths, then trust by pattern:
+Each shared hook repo has a namespace (defined in `.githooks/.namespace`, or a SHA1 prefix of its URL if not set). Use `git hooks list` to see namespace paths, then trust by pattern:
 
 ```bash
 # See namespace paths for all hooks
@@ -176,7 +186,7 @@ This is safer than `trust-all` because it only trusts hooks from a known, author
 | `GITHOOKS_SKIP_UNTRUSTED_HOOKS=true` | Per-session | Skips untrusted hooks silently |
 | `GITHOOKS_DISABLE=1` | Per-session | Disables all Githooks entirely |
 
-**For CI/automation**, either set `GITHOOKS_DISABLE=1` to skip hooks, or use `non-interactive-runner` with `trust-all --accept` to run hooks without prompts.
+**For CI/automation**, either set `GITHOOKS_DISABLE=1` to skip hooks entirely, or use `trust-all --accept` so the runner auto-trusts hooks (the non-interactive runner from initial setup already handles non-fatal prompts).
 
 ### 6a. Shared trust DB across many repos
 
