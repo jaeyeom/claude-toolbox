@@ -186,6 +186,16 @@
       },
       "source": "./plugins/review-push-loop",
       "category": "development"
+    },
+    {
+      "name": "jira-close-merged",
+      "description": "Scan the git log for Jira ticket IDs and transition any non-Done tickets to Done using the Atlassian MCP",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/jira-close-merged",
+      "category": "development"
     }
   ]
 }
