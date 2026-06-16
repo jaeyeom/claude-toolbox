@@ -1,0 +1,11 @@
+{
+  "name": "jira-close-merged",
+  "version": "1.0.0",
+  "description": "Scan the git log for Jira ticket IDs and transition any non-Done tickets to Done using the Atlassian MCP",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["jira", "atlassian", "mcp", "git", "workflow", "automation"]
+}
