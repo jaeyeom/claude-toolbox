@@ -189,8 +189,8 @@
     },
     {
       "name": "jira-close-merged",
-      "description": "Scan the git log for Jira ticket IDs and transition any non-Done tickets to Done using the Atlassian MCP",
-      "version": "1.0.0",
+      "description": "Scan the git log for Jira ticket IDs, transition non-Done tickets to Done, and assign unassigned tickets to the commit author using the Atlassian MCP",
+      "version": "1.1.0",
       "author": {
         "name": "Jaehyun Yeom"
       },

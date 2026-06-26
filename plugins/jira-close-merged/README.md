@@ -30,7 +30,9 @@ Atlassian MCP.
 2. Looks up each ticket's current status via the Atlassian MCP.
 3. Skips tickets already in the "Done" status category.
 4. Transitions all remaining tickets to Done in one pass.
-5. Reports a summary table with per-ticket results.
+5. Assigns unassigned tickets to the author of the most recent commit that
+   referenced the ticket (resolved via `lookupJiraAccountId`).
+6. Reports a summary table with per-ticket results.
 
 ## Example usage
 
