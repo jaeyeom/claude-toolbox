@@ -96,6 +96,7 @@ Safety and security:
 Other:
 - [apply-figma-make](./plugins/apply-figma-make)
 - [cloudflare-macos-fix](./plugins/cloudflare-macos-fix)
+- [cleanup-worktree-disk](./plugins/cleanup-worktree-disk)
 
 Each plugin directory contains its own `README.md`, which is the source of truth
 for installation details, configuration, and examples.

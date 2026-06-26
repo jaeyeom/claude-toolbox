@@ -1,0 +1,11 @@
+{
+  "name": "cleanup-worktree-disk",
+  "version": "1.0.0",
+  "description": "Reclaim macOS disk space by removing git worktrees whose PRs are merged and deleting orphaned Bazel output bases",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["git", "worktree", "bazel", "disk", "cleanup", "macos", "gh"]
+}
