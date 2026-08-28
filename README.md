@@ -32,7 +32,7 @@ These plugins work together to create a reliable development workflow:
 Add the task-management layer on top:
 - `next-action` finds the next item worth doing.
 - `todo` tracks local work.
-- `gh-issue-resolver` can take an issue from its written plan through commit, stopping when the plan must change.
+- `gh-issue-resolver` can take an issue from its written plan through a draft pull request, stopping when the plan must change.
 
 ## Quick Start
 
