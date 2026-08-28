@@ -15,6 +15,7 @@ Pick the smallest bundle that matches your situation.
 | --- | --- | --- |
 | Solo developer | You want safer commits and a lightweight task loop | `git-guardrails`, `next-action`, `todo` |
 | Go project | You want local quality gates, CI parity, and Go conventions | `git-guardrails`, `next-action`, `go-dev`, `makefile-workflow`, `gabyx-githooks-setup`, `ci-workflow` |
+| Python project | You want local quality gates, CI parity, and Python conventions | `git-guardrails`, `next-action`, `python-dev`, `makefile-workflow`, `gabyx-githooks-setup`, `ci-workflow` |
 | Team with Jira | You already have a base bundle and need ticket operations in Claude Code | `jira-commands`, `jira-edit-description` |
 | Full suite | You want the recommended default workflow (see [all plugins](../README.md) for the complete list) | `git-guardrails`, `gabyx-githooks-setup`, `makefile-workflow`, `ci-workflow`, `go-dev`, `next-action`, `todo`, `gh-issue-resolver`, `claude-md`, `semgrep-review`, `sandbox-helpers` |
 
@@ -46,6 +47,21 @@ Use this when you want the shortest path to a safer AI coding loop.
 Use this when you want `git commit`, `make check`, and CI to reinforce the same
 rules.
 
+### Python Project
+
+```bash
+/plugin marketplace add jaeyeom/claude-toolbox
+/plugin install git-guardrails
+/plugin install next-action
+/plugin install python-dev
+/plugin install makefile-workflow
+/plugin install gabyx-githooks-setup
+/plugin install ci-workflow
+```
+
+Use this when you want `git commit`, `make check`, and CI to reinforce the same
+rules, with Python conventions (uv/ruff/pytest, inject-don't-patch).
+
 ### Team with Jira
 
 Install this on top of one of the bundles above:
@@ -58,7 +74,7 @@ Install this on top of one of the bundles above:
 ### Full Suite
 
 This installs the recommended default set. Additional plugins such as
-`create-lang-dev-skill`, `biome-vcs-integration`, `jira-commands`,
+`python-dev`, `create-lang-dev-skill`, `biome-vcs-integration`, `jira-commands`,
 `jira-edit-description`, `apply-figma-make`, and `cloudflare-macos-fix` are
 available in the marketplace — install them individually as needed.
 
@@ -101,7 +117,7 @@ Think in layers:
 1. Task selection: `next-action`, `todo`, and optionally `gh-issue-resolver`.
 2. Commit safety: `git-guardrails`.
 3. Shared checks: `gabyx-githooks-setup` calling `make check`.
-4. Project conventions: `go-dev` or another `*-dev` plugin.
+4. Project conventions: `go-dev`, `python-dev`, or another `*-dev` plugin.
 5. CI parity: `ci-workflow` running the same Makefile targets.
 
 If you are unsure what to add next, fill gaps in that order.

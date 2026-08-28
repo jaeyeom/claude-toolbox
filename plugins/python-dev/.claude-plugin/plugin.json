@@ -1,0 +1,19 @@
+{
+  "name": "python-dev",
+  "version": "1.0.0",
+  "description": "Python development skill with uv/ruff/pytest defaults, type hints, and test doubles (dependency injection, freezegun, monkeypatch)",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": [
+    "python",
+    "pytest",
+    "uv",
+    "ruff",
+    "testing",
+    "freezegun",
+    "development"
+  ]
+}

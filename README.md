@@ -22,7 +22,7 @@ These plugins work together to create a reliable development workflow:
 │  Hooks call `make check` - format, lint, test, build    │
 │                    │              │                     │
 │                    ▼              ▼                     │
-│  *-dev (e.g. go-dev)      ci-workflow                   │
+│  *-dev (go-dev, python-dev)  ci-workflow                │
 │  Language-specific     CI calls the same                │
 │  conventions the       Makefile targets                 │
 │  checks enforce        via GitHub Actions               │
@@ -55,9 +55,10 @@ That gives you:
 - shared local checks and matching CI
 
 This starter bundle uses `go-dev` as the language-specific plugin example.
-For other setups, start with the bundle guide in
+Python projects should install `python-dev` instead. For other setups, start
+with the bundle guide in
 [Vibecoding Setup Guide](./docs/vibecoding-setup-guide.md), which separates
-solo, Go, Jira, and full-suite installs.
+solo, Go, Python, Jira, and full-suite installs.
 
 ## Documentation
 
@@ -74,6 +75,7 @@ Workflow:
 - [makefile-workflow](./plugins/makefile-workflow)
 - [ci-workflow](./plugins/ci-workflow)
 - [go-dev](./plugins/go-dev)
+- [python-dev](./plugins/python-dev)
 - [protobuf-dev](./plugins/protobuf-dev)
 - [create-lang-dev-skill](./plugins/create-lang-dev-skill)
 - [biome-vcs-integration](./plugins/biome-vcs-integration)
