@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, Figma design application, semgrep security review, Go development, Protocol Buffer development, gabyx/Githooks setup, Cloudflare macOS fix, worktree and Bazel disk cleanup, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira CLI, git guardrails, macOS sandbox helpers, and Biome VCS integration"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, Figma design application, semgrep security review, Go development, Python development, Protocol Buffer development, gabyx/Githooks setup, Cloudflare macOS fix, worktree and Bazel disk cleanup, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira CLI, git guardrails, macOS sandbox helpers, and Biome VCS integration"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -55,6 +55,16 @@
         "name": "Jaehyun Yeom"
       },
       "source": "./plugins/go-dev",
+      "category": "development"
+    },
+    {
+      "name": "python-dev",
+      "description": "Python development skill with uv/ruff/pytest defaults, type hints, and test doubles (dependency injection, freezegun, monkeypatch)",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/python-dev",
       "category": "development"
     },
     {
