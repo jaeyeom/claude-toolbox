@@ -8,7 +8,7 @@ autouse: false
 # GitHub Issue Resolver
 
 Resolve a GitHub issue by executing the issue's plan, meeting its acceptance
-criteria, and committing the fix.
+criteria, committing the fix, and opening a draft pull request.
 
 The issue's plan is the execution contract. Its acceptance criteria are the
 definition of done. Do not invent a competing approach.
@@ -84,6 +84,19 @@ gh label create "in progress" --description "Work is actively underway" --color 
 
 If label creation fails (e.g., insufficient permissions), skip labeling and
 proceed — assignment alone is sufficient to signal progress.
+
+### Step 3a — Create a feature branch
+
+If the current branch is the repository default branch, create and switch to
+a feature branch before making changes:
+
+```bash
+gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'
+git checkout -b issue-<number>-<short-slug>
+```
+
+Derive `<short-slug>` from the issue title (lowercase, hyphenated, a few
+words). If already on a non-default branch, keep it.
 
 ### Step 4 — Execute the plan
 
@@ -188,7 +201,51 @@ Follow the repository's commit message conventions. Include
 `Resolves #<issue-number>` or `Fixes #<issue-number>` in the commit body so
 GitHub automatically links the commit to the issue.
 
-### Step 7 — Clean up the "in progress" label
+### Step 7 — Open a draft pull request
+
+Push the feature branch and open a **draft** pull request.
+
+Look for a default pull request template (names are case-insensitive), in
+this order:
+
+1. `.github/pull_request_template.md`
+2. `pull_request_template.md` (repository root)
+3. `docs/pull_request_template.md`
+4. Files under `.github/PULL_REQUEST_TEMPLATE/`, `PULL_REQUEST_TEMPLATE/`,
+   or `docs/PULL_REQUEST_TEMPLATE/` (one file: use it; several: use the
+   first in lexicographic order)
+
+Search the working tree first. If none of those paths exist, repeat the
+same search on the default branch (`git show origin/<default>:<path>`).
+
+If a template exists, use it as the PR body: keep every heading, checklist
+item, and HTML comment, and fill in the sections from the issue and the work
+done. Put `Resolves #<issue-number>` in the related-issue slot when the
+template has one; otherwise include it in the body.
+
+If no template exists, write a short body that includes
+`Resolves #<issue-number>`.
+
+Write the filled body to a file and create the draft PR:
+
+```bash
+git push -u origin HEAD
+gh pr create --draft --title "<issue title>" --body-file <filled-body>
+```
+
+Pass the filled text with `--body-file`. `gh` rejects combining `--template`
+with `--body` / `--body-file`, so do not pass the unfilled template path as
+`--template`.
+
+Omit `--draft` only when the user explicitly asks for a ready-for-review
+pull request.
+
+If a pull request already exists for this branch (`gh pr view`), report its
+URL instead of creating another.
+
+Report the PR URL to the user.
+
+### Step 8 — Clean up the "in progress" label
 
 After committing, remove the "in progress" label so it does not remain on the
 issue after it is auto-closed:
@@ -200,11 +257,11 @@ gh issue edit $ARGUMENTS --remove-label "in progress"
 If the label was never added (e.g., it could not be created in Step 3), skip
 this step.
 
-### Step 8 — Leave the issue open
+### Step 9 — Leave the issue open
 
 Do **not** close the issue. The issue will be closed automatically when the
-commit is merged (via the `Resolves #N` reference), or the user can close it
-manually after review.
+pull request is merged (via the `Resolves #N` reference), or the user can
+close it manually after review.
 
 ## Red Flags — STOP
 
@@ -215,6 +272,8 @@ manually after review.
 - `gh issue edit` after the first yes without showing the exact diff
 - "Updating the issue is just bookkeeping"
 - Rewriting the whole issue body
+- Opening a non-draft PR without being asked
+- Writing a PR body that drops the repo template's headings or checklists
 
 ## Rationalizations
 
@@ -227,3 +286,5 @@ manually after review.
 | "They already said yes to the approach" | That was the first yes. The issue edit needs a second yes. |
 | "Asking again is pedantic / the issue is lying" | Propose the exact diff and wait. Do not edit. |
 | "I'll rewrite the whole issue so it's accurate" | Surgical only: change the sentences that no longer match. |
+| "It's ready, so skip draft" | Draft is the default. Ready only if the user asks. |
+| "I'll write a better body from scratch" | Fill the template. Keep its structure. |
