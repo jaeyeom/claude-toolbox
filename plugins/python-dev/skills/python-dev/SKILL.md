@@ -110,12 +110,21 @@ that project. Do not introduce a new logging library.
 
 ### Imports
 
-Import modules, not functions: `import freezegun`, then
-`freezegun.freeze_time`. Do not `from freezegun import freeze_time`.
+Import modules, not types, classes, or functions:
 
-The same rule applies elsewhere. Exceptions are names used as types where the
-qualified form is unreadable (`from datetime import datetime`,
-`from typing import Protocol`).
+```python
+import datetime
+import freezegun
+
+now = datetime.datetime.now(datetime.UTC)
+```
+
+Do not `from datetime import datetime, UTC` or
+`from freezegun import freeze_time`.
+
+**Exception:** symbols from `typing`, `collections.abc`, and
+`typing_extensions` that exist to support type annotations
+(`from typing import Protocol`, `from collections.abc import Callable`).
 
 ### Functions and modules
 
@@ -149,60 +158,60 @@ UUIDs, random, the filesystem, and the current user: accept them as
 dependencies.
 
 ```python
-from datetime import UTC, datetime
+import datetime
 from typing import Protocol
 
 
 class Clock(Protocol):
-    def now(self) -> datetime: ...
+    def now(self) -> datetime.datetime: ...
 
 
 class SystemClock:
-    def now(self) -> datetime:
-        return datetime.now(UTC)
+    def now(self) -> datetime.datetime:
+        return datetime.datetime.now(datetime.UTC)
 
 
 class TokenService:
     def __init__(self, clock: Clock) -> None:
         self._clock = clock
 
-    def is_expired(self, expires_at: datetime) -> bool:
+    def is_expired(self, expires_at: datetime.datetime) -> bool:
         return self._clock.now() >= expires_at
 ```
 
 ```python
-from datetime import UTC, datetime
+import datetime
 
-from myproject.tokens import TokenService
+from myproject import tokens
 
 
 class FrozenClock:
-    def __init__(self, instant: datetime) -> None:
+    def __init__(self, instant: datetime.datetime) -> None:
         self._instant = instant
 
-    def now(self) -> datetime:
+    def now(self) -> datetime.datetime:
         return self._instant
 
 
 def test_is_expired() -> None:
-    clock = FrozenClock(datetime(2024, 1, 15, 12, 0, tzinfo=UTC))
-    service = TokenService(clock)
-    assert service.is_expired(datetime(2024, 1, 15, 11, 0, tzinfo=UTC))
+    clock = FrozenClock(datetime.datetime(2024, 1, 15, 12, 0, tzinfo=datetime.UTC))
+    service = tokens.TokenService(clock)
+    assert service.is_expired(datetime.datetime(2024, 1, 15, 11, 0, tzinfo=datetime.UTC))
 ```
 
 For a single function, a `now` callable is enough:
 
 ```python
+import datetime
 from collections.abc import Callable
-from datetime import UTC, datetime
 
 
 def is_expired(
-    expires_at: datetime,
+    expires_at: datetime.datetime,
     *,
-    now: Callable[[], datetime] | None = None,
+    now: Callable[[], datetime.datetime] | None = None,
 ) -> bool:
-    current = now() if now is not None else datetime.now(UTC)
+    current = now() if now is not None else datetime.datetime.now(datetime.UTC)
     return current >= expires_at
 ```
 
