@@ -1,9 +1,9 @@
 # Python Development Plugin
 
 Expert knowledge for Python development. Provides uv/ruff/pytest defaults,
-type hints, exception handling, project layout, and a testing rule: inject
-dependencies you own, use freezegun for time in third-party code you cannot
-inject, and treat monkeypatch as last resort.
+type hints, exception handling, and a testing rule: inject dependencies you
+own, use freezegun for time in third-party code you cannot inject, and treat
+monkeypatch as last resort.
 
 ## Components
 

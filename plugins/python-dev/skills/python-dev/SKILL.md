@@ -9,65 +9,17 @@ Use this skill when the user **writes, modifies, tests, or builds Python code**.
 
 ## 1. Toolchain
 
-Prefer **uv + ruff + pytest + pyproject.toml**. Detect what the repo already
-uses, then fall back rather than fighting it.
+Prefer **uv + ruff + pytest + pyproject.toml**. If the repo already uses poetry,
+pip, Black, a Makefile, or Bazel, use that — do not add a parallel toolchain.
 
-Command order:
-
-1. **Makefile** with `test` / `lint` / `format` targets — use `make`. Those
-   targets usually wrap the tools below.
-2. **uv** when `uv.lock` exists, or when starting a new project / adding
-   tooling. This is the default.
-3. **Poetry** when `poetry.lock` exists and `uv.lock` does not.
-4. **pip + venv** when neither lockfile exists.
-5. **Bazel** when `BUILD` / `BUILD.bazel` Python targets exist. Do not call
-   `pytest` directly if generated code only resolves through Bazel.
-
-### Default commands (uv)
-
-```bash
-uv sync
-uv run pytest
-uv run ruff check
-uv run ruff format
-uv add some-package
-uv add --dev pytest ruff
-```
-
-### Fallbacks
-
-```bash
-# Poetry
-poetry install
-poetry run pytest
-poetry run ruff check
-
-# pip
-python -m pytest
-ruff check .
-ruff format .
-
-# Makefile
-make test
-make lint
-make format
-```
-
-If the project formats with **Black** (`[tool.black]` and no Ruff formatter),
-use `black` instead of `ruff format`. Still prefer Ruff for lint when
-`[tool.ruff]` is present.
+If `make test` / `make lint` / `make format` exist, run those.
 
 Do not invent `setup.py` or `requirements.txt` when `pyproject.toml` exists.
 
 ## 2. Linting and Formatting
 
-Use Ruff for both:
-
-```bash
-uv run ruff check
-uv run ruff check --fix
-uv run ruff format
-```
+Use Ruff for lint and format. If the project already formats with Black, keep
+Black.
 
 **Do not add `# noqa` carelessly:**
 
@@ -106,36 +58,13 @@ Use `list[str]`, `dict[str, int]`, and `X | None` — not `List`, `Dict`, or
 `Optional` from `typing` unless the project's Python version requires them.
 
 If the repo already runs **mypy** or **pyright/basedpyright**, run that checker
-the way the project does (`uv run mypy`, `uv run basedpyright`, Makefile
-target). Do not add a second type checker.
+the way the project does. Do not add a second type checker.
 
 If there is no type checker, still write accurate annotations. Do not add a
 type-checker dependency unless the user asks or the change is introducing
 tooling.
 
-## 4. Project Layout
-
-Prefer a `src/` layout for libraries; a flat package is fine for small apps.
-
-```
-myproject/
-├── pyproject.toml
-├── src/
-│   └── myproject/
-│       ├── __init__.py
-│       └── service.py
-└── tests/
-    └── test_service.py
-```
-
-Package import names are lowercase with underscores (`myproject`,
-`auth_client`). Do not use hyphens in importable package directories.
-
-Keep CLI entry points in `__main__.py` or a `cli` module. Library code receives
-configuration as parameters or structs — it must not read `sys.argv` or parse
-click/typer options.
-
-## 5. Code Style
+## 4. Code Style
 
 ### Exceptions: raise or handle, not both
 
@@ -172,15 +101,28 @@ logger.info("starting sync", extra={"user_id": user_id})
 If the project already uses a structured logger (structlog, loguru), follow
 that project. Do not introduce a new logging library.
 
+### Structured data
+
+- **Internal values:** `@dataclass`, or a plain class if it has real behavior.
+- **External I/O** (API payloads, config files, wire formats): the project's
+  schema library (pydantic, msgspec, …) if it already has one. Do not add
+  pydantic just to hold fields.
+
+### Imports
+
+Import modules, not functions: `import freezegun`, then
+`freezegun.freeze_time`. Do not `from freezegun import freeze_time`.
+
+The same rule applies elsewhere. Exceptions are names used as types where the
+qualified form is unreadable (`from datetime import datetime`,
+`from typing import Protocol`).
+
 ### Functions and modules
 
 - Public names are documented when behavior is not obvious from the signature.
 - Avoid module-level mutable state. Pass collaborators in.
-- Prefer dataclasses / `NamedTuple` / `pydantic` models only when the project
-  already uses them or the data is a real schema — not as a default for every
-  struct.
 
-## 6. Testing
+## 5. Testing
 
 Use **pytest**. Prefer `pytest.mark.parametrize` over handwritten loops. Name
 tests `test_<behavior>`.
@@ -274,10 +216,10 @@ and exposes no clock argument, use **freezegun**. Do not `monkeypatch` datetime
 yourself in that situation.
 
 ```python
-from freezegun import freeze_time
+import freezegun
 
 
-@freeze_time("2024-01-15T12:00:00Z")
+@freezegun.freeze_time("2024-01-15T12:00:00Z")
 def test_third_party_token_not_expired() -> None:
     token = jwt.encode({"exp": 1_705_327_200}, "secret", algorithm="HS256")
     jwt.decode(token, "secret", algorithms=["HS256"])
@@ -306,6 +248,7 @@ def test_legacy_vendor_id(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("vendor_sdk.ids.generate", lambda: "fixed-id")
     assert create_record().id == "fixed-id"
 ```
+
 If you reach for monkeypatch on **your** module's `datetime`, `time`, `uuid`,
 `random`, or a client class you own, stop. Add a constructor/function argument
 and inject a fake.
@@ -333,22 +276,14 @@ and inject a fake.
 **All of these mean: change the production API (or use freezegun for
 third-party time). Do not ship the patch.**
 
-## 7. Dependencies
+## 6. Dependencies
 
-```bash
-uv add requests              # runtime
-uv add --dev pytest ruff     # test/lint
-```
+Add runtime deps with `uv add`, dev deps with `uv add --dev`. Pin via the
+lockfile (`uv.lock`). Do not add packages to `requirements.txt` in a uv
+project.
 
-Pin via the lockfile (`uv.lock`). Do not add packages to `requirements.txt` in
-a uv project.
-
-New tooling defaults for a greenfield project:
-
-- packaging: `uv`
-- lint/format: `ruff`
-- tests: `pytest`
-- third-party time in tests: `freezegun` (dev, when needed)
+Greenfield defaults: `uv`, `ruff`, `pytest`. Add `freezegun` as a dev
+dependency only when a test needs it.
 
 Do not add `pytest-mock` just to make patching easier. If tests need
 `pytest-mock` / `unittest.mock` / `monkeypatch`, first check whether injection
