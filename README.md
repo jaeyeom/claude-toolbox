@@ -22,7 +22,7 @@ These plugins work together to create a reliable development workflow:
 │  Hooks call `make check` - format, lint, test, build    │
 │                    │              │                     │
 │                    ▼              ▼                     │
-│  *-dev (go-dev, python-dev)  ci-workflow                │
+│  *-dev (go-dev, python-dev, sh-dev)  ci-workflow        │
 │  Language-specific     CI calls the same                │
 │  conventions the       Makefile targets                 │
 │  checks enforce        via GitHub Actions               │
@@ -76,6 +76,7 @@ Workflow:
 - [ci-workflow](./plugins/ci-workflow)
 - [go-dev](./plugins/go-dev)
 - [python-dev](./plugins/python-dev)
+- [sh-dev](./plugins/sh-dev)
 - [protobuf-dev](./plugins/protobuf-dev)
 - [create-lang-dev-skill](./plugins/create-lang-dev-skill)
 - [biome-vcs-integration](./plugins/biome-vcs-integration)

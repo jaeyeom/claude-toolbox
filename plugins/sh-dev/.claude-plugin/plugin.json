@@ -1,0 +1,20 @@
+{
+  "name": "sh-dev",
+  "version": "1.0.0",
+  "description": "POSIX shell glue skill: when to leave shell, strict POSIX dialect, and thin bootstrap",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": [
+    "posix",
+    "shell",
+    "sh",
+    "bash",
+    "glue",
+    "bootstrap",
+    "shellcheck",
+    "development"
+  ]
+}

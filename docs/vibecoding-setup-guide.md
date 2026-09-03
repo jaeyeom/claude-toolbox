@@ -74,9 +74,10 @@ Install this on top of one of the bundles above:
 ### Full Suite
 
 This installs the recommended default set. Additional plugins such as
-`python-dev`, `create-lang-dev-skill`, `biome-vcs-integration`, `jira-commands`,
-`jira-edit-description`, `apply-figma-make`, and `cloudflare-macos-fix` are
-available in the marketplace — install them individually as needed.
+`python-dev`, `sh-dev`, `create-lang-dev-skill`, `biome-vcs-integration`,
+`jira-commands`, `jira-edit-description`, `apply-figma-make`, and
+`cloudflare-macos-fix` are available in the marketplace — install them
+individually as needed.
 
 ```bash
 /plugin marketplace add jaeyeom/claude-toolbox
@@ -117,7 +118,9 @@ Think in layers:
 1. Task selection: `next-action`, `todo`, and optionally `gh-issue-resolver`.
 2. Commit safety: `git-guardrails`.
 3. Shared checks: `gabyx-githooks-setup` calling `make check`.
-4. Project conventions: `go-dev`, `python-dev`, or another `*-dev` plugin.
+4. Project conventions: `go-dev`, `python-dev`, `sh-dev`, or another `*-dev`
+   plugin. Install `sh-dev` when the repo has bootstrap scripts, Makefile
+   recipes, CI `run:` blocks, or hooks — it stops agents from growing shell.
 5. CI parity: `ci-workflow` running the same Makefile targets.
 
 If you are unsure what to add next, fill gaps in that order.
