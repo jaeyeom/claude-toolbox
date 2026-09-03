@@ -1,6 +1,9 @@
-# Code paths → the docs that shadow them. Not full coverage: plugin.json
-# version bumps, docs/claude/ (upstream mirrors), and agent context files
-# are left unmatched on purpose.
+# Code paths → the docs that shadow them.
+# Built from both directions: plugin implementation → plugin README, then
+# each doc's named source files back to that doc.
+# Left unmatched on purpose: plugin.json version bumps, docs/claude/
+# (upstream mirrors), INSTALL.md (upstream githooks install), and
+# .githooks/README.md (no local hook scripts).
 #
 # Matching is root-anchored. No implicit **/.
 
@@ -12,26 +15,56 @@ rules:
       - path: README.md
         section: "## Plugin Directory"
         why: "marketplace plugin catalog"
+      - path: README.md
+        section: "## Quick Start"
+        why: "starter bundle plugin names"
       - path: docs/vibecoding-setup-guide.md
         why: "bundle and recipe plugin names"
       - path: CONTRIBUTING.md
         section: "## Submitting Your Plugin"
         why: "marketplace registry entry"
+      - path: plugins/ci-workflow/skills/check-ci/SKILL.md
+        why: "version mismatch and missing marketplace entry"
 
   - match:
       - "Makefile"
       - "scripts/validate-marketplace.sh"
-      - "scripts/check-agents-md.sh"
     docs:
       - path: CONTRIBUTING.md
         section: "### Validation"
         why: "make check / validate workflow"
+      - path: CLAUDE.md
+        section: "## Validation"
+        why: "pre-commit make check contents"
+      - path: plugins/ci-workflow/skills/check-ci/SKILL.md
+        why: "this-repo make/validate failure recipes"
+      - path: .github/pull_request_template.md
+        section: "## Test plan"
+        why: "make check coverage list"
+
+  - match: ["scripts/check-agents-md.sh"]
+    docs:
+      - path: CONTRIBUTING.md
+        section: "### Validation"
+        why: "make check includes AGENTS.md check"
+      - path: plugins/claude-md/README.md
+        section: "## AGENTS.md Compatibility"
+        why: "CI validator for agents-md-compat"
 
   - match: [".github/pull_request_template.md"]
     docs:
       - path: CONTRIBUTING.md
         section: "## Submitting Your Plugin"
         why: "PR template structure"
+      - path: CLAUDE.md
+        section: "## Pull requests"
+        why: "do not copy template HTML comments"
+
+  - match: [".github/workflows/strip-pr-html-comments.yml"]
+    docs:
+      - path: CLAUDE.md
+        section: "## Pull requests"
+        why: "HTML comment strip workflow backstop"
 
   # --- Plugins: implementation → plugin README ---
   # Skill-only plugins: SKILL.md is the behavior the README summarizes.
@@ -146,11 +179,6 @@ rules:
     docs:
       - path: plugins/gabyx-githooks-setup/README.md
         why: "skill and bootstrap script behavior"
-
-  - match: ["plugins/gabyx-githooks-setup/scripts/*.sh"]
-    docs:
-      - path: plugins/gabyx-githooks-setup/skills/gabyx-githooks-setup/SKILL.md
-        why: "bootstrap script steps"
 
   # Hook plugins.
   - match: ["plugins/git-guardrails/hooks/*"]
