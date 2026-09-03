@@ -272,10 +272,14 @@ Do not bypass git hooks with `--no-verify`, `GITHOOKS_DISABLE`, or similar flags
 2. Add or update the matching entry in `.claude-plugin/marketplace.json`
 3. Test it locally with Claude Code
 4. Commit and push to your fork
-5. Create a pull request with:
-   - Clear title: `Add <plugin-name> plugin`
-   - Description of what the plugin does
-   - Any special requirements
+5. Create a pull request. GitHub fills
+   [`.github/pull_request_template.md`](./.github/pull_request_template.md).
+   Use that structure (Summary, Test plan; Demo and Reviewer notes only when
+   they help). Do not copy the template's HTML comments into the submitted
+   body — this repo squash-merges with the PR description as the commit
+   message, so those comments would appear in `git log`. Delete unused
+   optional sections instead of leaving them empty. Title with a
+   Conventional Commit and plugin scope, e.g. `feat(<plugin-name>): ...`.
 
 ## Questions?
 
