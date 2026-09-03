@@ -1,0 +1,12 @@
+name: Strip PR HTML comments
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, ready_for_review]
+
+jobs:
+  strip:
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: jaeyeom/experimental/.github/workflows/strip-pr-html-comments.yml@5915f1f7d6cb9fa160fc250c01865fa20d1ba7fc
