@@ -1,0 +1,11 @@
+{
+  "name": "docsync",
+  "version": "1.0.0",
+  "description": "Find documentation sections implicated by a code change with docsync, review them, and patch stale factual drift",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["docsync", "documentation", "docs", "stale-docs", "review"]
+}
