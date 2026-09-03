@@ -27,6 +27,36 @@
 - Define hooks in `hooks/hooks.json` (not `settings.json`). Use the wrapper format: `{"hooks": {"PreToolUse": [...]}}`.
 - Use `${CLAUDE_PLUGIN_ROOT}` (not `$CLAUDE_PLUGIN_DIR`) to reference files relative to the plugin directory.
 
+## Pull requests
+This repository squash-merges with the pull request title and description
+as the commit message. HTML comments (`<!-- ... -->`) in the PR body are
+copied into `git log` even though GitHub hides them in the rendered
+description.
+
+When creating or updating a PR:
+- Do not copy `<!-- ... -->` hints from a PR template into the submitted
+  body. They are compose-time hints only.
+- Delete unused optional sections instead of leaving them empty.
+
+A workflow calls
+`jaeyeom/experimental/.github/workflows/strip-pr-html-comments.yml` as a
+backstop.
+
+## Pull requests
+This repository squash-merges with the pull request title and description
+as the commit message. HTML comments (`<!-- ... -->`) in the PR body are
+copied into `git log` even though GitHub hides them in the rendered
+description.
+
+When creating or updating a PR:
+- Do not copy `<!-- ... -->` hints from a PR template into the submitted
+  body. They are compose-time hints only.
+- Delete unused optional sections instead of leaving them empty.
+
+A workflow calls
+`jaeyeom/experimental/.github/workflows/strip-pr-html-comments.yml` as a
+backstop.
+
 ## Task Sources
 - Local: TODO.md
 - GitHub Issues: state open, repo jaeyeom/claude-toolbox
