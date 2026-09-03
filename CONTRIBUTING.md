@@ -274,12 +274,12 @@ Do not bypass git hooks with `--no-verify`, `GITHOOKS_DISABLE`, or similar flags
 4. Commit and push to your fork
 5. Create a pull request. GitHub fills
    [`.github/pull_request_template.md`](./.github/pull_request_template.md).
-   Use that structure (Summary, Test plan; Demo and Reviewer notes only when
-   they help). Do not copy the template's HTML comments into the submitted
-   body — this repo squash-merges with the PR description as the commit
-   message, so those comments would appear in `git log`. Delete unused
-   optional sections instead of leaving them empty. Title with a
-   Conventional Commit and plugin scope, e.g. `feat(<plugin-name>): ...`.
+   Use that structure. Keep Skill, Hook, and New plugin test-plan
+   subsections only when they apply; delete the rest. Do not copy the
+   template's HTML comments into the submitted body — this repo
+   squash-merges with the PR description as the commit message, so those
+   comments would appear in `git log`. Title with a Conventional Commit
+   and plugin scope, e.g. `feat(<plugin-name>): ...`.
 
 ## Questions?
 
