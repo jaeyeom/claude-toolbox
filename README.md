@@ -80,6 +80,7 @@ Workflow:
 - [create-lang-dev-skill](./plugins/create-lang-dev-skill)
 - [biome-vcs-integration](./plugins/biome-vcs-integration)
 - [claude-md](./plugins/claude-md)
+- [docsync](./plugins/docsync)
 
 Task management:
 - [todo](./plugins/todo)
