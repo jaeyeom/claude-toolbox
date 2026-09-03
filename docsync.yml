@@ -1,0 +1,204 @@
+# Code paths → the docs that shadow them.
+# Built from both directions: plugin implementation → plugin README, then
+# each doc's named source files back to that doc.
+# Left unmatched on purpose: plugin.json version bumps, docs/claude/
+# (upstream mirrors), INSTALL.md (upstream githooks install), and
+# .githooks/README.md (no local hook scripts).
+#
+# Matching is root-anchored. No implicit **/.
+
+version: 1
+rules:
+  # --- Marketplace catalog and contributing process ---
+  - match: [".claude-plugin/marketplace.json"]
+    docs:
+      - path: README.md
+        section: "## Plugin Directory"
+        why: "marketplace plugin catalog"
+      - path: README.md
+        section: "## Quick Start"
+        why: "starter bundle plugin names"
+      - path: docs/vibecoding-setup-guide.md
+        why: "bundle and recipe plugin names"
+      - path: CONTRIBUTING.md
+        section: "## Submitting Your Plugin"
+        why: "marketplace registry entry"
+      - path: plugins/ci-workflow/skills/check-ci/SKILL.md
+        why: "version mismatch and missing marketplace entry"
+
+  - match:
+      - "Makefile"
+      - "scripts/validate-marketplace.sh"
+    docs:
+      - path: CONTRIBUTING.md
+        section: "### Validation"
+        why: "make check / validate workflow"
+      - path: CLAUDE.md
+        section: "## Validation"
+        why: "pre-commit make check contents"
+      - path: plugins/ci-workflow/skills/check-ci/SKILL.md
+        why: "this-repo make/validate failure recipes"
+      - path: .github/pull_request_template.md
+        section: "## Test plan"
+        why: "make check coverage list"
+
+  - match: ["scripts/check-agents-md.sh"]
+    docs:
+      - path: CONTRIBUTING.md
+        section: "### Validation"
+        why: "make check includes AGENTS.md check"
+      - path: plugins/claude-md/README.md
+        section: "## AGENTS.md Compatibility"
+        why: "CI validator for agents-md-compat"
+
+  - match: [".github/pull_request_template.md"]
+    docs:
+      - path: CONTRIBUTING.md
+        section: "## Submitting Your Plugin"
+        why: "PR template structure"
+      - path: CLAUDE.md
+        section: "## Pull requests"
+        why: "do not copy template HTML comments"
+
+  - match: [".github/workflows/strip-pr-html-comments.yml"]
+    docs:
+      - path: CLAUDE.md
+        section: "## Pull requests"
+        why: "HTML comment strip workflow backstop"
+
+  # --- Plugins: implementation → plugin README ---
+  # Skill-only plugins: SKILL.md is the behavior the README summarizes.
+  - match: ["plugins/apply-figma-make/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/apply-figma-make/README.md
+        why: "conversion behavior and usage"
+
+  - match: ["plugins/biome-vcs-integration/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/biome-vcs-integration/README.md
+        why: "VCS integration setup"
+
+  - match: ["plugins/ci-workflow/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/ci-workflow/README.md
+        why: "ci-workflow and check-ci coverage"
+
+  - match: ["plugins/claude-md/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/claude-md/README.md
+        why: "quality bar and AGENTS.md compatibility"
+
+  - match: ["plugins/cloudflare-macos-fix/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/cloudflare-macos-fix/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/create-lang-dev-skill/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/create-lang-dev-skill/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/docsync/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/docsync/README.md
+        why: "skill coverage and prerequisites"
+
+  - match: ["plugins/gh-issue-resolver/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/gh-issue-resolver/README.md
+        why: "workflow and usage"
+
+  - match: ["plugins/go-dev/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/go-dev/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/makefile-workflow/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/makefile-workflow/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/protobuf-dev/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/protobuf-dev/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/python-dev/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/python-dev/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/semgrep-review/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/semgrep-review/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/sh-dev/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/sh-dev/README.md
+        why: "skill coverage and usage"
+
+  - match: ["plugins/todo/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/todo/README.md
+        why: "TODO.md format and usage"
+
+  - match: ["plugins/jira-close-merged/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/jira-close-merged/README.md
+        why: "scan/transition behavior"
+
+  # Skills plus bundled scripts: scripts can stale both the README and SKILL.md.
+  - match:
+      - "plugins/cleanup-worktree-disk/skills/**/SKILL.md"
+      - "plugins/cleanup-worktree-disk/skills/**/*.sh"
+    docs:
+      - path: plugins/cleanup-worktree-disk/README.md
+        why: "inventory script and cleanup flow"
+
+  - match: ["plugins/cleanup-worktree-disk/skills/**/*.sh"]
+    docs:
+      - path: plugins/cleanup-worktree-disk/skills/cleanup-worktree-disk/SKILL.md
+        why: "inventory.sh invocation"
+
+  - match:
+      - "plugins/next-action/skills/**/SKILL.md"
+      - "plugins/next-action/skills/**/*.sh"
+    docs:
+      - path: plugins/next-action/README.md
+        why: "sources, features, and usage"
+
+  - match: ["plugins/next-action/skills/**/*.sh"]
+    docs:
+      - path: plugins/next-action/skills/next-action/SKILL.md
+        why: "helper script invocation and scoring"
+
+  - match:
+      - "plugins/gabyx-githooks-setup/skills/**/SKILL.md"
+      - "plugins/gabyx-githooks-setup/scripts/*.sh"
+    docs:
+      - path: plugins/gabyx-githooks-setup/README.md
+        why: "skill and bootstrap script behavior"
+
+  # Hook plugins.
+  - match: ["plugins/git-guardrails/hooks/*"]
+    docs:
+      - path: plugins/git-guardrails/README.md
+        why: "blocked git/find patterns"
+
+  - match: ["plugins/review-push-loop/hooks/*"]
+    docs:
+      - path: plugins/review-push-loop/README.md
+        why: "denied pushes and escape hatches"
+
+  - match: ["plugins/sandbox-helpers/hooks/*"]
+    docs:
+      - path: plugins/sandbox-helpers/README.md
+        why: "TLS warning behavior"
+
+  - match:
+      - "plugins/jira-cli/skills/**/SKILL.md"
+      - "plugins/jira-cli/hooks/*"
+    docs:
+      - path: plugins/jira-cli/README.md
+        why: "skills and create-issue hook"

@@ -16,7 +16,7 @@ Pick the smallest bundle that matches your situation.
 | Solo developer | You want safer commits and a lightweight task loop | `git-guardrails`, `next-action`, `todo` |
 | Go project | You want local quality gates, CI parity, and Go conventions | `git-guardrails`, `next-action`, `go-dev`, `makefile-workflow`, `gabyx-githooks-setup`, `ci-workflow` |
 | Python project | You want local quality gates, CI parity, and Python conventions | `git-guardrails`, `next-action`, `python-dev`, `makefile-workflow`, `gabyx-githooks-setup`, `ci-workflow` |
-| Team with Jira | You already have a base bundle and need ticket operations in Claude Code | `jira-commands`, `jira-edit-description` |
+| Team with Jira | You already have a base bundle and need ticket operations in Claude Code | `jira-cli` |
 | Full suite | You want the recommended default workflow (see [all plugins](../README.md) for the complete list) | `git-guardrails`, `gabyx-githooks-setup`, `makefile-workflow`, `ci-workflow`, `go-dev`, `next-action`, `todo`, `gh-issue-resolver`, `claude-md`, `semgrep-review`, `sandbox-helpers` |
 
 ## Installation Recipes
@@ -67,15 +67,14 @@ rules, with Python conventions (uv/ruff/pytest, inject-don't-patch).
 Install this on top of one of the bundles above:
 
 ```bash
-/plugin install jira-commands
-/plugin install jira-edit-description
+/plugin install jira-cli
 ```
 
 ### Full Suite
 
 This installs the recommended default set. Additional plugins such as
 `python-dev`, `sh-dev`, `create-lang-dev-skill`, `biome-vcs-integration`,
-`jira-commands`, `jira-edit-description`, `apply-figma-make`, and
+`jira-cli`, `apply-figma-make`, and
 `cloudflare-macos-fix` are available in the marketplace — install them
 individually as needed.
 

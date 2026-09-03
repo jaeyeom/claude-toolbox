@@ -89,12 +89,13 @@ Task management:
 - [gh-issue-resolver](./plugins/gh-issue-resolver)
 
 Jira:
-- [jira-commands](./plugins/jira-commands)
-- [jira-edit-description](./plugins/jira-edit-description)
+- [jira-cli](./plugins/jira-cli)
+- [jira-close-merged](./plugins/jira-close-merged)
 
 Safety and security:
 - [semgrep-review](./plugins/semgrep-review)
 - [git-guardrails](./plugins/git-guardrails)
+- [review-push-loop](./plugins/review-push-loop)
 - [sandbox-helpers](./plugins/sandbox-helpers)
 
 Other:
