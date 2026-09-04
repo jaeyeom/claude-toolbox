@@ -36,6 +36,8 @@ The skill activates automatically when you write or review shell:
   if those skills apply); do not invent a new stack
 - **Dialect**: `#!/bin/sh`, `shellcheck -s sh`; no bash, `pipefail`, `local`,
   or arrays
+- **Portability**: POSIX `TMPDIR` (fallback `/tmp`), not `$TMP`/`$TEMP` or a
+  hardcoded `/tmp`; GNU options like `sed -i` are a leave-shell signal
 - **Surfaces**: `.sh` files, Makefile recipes, GitHub Actions `run:` blocks,
   plugin/git hooks, and one-liners about to become a file
 - **Bootstrap**: allowed when no runtime exists yet; keep it thin and hand off
