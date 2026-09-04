@@ -1,6 +1,6 @@
 ---
 name: sh-dev
-description: Expert knowledge for POSIX shell glue. Includes when to leave shell, POSIX dialect, quoting, and thin bootstrap. Use when writing, editing, or reviewing shell scripts, POSIX sh, bash, Makefile recipes, GitHub Actions run: blocks, or plugin/git hooks.
+description: Expert knowledge for POSIX shell glue. Includes when to leave shell, POSIX dialect, quoting, thin bootstrap, and portability. Use when writing, editing, or reviewing shell scripts, POSIX sh, bash, Makefile recipes, GitHub Actions run: blocks, plugin/git hooks, temp files, TMPDIR, /tmp, or mktemp.
 ---
 
 # Shell Development Skill
@@ -81,9 +81,13 @@ When glue stays in shell:
 - Lint: `shellcheck -s sh`
 - `set -eu`. No `pipefail`, no `local`, no arrays, no `[[ ]]`
 - Quote everything. `printf` not `echo`. `command -v` not `which`
-- Temp files: `mktemp` + `trap`
+- Temp files: `mktemp` + `trap`. `mktemp` honors POSIX `TMPDIR`. If you
+  must build a path, `"${TMPDIR:-/tmp}"`. `$TMP`/`$TEMP` are Windows, not
+  POSIX. Do not hardcode `/tmp`. Do not use `mktemp -t` (GNU/BSD disagree).
 - Pipelines: check them explicitly, or don't write a pipeline. If you need
   `pipefail`, leave shell.
+- Don't assume GNU: `sed -i`, `readlink -f`, and `seq` are a leave-shell
+  signal, same as bashisms.
 
 ```sh
 # BAD
@@ -113,6 +117,8 @@ exec the real program. Do not accrete features in the bootstrap file.
 | "Bash is already on the machine" | New agent-written shell is POSIX sh, or not shell. |
 | "I need arrays / pipefail / local" | Leave shell. |
 | "It's only 80 lines" | Length follows complexity. Parsing and retries leave. |
+| "`$TMP` is more portable than `/tmp`" | `$TMP` is Windows. POSIX is `TMPDIR`, fallback `/tmp`. |
+| "`sed -i` / `seq` is on every machine" | GNU vs BSD. Leave shell, or POSIX subset. |
 
 ## 6. Red flags — stop and leave shell (or shrink)
 
@@ -122,6 +128,8 @@ exec the real program. Do not accrete features in the bootstrap file.
 - Logic embedded in a Makefile recipe or GitHub Actions `run:` block
 - "I'll add tests later" for a shell script
 - Bootstrap that grew past detect / install / exec
+- Hardcoded `/tmp`, `$TMP`, `$TEMP`, `mktemp -t`
+- `sed -i`, `readlink -f`, `seq` (GNU; leave or POSIX subset)
 
 **All of these mean: extract to the project language with tests, or shrink to
 thin POSIX glue.**
