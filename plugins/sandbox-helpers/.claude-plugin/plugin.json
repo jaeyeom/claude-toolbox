@@ -1,11 +1,19 @@
 {
   "name": "sandbox-helpers",
-  "version": "1.0.5",
-  "description": "PreToolUse hook that warns about macOS sandbox TLS failures for Go CLI tools (gh, jira) and suggests workarounds",
+  "version": "1.1.0",
+  "description": "PreToolUse hook that warns about macOS sandbox TLS failures for Go CLI tools (gh, jira, circleci) and suggests workarounds",
   "author": {
     "name": "Jaehyun Yeom"
   },
   "repository": "https://github.com/jaeyeom/claude-toolbox",
   "license": "MIT",
-  "keywords": ["sandbox", "macos", "tls", "gh", "jira", "workaround"]
+  "keywords": [
+    "sandbox",
+    "macos",
+    "tls",
+    "gh",
+    "jira",
+    "circleci",
+    "workaround"
+  ]
 }
