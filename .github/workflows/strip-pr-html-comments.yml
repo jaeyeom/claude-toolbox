@@ -9,4 +9,4 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: jaeyeom/experimental/.github/workflows/strip-pr-html-comments.yml@5915f1f7d6cb9fa160fc250c01865fa20d1ba7fc
+    uses: jaeyeom/experimental/.github/workflows/strip-pr-html-comments.yml@4176fa4121d4d7c8742debad25af6f85b97ef937
