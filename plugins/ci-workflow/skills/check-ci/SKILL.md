@@ -1,4 +1,5 @@
 ---
+
 name: check-ci
 description: Diagnose CI failures by inspecting GitHub Actions run logs, identifying root causes, and suggesting fixes. Use when CI is failing, a workflow run failed, checks are red, or the user asks "why is CI failing" or "fix CI".
 autouse: false
@@ -51,14 +52,14 @@ identify:
 
 Map the failure to one of these categories and suggest the appropriate fix:
 
-| Failure type | Indicators | Fix command |
-| --- | --- | --- |
-| Formatting | `biome format`, `Formatter would have printed`, diff output | `make format` |
-| Linting | `biome lint`, `lint error`, rule names | `make fix` |
-| Validation | `validate-marketplace.sh`, version mismatch, missing fields | Fix the specific field, then `make validate` |
-| Test failure | `go test`, `npm test`, assertion errors | Read the test, fix the code, re-run tests |
-| Build failure | `go build`, `npm run build`, compilation errors | Fix the source code |
-| Workflow config | YAML syntax, action version, missing setup step | Fix `.github/workflows/*.yml` |
+| Failure type    | Indicators                                                  | Fix command                                  |
+| --------------- | ----------------------------------------------------------- | -------------------------------------------- |
+| Formatting      | `biome format`, `Formatter would have printed`, diff output | `make format`                                |
+| Linting         | `biome lint`, `lint error`, rule names                      | `make fix`                                   |
+| Validation      | `validate-marketplace.sh`, version mismatch, missing fields | Fix the specific field, then `make validate` |
+| Test failure    | `go test`, `npm test`, assertion errors                     | Read the test, fix the code, re-run tests    |
+| Build failure   | `go build`, `npm run build`, compilation errors             | Fix the source code                          |
+| Workflow config | YAML syntax, action version, missing setup step             | Fix `.github/workflows/*.yml`                |
 
 ## Step 4 — Apply the fix
 

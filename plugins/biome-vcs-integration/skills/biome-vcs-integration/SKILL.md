@@ -1,13 +1,14 @@
 ---
+
 name: biome-vcs-integration
 description: >
-  Configure Biome to respect .gitignore via VCS integration so that untracked
-  and ignored files are skipped during format and lint. Use when the user
-  encounters Biome errors on .gitignore'd files, CI failures from local-only
-  files, or asks how to exclude files from Biome. Trigger on keywords: "biome
-  gitignore", "biome ignore files", "biome vcs", "biome skip untracked",
-  "biome CI failure local file", "biome settings.local.json",
-  "useIgnoreFile", "clientKind".
+Configure Biome to respect .gitignore via VCS integration so that untracked
+and ignored files are skipped during format and lint. Use when the user
+encounters Biome errors on .gitignore'd files, CI failures from local-only
+files, or asks how to exclude files from Biome. Trigger on keywords: "biome
+gitignore", "biome ignore files", "biome vcs", "biome skip untracked",
+"biome CI failure local file", "biome settings.local.json",
+"useIgnoreFile", "clientKind".
 ---
 
 # Biome VCS Integration
@@ -120,11 +121,11 @@ If migrating from Biome v1.x to v2.x while applying this fix:
 
 ## Common Pitfalls
 
-| Pitfall | Fix |
-|---------|-----|
-| Missing `clientKind` | Always include `"clientKind": "git"` — it's required |
-| Nested `.gitignore` files | Biome respects nested `.gitignore` files when VCS integration is enabled; ensure `useIgnoreFile` is `true` and each subdirectory's `.gitignore` is committed |
-| `biome.jsonc` vs `biome.json` | VCS config works in both; use whichever the project already has |
+| Pitfall                       | Fix                                                                                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Missing `clientKind`          | Always include `"clientKind": "git"` — it's required                                                                                                         |
+| Nested `.gitignore` files     | Biome respects nested `.gitignore` files when VCS integration is enabled; ensure `useIgnoreFile` is `true` and each subdirectory's `.gitignore` is committed |
+| `biome.jsonc` vs `biome.json` | VCS config works in both; use whichever the project already has                                                                                              |
 
 ## Reference
 

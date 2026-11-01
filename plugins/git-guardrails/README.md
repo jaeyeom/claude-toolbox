@@ -5,10 +5,12 @@ PreToolUse hooks that block dangerous command patterns in Claude Code sessions.
 ## What it blocks
 
 ### Git commands
+
 - **`git commit --no-verify`** — Skipping hooks is not allowed; pre-commit hooks exist for a reason.
 - **`git add .`**, **`git add -A`**, **`git add --all`** — Bulk staging may include unrelated or sensitive files. Specify files explicitly instead.
 
 ### Find commands
+
 - **`find` with `-exec`, `-execdir`, `-ok`, `-okdir`, `-delete`, `-fls`, `-fprint`, `-fprint0`, `-fprintf`** — These options can execute arbitrary commands or modify files. Use Claude Code's dedicated tools (Glob, Grep, Read) instead.
 
 ## Installation

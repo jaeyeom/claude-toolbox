@@ -1,11 +1,12 @@
 ---
+
 name: jira-close-merged
 description: >
-  Marks Jira tickets as Done when their commits have been merged into the
-  current branch. Use whenever the user wants to sync Jira with merged
-  commits — e.g. "mark done", "close tickets from commits", "sync Jira
-  with merged PRs", "any Jira tickets to close?", or after a batch of PRs
-  lands. Works with any Jira project key.
+Marks Jira tickets as Done when their commits have been merged into the
+current branch. Use whenever the user wants to sync Jira with merged
+commits — e.g. "mark done", "close tickets from commits", "sync Jira
+with merged PRs", "any Jira tickets to close?", or after a batch of PRs
+lands. Works with any Jira project key.
 ---
 
 # Jira: Close Merged Tickets
@@ -90,11 +91,11 @@ than failing the whole run.
 
 Show a compact summary table:
 
-| Ticket | Summary (truncated to ~40 chars) | Result |
-|--------|----------------------------------|--------|
-| X-123  | Short summary...                 | Done ✓ (assigned to Jane) |
-| X-124  | Another ticket...                | already done |
-| X-125  | Blocked ticket...                | skipped: <reason> |
+| Ticket | Summary (truncated to ~40 chars) | Result                       |
+| ------ | -------------------------------- | ---------------------------- |
+| X-123  | Short summary...                 | Done ✓ (assigned to Jane)    |
+| X-124  | Another ticket...                | already done                 |
+| X-125  | Blocked ticket...                | skipped: <reason>            |
 | X-126  | Unresolved author...             | Done ✓ (assignee unresolved) |
 
 List counts at the end: "Transitioned N ticket(s), M already done, K skipped."

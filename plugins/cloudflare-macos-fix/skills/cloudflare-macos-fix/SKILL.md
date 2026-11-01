@@ -1,13 +1,14 @@
 ---
+
 name: cloudflare-macos-fix
 description: >
-  Fix sharp native module installation failure on macOS Apple Silicon when
-  setting up Cloudflare Workers projects using wrangler. Use when the user
-  encounters "sharp", "wrangler install", "pnpm install" errors on macOS
-  arm64/Apple Silicon with Node v25+, or when setting up a new Cloudflare
-  Workers project on macOS. Trigger on keywords: "sharp", "wrangler",
-  "cloudflare workers setup", "native module", "darwin-arm64",
-  "prebuilt binary", "node-gyp", "ABI mismatch".
+Fix sharp native module installation failure on macOS Apple Silicon when
+setting up Cloudflare Workers projects using wrangler. Use when the user
+encounters "sharp", "wrangler install", "pnpm install" errors on macOS
+arm64/Apple Silicon with Node v25+, or when setting up a new Cloudflare
+Workers project on macOS. Trigger on keywords: "sharp", "wrangler",
+"cloudflare workers setup", "native module", "darwin-arm64",
+"prebuilt binary", "node-gyp", "ABI mismatch".
 ---
 
 # Sharp Native Module Fix for macOS Apple Silicon

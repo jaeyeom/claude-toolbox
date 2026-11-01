@@ -1,4 +1,5 @@
 ---
+
 name: makefile-workflow
 description: Design or update Makefiles with consistent build, format, lint, test, and check-* targets. Use when a user asks for a Makefile, build automation, or project workflow targets for Go, Node, Bazel, or mixed stacks.
 autouse: false
@@ -44,15 +45,18 @@ Create or refine Makefiles that encode a reliable developer workflow. Mirror the
 ## Recommended target patterns
 
 ### Minimal workflow
+
 - `all`: `format fix test build`
 - `check`: `check-format lint test build`
 - Parallel-safety deps: `fix: format` (both mutate files)
 
 ### Go + linters
+
 - `lint-golangci`, `fix-golangci`, `verify-golangci-config`
 - `coverage`, `coverage-html`, `coverage-report`, `clean-coverage`
 
 ### Frontend + Supabase
+
 - `check-astro`, `check-bundle`, `test-e2e`, `db-push`, `db-reset`, `db-status`, `db-gen-types`
 
 ## Output expectations

@@ -4,8 +4,8 @@ Expert knowledge for Go development. Provides idiomatic Go patterns, error handl
 
 ## Components
 
-| Component | Type  | Description                                          |
-| --------- | ----- | ---------------------------------------------------- |
+| Component | Type  | Description                                         |
+| --------- | ----- | --------------------------------------------------- |
 | `go-dev`  | Skill | Guides Go development with idiomatic best practices |
 
 ## Installation

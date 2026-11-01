@@ -1,4 +1,5 @@
 ---
+
 name: sh-dev
 description: Expert knowledge for POSIX shell glue. Includes when to leave shell, POSIX dialect, quoting, thin bootstrap, and portability. Use when writing, editing, or reviewing shell scripts, POSIX sh, bash, Makefile recipes, GitHub Actions run: blocks, plugin/git hooks, temp files, TMPDIR, /tmp, or mktemp.
 ---
@@ -41,13 +42,13 @@ This skill owns whether the shell in those places is allowed to grow.
 
 ## 2. Stay vs leave
 
-| Stay in POSIX sh | Leave shell |
-| ---------------- | ----------- |
-| Thin glue: cd, env, `command -v`, exec | JSON / CSV / XML / regex-heavy parsing |
-| A few `if`s / existence checks | retries, timeouts, concurrency |
-| Bootstrap until a runtime exists | arrays, maps, non-trivial control flow |
-| | anything you'd unit-test |
-| | needs `pipefail`, arrays, `[[ ]]`, `local` |
+| Stay in POSIX sh                       | Leave shell                                |
+| -------------------------------------- | ------------------------------------------ |
+| Thin glue: cd, env, `command -v`, exec | JSON / CSV / XML / regex-heavy parsing     |
+| A few `if`s / existence checks         | retries, timeouts, concurrency             |
+| Bootstrap until a runtime exists       | arrays, maps, non-trivial control flow     |
+|                                        | anything you'd unit-test                   |
+|                                        | needs `pipefail`, arrays, `[[ ]]`, `local` |
 
 ### BAD — shell that should have left
 
@@ -108,17 +109,17 @@ exec the real program. Do not accrete features in the bootstrap file.
 
 ## 5. Rationalizations
 
-| Excuse | Reality |
-| ------ | ------- |
-| "It's just a hook / Makefile / CI `run:` block" | Same rule. Surface doesn't grant complexity. |
-| "I'll rewrite it later" | Write it in the project language now. |
-| "POSIX is too limited, so I'll use bash" | The limit is the signal. Leave shell. |
-| "Makefile isn't a shell script" | Recipes are shell. This skill applies. |
-| "Bash is already on the machine" | New agent-written shell is POSIX sh, or not shell. |
-| "I need arrays / pipefail / local" | Leave shell. |
-| "It's only 80 lines" | Length follows complexity. Parsing and retries leave. |
-| "`$TMP` is more portable than `/tmp`" | `$TMP` is Windows. POSIX is `TMPDIR`, fallback `/tmp`. |
-| "`sed -i` / `seq` is on every machine" | GNU vs BSD. Leave shell, or POSIX subset. |
+| Excuse                                          | Reality                                                |
+| ----------------------------------------------- | ------------------------------------------------------ |
+| "It's just a hook / Makefile / CI `run:` block" | Same rule. Surface doesn't grant complexity.           |
+| "I'll rewrite it later"                         | Write it in the project language now.                  |
+| "POSIX is too limited, so I'll use bash"        | The limit is the signal. Leave shell.                  |
+| "Makefile isn't a shell script"                 | Recipes are shell. This skill applies.                 |
+| "Bash is already on the machine"                | New agent-written shell is POSIX sh, or not shell.     |
+| "I need arrays / pipefail / local"              | Leave shell.                                           |
+| "It's only 80 lines"                            | Length follows complexity. Parsing and retries leave.  |
+| "`$TMP` is more portable than `/tmp`"           | `$TMP` is Windows. POSIX is `TMPDIR`, fallback `/tmp`. |
+| "`sed -i` / `seq` is on every machine"          | GNU vs BSD. Leave shell, or POSIX subset.              |
 
 ## 6. Red flags — stop and leave shell (or shrink)
 

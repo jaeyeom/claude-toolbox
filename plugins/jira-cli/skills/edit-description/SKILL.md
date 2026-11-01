@@ -1,4 +1,5 @@
 ---
+
 name: edit-description
 description: Edit JIRA issue descriptions using the jira CLI tool. Use when the user asks to update, modify, or edit a JIRA issue description, or when creating detailed documentation for JIRA tickets.
 argument-hint: <PROJ-123>

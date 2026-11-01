@@ -1,4 +1,5 @@
 ---
+
 name: todo
 description: Manage a TODO.md file at the project root. Add, complete, remove, and list tasks with priority levels. Use when the user says /todo or asks to manage tasks, todos, or action items.
 ---
@@ -13,13 +14,16 @@ Manage a `TODO.md` file at the project root using markdown checkboxes grouped by
 # TODO
 
 ## High Priority
+
 - [ ] Incomplete task
 - [x] Completed task
 
 ## Medium Priority
+
 - [ ] Another task
 
 ## Low Priority
+
 - [ ] Low priority task
 ```
 

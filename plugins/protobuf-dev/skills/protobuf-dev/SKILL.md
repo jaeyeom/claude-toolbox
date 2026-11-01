@@ -1,4 +1,5 @@
 ---
+
 name: protobuf-dev
 description: Expert knowledge for Protocol Buffer development. Includes style guidelines, backward compatibility, design patterns, and build system detection (buf, Bazel). Use when creating, modifying, or reviewing .proto files or proto build rules.
 ---
@@ -80,15 +81,15 @@ import "google/protobuf/timestamp.proto";
 
 ### Naming Conventions
 
-| Element        | Style                  | Example            |
-|----------------|------------------------|--------------------|
-| Message names  | PascalCase             | `UserProfile`      |
-| Field names    | snake_case             | `user_name`        |
-| Enum names     | PascalCase             | `StatusCode`       |
-| Enum values    | SCREAMING_SNAKE_CASE   | `STATUS_ACTIVE`    |
-| Enum zero value| Must end with `_UNKNOWN` or `_UNSPECIFIED` | `STATUS_UNKNOWN = 0` |
-| Service names  | PascalCase             | `UserService`      |
-| RPC names      | PascalCase             | `GetUser`          |
+| Element         | Style                                      | Example              |
+| --------------- | ------------------------------------------ | -------------------- |
+| Message names   | PascalCase                                 | `UserProfile`        |
+| Field names     | snake_case                                 | `user_name`          |
+| Enum names      | PascalCase                                 | `StatusCode`         |
+| Enum values     | SCREAMING_SNAKE_CASE                       | `STATUS_ACTIVE`      |
+| Enum zero value | Must end with `_UNKNOWN` or `_UNSPECIFIED` | `STATUS_UNKNOWN = 0` |
+| Service names   | PascalCase                                 | `UserService`        |
+| RPC names       | PascalCase                                 | `GetUser`            |
 
 ## 3. Documentation: The Fine-Print Contract
 
@@ -368,11 +369,11 @@ message Event {
 
 #### Other Useful WKTs
 
-| Type | Use For |
-|------|---------|
-| `google.protobuf.Struct` | Arbitrary JSON-like data |
-| `google.protobuf.FieldMask` | Partial updates |
-| `google.protobuf.Empty` | RPCs with no request/response payload |
+| Type                                     | Use For                                                 |
+| ---------------------------------------- | ------------------------------------------------------- |
+| `google.protobuf.Struct`                 | Arbitrary JSON-like data                                |
+| `google.protobuf.FieldMask`              | Partial updates                                         |
+| `google.protobuf.Empty`                  | RPCs with no request/response payload                   |
 | `google.protobuf.StringValue` (wrappers) | Distinguishing "unset" from zero with implicit presence |
 
 ## 6. Linting

@@ -37,6 +37,7 @@ for tasks:
 
 ```markdown
 ## Task Sources
+
 - Local: TODO.md
 - GitHub Issues: assigned to @me, state open, label "ready"
 ```

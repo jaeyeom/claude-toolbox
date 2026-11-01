@@ -1,4 +1,5 @@
 ---
+
 name: new-task
 description: Create a new Jira task with proper wiki markup formatting
 argument-hint: <PROJECT or EPIC-123>

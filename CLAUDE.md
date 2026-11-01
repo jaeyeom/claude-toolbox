@@ -28,6 +28,7 @@
 - Use `${CLAUDE_PLUGIN_ROOT}` (not `$CLAUDE_PLUGIN_DIR`) to reference files relative to the plugin directory.
 
 ## Pull requests
+
 This repository squash-merges with the pull request title and description
 as the commit message. HTML comments (`<!-- ... -->`) in the PR body are
 copied into `git log` even though GitHub hides them in the rendered
@@ -43,6 +44,7 @@ A workflow calls
 backstop.
 
 ## Pull requests
+
 This repository squash-merges with the pull request title and description
 as the commit message. HTML comments (`<!-- ... -->`) in the PR body are
 copied into `git log` even though GitHub hides them in the rendered
@@ -58,6 +60,7 @@ A workflow calls
 backstop.
 
 ## Task Sources
+
 - Local: TODO.md
 - GitHub Issues: state open, repo jaeyeom/claude-toolbox
 

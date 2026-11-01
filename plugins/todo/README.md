@@ -36,12 +36,15 @@ Then use `/todo` followed by a command:
 # TODO
 
 ## High Priority
+
 - [ ] Implement user auth
 - [x] Set up database schema
 
 ## Medium Priority
+
 - [ ] Add logging
 
 ## Low Priority
+
 - [ ] Refactor utils
 ```
