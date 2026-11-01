@@ -1,4 +1,5 @@
 ---
+
 name: gh-issue-resolver
 description: Resolve a GitHub issue end-to-end using the gh CLI. Use when asked to resolve, fix, or work on a GitHub issue, when the issue has a written plan or acceptance criteria, or when implementation starts to diverge from that plan.
 argument-hint: "<issue-number>"
@@ -32,15 +33,15 @@ If the issue is already closed, inform the user and stop.
 
 Extract the **plan** and **acceptance criteria** as the contract:
 
-| Body has | Treat as the plan |
-|----------|-------------------|
-| A heading such as Plan, Proposed design, Proposed behavior, Suggested approach, or Scope | That section |
-| None of those headings | The whole body |
+| Body has                                                                                 | Treat as the plan |
+| ---------------------------------------------------------------------------------------- | ----------------- |
+| A heading such as Plan, Proposed design, Proposed behavior, Suggested approach, or Scope | That section      |
+| None of those headings                                                                   | The whole body    |
 
-| Body has | Treat as acceptance criteria |
-|----------|------------------------------|
-| Acceptance criteria or Requirements (checkboxes or a MUST/should list) | That section |
-| Neither | The stated outcome in the title and body |
+| Body has                                                               | Treat as acceptance criteria             |
+| ---------------------------------------------------------------------- | ---------------------------------------- |
+| Acceptance criteria or Requirements (checkboxes or a MUST/should list) | That section                             |
+| Neither                                                                | The stated outcome in the title and body |
 
 ### Step 2 — Check for blocking dependencies
 
@@ -277,14 +278,14 @@ close it manually after review.
 
 ## Rationalizations
 
-| Excuse | Reality |
-|--------|---------|
-| "The plan is a means; intent is satisfied" | The written plan is the contract. Changing it needs the first yes. |
-| "User said just finish, don't wait" | Deviation still needs a yes. Message them and stop. |
-| "I'll mention it in the commit / later" | That is implementing first. Stop. |
-| "A better helper is not really a plan change" | Different files or approach = deviation. First yes. |
-| "They already said yes to the approach" | That was the first yes. The issue edit needs a second yes. |
-| "Asking again is pedantic / the issue is lying" | Propose the exact diff and wait. Do not edit. |
-| "I'll rewrite the whole issue so it's accurate" | Surgical only: change the sentences that no longer match. |
-| "It's ready, so skip draft" | Draft is the default. Ready only if the user asks. |
-| "I'll write a better body from scratch" | Fill the template. Keep its structure. |
+| Excuse                                          | Reality                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------ |
+| "The plan is a means; intent is satisfied"      | The written plan is the contract. Changing it needs the first yes. |
+| "User said just finish, don't wait"             | Deviation still needs a yes. Message them and stop.                |
+| "I'll mention it in the commit / later"         | That is implementing first. Stop.                                  |
+| "A better helper is not really a plan change"   | Different files or approach = deviation. First yes.                |
+| "They already said yes to the approach"         | That was the first yes. The issue edit needs a second yes.         |
+| "Asking again is pedantic / the issue is lying" | Propose the exact diff and wait. Do not edit.                      |
+| "I'll rewrite the whole issue so it's accurate" | Surgical only: change the sentences that no longer match.          |
+| "It's ready, so skip draft"                     | Draft is the default. Ready only if the user asks.                 |
+| "I'll write a better body from scratch"         | Fill the template. Keep its structure.                             |

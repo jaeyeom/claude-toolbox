@@ -4,8 +4,8 @@ Create language-specific development skills (e.g., rust-dev, go-dev, python-dev)
 
 ## Components
 
-| Component              | Type  | Description                                                       |
-| ---------------------- | ----- | ----------------------------------------------------------------- |
+| Component               | Type  | Description                                                      |
+| ----------------------- | ----- | ---------------------------------------------------------------- |
 | `create-lang-dev-skill` | Skill | Guides creation of a lang-dev skill from PR reviews and codebase |
 
 ## Installation

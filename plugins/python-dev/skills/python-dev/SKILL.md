@@ -1,4 +1,5 @@
 ---
+
 name: python-dev
 description: Expert knowledge for Python development. Includes uv, ruff, pytest, type hints, and test doubles (dependency injection, freezegun, monkeypatch). Use when writing, testing, or building Python code.
 ---
@@ -264,15 +265,15 @@ and inject a fake.
 
 ### Rationalizations
 
-| Excuse | Reality |
-|--------|---------|
-| "It's only a test; patching is faster" | The test is telling you the API is hard to test. Inject. |
-| "I'll add a clock parameter later" | Add it now. The test is the reason. |
+| Excuse                                           | Reality                                                                  |
+| ------------------------------------------------ | ------------------------------------------------------------------------ |
+| "It's only a test; patching is faster"           | The test is telling you the API is hard to test. Inject.                 |
+| "I'll add a clock parameter later"               | Add it now. The test is the reason.                                      |
 | "freezegun is also monkeypatching, so skip both" | freezegun is the tool for third-party time. DI is the tool for our time. |
-| "The class calls datetime.now in many places" | One clock dependency replaces all of them. Do not patch `datetime`. |
-| "A fixture that monkeypatches is cleaner" | A fixture that only patches is still monkeypatch. |
-| "unittest.mock.Mock is the pytest way" | pytest does not require mocks. Inject fakes you control. |
-| "Third-party code, but I can patch its datetime" | Use freezegun for time. Do not hand-roll datetime patches. |
+| "The class calls datetime.now in many places"    | One clock dependency replaces all of them. Do not patch `datetime`.      |
+| "A fixture that monkeypatches is cleaner"        | A fixture that only patches is still monkeypatch.                        |
+| "unittest.mock.Mock is the pytest way"           | pytest does not require mocks. Inject fakes you control.                 |
+| "Third-party code, but I can patch its datetime" | Use freezegun for time. Do not hand-roll datetime patches.               |
 
 ### Red flags — stop and inject (or freezegun)
 

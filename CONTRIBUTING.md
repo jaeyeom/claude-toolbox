@@ -73,6 +73,7 @@ Slash commands are user-invoked via `/command-name`:
 
 ```markdown
 ---
+
 description: Brief description shown in /help
 argument-hint: [arg1] [--option]
 allowed-tools: Read, Grep, Bash
@@ -99,6 +100,7 @@ Skills are model-invoked (Claude decides when to use them):
 
 ```markdown
 ---
+
 name: my-skill
 description: What this skill does and when Claude should use it
 allowed-tools: Read, Grep, Glob
@@ -122,6 +124,7 @@ Subagents are specialized AI assistants for specific tasks:
 
 ```markdown
 ---
+
 name: my-agent
 description: When to invoke this agent. Use "proactively" for auto-invocation.
 tools: Bash, Read, Grep, Glob

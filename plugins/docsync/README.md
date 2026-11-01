@@ -6,8 +6,8 @@ patch stale factual drift.
 
 ## Components
 
-| Component | Type  | Description                                              |
-| --------- | ----- | -------------------------------------------------------- |
+| Component | Type  | Description                                                |
+| --------- | ----- | ---------------------------------------------------------- |
 | `docsync` | Skill | Run `docsync check`, review implicated docs, edit if stale |
 
 ## Prerequisites

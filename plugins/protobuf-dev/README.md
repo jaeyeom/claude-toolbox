@@ -4,8 +4,8 @@ Expert knowledge for Protocol Buffer development. Provides style guidelines, doc
 
 ## Components
 
-| Component      | Type  | Description                                              |
-| -------------- | ----- | -------------------------------------------------------- |
+| Component      | Type  | Description                                               |
+| -------------- | ----- | --------------------------------------------------------- |
 | `protobuf-dev` | Skill | Guides proto development with best practices and patterns |
 
 ## Installation

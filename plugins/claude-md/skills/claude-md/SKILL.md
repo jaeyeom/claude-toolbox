@@ -1,4 +1,5 @@
 ---
+
 name: claude-md
 description: Write effective CLAUDE.md files containing only tacit knowledge. Use when asked to create, review, or improve a CLAUDE.md file, or when setting up project context for AI agents. Enforces the "tacit knowledge only" quality bar — rejects content derivable from code, linters, or tooling, with an exception for information that is technically derivable but practically hard to get right.
 argument-hint: "[path-or-action]"
@@ -43,7 +44,7 @@ Before writing or reviewing, understand the codebase:
 
 ### Step 2a — Mine PR Review Comments
 
-PR code reviews are one of the richest sources of tacit knowledge. Reviewers often explain *why* something is wrong in ways that never make it into documentation. Mine this knowledge with `gh`:
+PR code reviews are one of the richest sources of tacit knowledge. Reviewers often explain _why_ something is wrong in ways that never make it into documentation. Mine this knowledge with `gh`:
 
 ```bash
 # Recent merged PRs touching the target directory
@@ -58,20 +59,20 @@ gh api repos/{owner}/{repo}/pulls/{number}/reviews --jq '.[] | select(.state != 
 
 **What to look for in review comments:**
 
-| Signal | Example | Extracts To |
-|---|---|---|
-| **"Don't do X because..."** | "Don't import `pkg/internal` from here — it breaks the dependency boundary" | Architectural boundary |
-| **"This broke prod when..."** | "Last time someone changed this serialization, the mobile app crashed for 2 hours" | Operational gotcha |
-| **"The convention is..."** | "We always put migration SQL in `migrations/` not inline — the deploy pipeline expects it there" | Workflow procedure |
-| **"This needs to match..."** | "This enum must stay in sync with the proto definition in repo X" | Cross-team constraint |
-| **Repeated corrections** | Same feedback given across multiple PRs | Undocumented rule worth capturing |
-| **"Why" explanations** | "We use X instead of Y because Y has a memory leak under Z conditions" | Non-obvious design rationale |
+| Signal                        | Example                                                                                          | Extracts To                       |
+| ----------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------- |
+| **"Don't do X because..."**   | "Don't import `pkg/internal` from here — it breaks the dependency boundary"                      | Architectural boundary            |
+| **"This broke prod when..."** | "Last time someone changed this serialization, the mobile app crashed for 2 hours"               | Operational gotcha                |
+| **"The convention is..."**    | "We always put migration SQL in `migrations/` not inline — the deploy pipeline expects it there" | Workflow procedure                |
+| **"This needs to match..."**  | "This enum must stay in sync with the proto definition in repo X"                                | Cross-team constraint             |
+| **Repeated corrections**      | Same feedback given across multiple PRs                                                          | Undocumented rule worth capturing |
+| **"Why" explanations**        | "We use X instead of Y because Y has a memory leak under Z conditions"                           | Non-obvious design rationale      |
 
 **Process:**
 
 1. Fetch the last 20–30 merged PRs touching the target directory.
 2. For each PR, read inline review comments and review-level feedback.
-3. Filter for comments that explain *constraints*, *boundaries*, *gotchas*, or *rationale* — skip style nits and typo fixes.
+3. Filter for comments that explain _constraints_, _boundaries_, _gotchas_, or _rationale_ — skip style nits and typo fixes.
 4. Group recurring themes — if the same feedback appears in 2+ PRs, it is almost certainly undocumented tacit knowledge.
 5. Apply the quality bar (Step 3) to each extracted item before including it.
 
@@ -81,30 +82,30 @@ gh api repos/{owner}/{repo}/pulls/{number}/reviews --jq '.[] | select(.state != 
 
 Every piece of content must pass this checklist:
 
-| Check | Question |
-|---|---|
-| **Tacit knowledge** | Would an agent reading source code and tool configs miss this? |
+| Check                               | Question                                                                                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Tacit knowledge**                 | Would an agent reading source code and tool configs miss this?                                                                  |
 | **Non-derivable or hard-to-derive** | Can `ls`, `grep`, linter output, or config files reproduce this? If yes, would an agent reliably get it right on the first try? |
-| **Architectural invariant** | Does it describe a rule not enforced by tooling? |
-| **Known violations** | If documenting a rule, are existing violations called out? |
-| **Actionable** | Does it give concrete steps, not vague guidance? |
-| **Not code explanation** | Does it avoid restating what functions do? |
-| **Concise** | Uses tables, short bullets, or headings — not prose walls? |
+| **Architectural invariant**         | Does it describe a rule not enforced by tooling?                                                                                |
+| **Known violations**                | If documenting a rule, are existing violations called out?                                                                      |
+| **Actionable**                      | Does it give concrete steps, not vague guidance?                                                                                |
+| **Not code explanation**            | Does it avoid restating what functions do?                                                                                      |
+| **Concise**                         | Uses tables, short bullets, or headings — not prose walls?                                                                      |
 
 ### Hard-to-Derive Exception
 
 Some information is technically derivable but practically hard to get right. Apply this test:
 
-> Even if an agent *could* find this by searching, would it reliably find the *correct* answer on the first try?
+> Even if an agent _could_ find this by searching, would it reliably find the _correct_ answer on the first try?
 
 If the answer is **probably not** — because the information is buried, ambiguous, or commonly confused — it belongs in CLAUDE.md despite being technically derivable.
 
-| Category | Example |
-|---|---|
-| **Niche tool flags** | A CLI flag that looks like it does one thing but behaves differently in this project's context |
-| **Subtle config interactions** | Two settings that are individually documented but whose combination produces unexpected behavior |
-| **Error-prone defaults** | A tool where the obvious usage is wrong and the correct invocation requires project-specific knowledge |
-| **Version-pinned behavior** | A tool invocation where the default behavior changed between versions and the project pins an older version |
+| Category                       | Example                                                                                                     |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Niche tool flags**           | A CLI flag that looks like it does one thing but behaves differently in this project's context              |
+| **Subtle config interactions** | Two settings that are individually documented but whose combination produces unexpected behavior            |
+| **Error-prone defaults**       | A tool where the obvious usage is wrong and the correct invocation requires project-specific knowledge      |
+| **Version-pinned behavior**    | A tool invocation where the default behavior changed between versions and the project pins an older version |
 
 This exception does **not** apply to content that is straightforward to derive — directory listings, standard lint rules, or well-documented API usage remain excluded.
 
@@ -118,30 +119,30 @@ If **yes**, keep it. If **no** — because tooling or code review would catch it
 
 ### Content That Belongs
 
-| Category | Example |
-|---|---|
-| **Architectural boundaries** | "Vendor formats must be parsed only inside `topomap/` — all other packages use `topomap.Graph`" |
-| **Non-obvious design rationale** | "Shortest paths are precomputed with Dijkstra because the graph is static and small" |
-| **Operational gotchas** | "Run `ms_local_ctl down` when done — Cloud SQL Proxy impersonation accounts are limited" |
-| **Workflow procedures** | Step-by-step for tasks the code can't express (e.g., "how to add a new vendor format") |
-| **Cross-team constraints** | "Service X owns the schema — changes require their review even though we have write access" |
-| **Non-obvious environment setup** | "Must run `gcloud auth` with impersonation flag before local dev works" |
-| **Migration context** | "Package `oldauth` is deprecated — new code must use `auth/v2`. Known users: [list]" |
-| **PR review wisdom** | Recurring reviewer feedback that reveals undocumented rules, boundaries, or gotchas |
-| **Hard-to-derive tool usage** | "Must pass `--legacy-peer-deps` to `npm install` — the default resolver fails on our pinned React 17 peer deps" |
-| **Subtle config interactions** | "Setting `GOMAXPROCS=1` in CI is intentional — the race detector produces false positives with higher values on this codebase" |
+| Category                          | Example                                                                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Architectural boundaries**      | "Vendor formats must be parsed only inside `topomap/` — all other packages use `topomap.Graph`"                                |
+| **Non-obvious design rationale**  | "Shortest paths are precomputed with Dijkstra because the graph is static and small"                                           |
+| **Operational gotchas**           | "Run `ms_local_ctl down` when done — Cloud SQL Proxy impersonation accounts are limited"                                       |
+| **Workflow procedures**           | Step-by-step for tasks the code can't express (e.g., "how to add a new vendor format")                                         |
+| **Cross-team constraints**        | "Service X owns the schema — changes require their review even though we have write access"                                    |
+| **Non-obvious environment setup** | "Must run `gcloud auth` with impersonation flag before local dev works"                                                        |
+| **Migration context**             | "Package `oldauth` is deprecated — new code must use `auth/v2`. Known users: [list]"                                           |
+| **PR review wisdom**              | Recurring reviewer feedback that reveals undocumented rules, boundaries, or gotchas                                            |
+| **Hard-to-derive tool usage**     | "Must pass `--legacy-peer-deps` to `npm install` — the default resolver fails on our pinned React 17 peer deps"                |
+| **Subtle config interactions**    | "Setting `GOMAXPROCS=1` in CI is intentional — the race detector produces false positives with higher values on this codebase" |
 
 ### Content to Reject
 
-| Anti-Pattern | Why It Fails | Alternative |
-|---|---|---|
-| Lint rules | Derivable from linter config | Let the linter do its job |
-| Directory listings (names only) | Derivable from `ls` | OK if adding constraints or relationships |
-| Code explanations | Derivable from reading code | Document *why*, not *what* |
-| Language style guides | Derivable from formatter config | Only project-specific deviations |
-| Dependency lists | Derivable from `go.mod`/`package.json` | Only surprising choices and why |
-| API endpoint catalogs | Derivable from specs/routes | Only non-obvious auth, rate limits, ordering |
-| Build commands alone | Derivable from `Makefile`/CI | Only alongside non-obvious flags, env setup, or hard-to-derive interactions |
+| Anti-Pattern                    | Why It Fails                           | Alternative                                                                 |
+| ------------------------------- | -------------------------------------- | --------------------------------------------------------------------------- |
+| Lint rules                      | Derivable from linter config           | Let the linter do its job                                                   |
+| Directory listings (names only) | Derivable from `ls`                    | OK if adding constraints or relationships                                   |
+| Code explanations               | Derivable from reading code            | Document _why_, not _what_                                                  |
+| Language style guides           | Derivable from formatter config        | Only project-specific deviations                                            |
+| Dependency lists                | Derivable from `go.mod`/`package.json` | Only surprising choices and why                                             |
+| API endpoint catalogs           | Derivable from specs/routes            | Only non-obvious auth, rate limits, ordering                                |
+| Build commands alone            | Derivable from `Makefile`/CI           | Only alongside non-obvious flags, env setup, or hard-to-derive interactions |
 
 ## Step 5 — Structure the File
 
@@ -184,7 +185,7 @@ When reviewing an existing CLAUDE.md, evaluate each section:
 
 1. **For each item**, ask: "Can an agent derive this from the codebase?"
 2. If derivable, apply the hard-to-derive exception: "Would an agent reliably get this right on the first try?" If not, the item may still belong.
-3. **Flag** items that are derivable *and* easy to get right, with a brief explanation of how.
+3. **Flag** items that are derivable _and_ easy to get right, with a brief explanation of how.
 4. **Flag** items that are vague or non-actionable.
 5. **Suggest** tacit knowledge that is missing based on your codebase exploration.
 6. **Output a verdict**: items to keep, items to remove, items to add.
@@ -213,6 +214,7 @@ contains the `<!-- agents-md-compat -->` marker:
 1. Check whether `AGENTS.md` already exists in the same directory as the target
    `CLAUDE.md`.
 2. If it does not exist, create it as a symbolic link:
+
    ```bash
    ln -s CLAUDE.md AGENTS.md
    ```

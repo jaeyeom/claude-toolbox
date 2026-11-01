@@ -1,4 +1,5 @@
 ---
+
 name: apply-figma-make
 description: Apply Figma Make exported designs to website pages. Converts React/motion code to framework-appropriate code (Astro, Next.js, etc.) with CSS animations.
 argument-hint: "<path-to-zip> [target-page]"
@@ -20,9 +21,11 @@ This skill activates when:
 ### Phase 1: Extract and Analyze
 
 1. **Extract the zip file** to a temporary directory
+
    ```bash
    unzip -o "<path-to-zip>" -d "$TMPDIR/figma-design"
    ```
+
    Note: Use `$TMPDIR` or any suitable temp directory. Claude will determine the appropriate location at runtime.
 
 2. **Identify key files**
@@ -59,14 +62,14 @@ Common constraints:
 
 **Conversion Rules for Astro/Static Sites:**
 
-| Figma Make (React) | Convert To |
-|-------------------|------------|
-| `motion.div` with `animate` | CSS `@keyframes` animation |
-| `motion.div` with `whileHover` | CSS `:hover` with `transition` |
-| `motion.div` with `whileInView` | CSS animation (plays on load) |
-| `useState`/`useEffect` for scroll | CSS or remove if decorative |
-| `[...Array(N)].map()` particles | CSS gradients or fewer elements |
-| Inline `style={{}}` | Tailwind classes or `<style>` |
+| Figma Make (React)                | Convert To                      |
+| --------------------------------- | ------------------------------- |
+| `motion.div` with `animate`       | CSS `@keyframes` animation      |
+| `motion.div` with `whileHover`    | CSS `:hover` with `transition`  |
+| `motion.div` with `whileInView`   | CSS animation (plays on load)   |
+| `useState`/`useEffect` for scroll | CSS or remove if decorative     |
+| `[...Array(N)].map()` particles   | CSS gradients or fewer elements |
+| Inline `style={{}}`               | Tailwind classes or `<style>`   |
 
 **Delegate to executor:**
 ```
@@ -118,6 +121,7 @@ Task(
 ### Phase 5: Verify
 
 1. **Build the project**
+
    ```bash
    npm run build
    ```
@@ -152,9 +156,9 @@ Claude:
 
 ## Common Issues
 
-| Issue | Solution |
-|-------|----------|
+| Issue                   | Solution                                     |
+| ----------------------- | -------------------------------------------- |
 | Logo appears wrong size | Check SVG viewBox matches your existing logo |
-| Animations janky | Simplify or use `will-change` CSS property |
-| Too many DOM elements | Replace particle arrays with CSS gradients |
-| Colors don't match | Map Figma colors to your Tailwind theme |
+| Animations janky        | Simplify or use `will-change` CSS property   |
+| Too many DOM elements   | Replace particle arrays with CSS gradients   |
+| Colors don't match      | Map Figma colors to your Tailwind theme      |

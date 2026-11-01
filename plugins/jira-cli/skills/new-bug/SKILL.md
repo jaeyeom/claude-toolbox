@@ -1,4 +1,5 @@
 ---
+
 name: new-bug
 description: Create a new Jira bug report with proper wiki markup formatting
 argument-hint: <PROJECT or EPIC-123>

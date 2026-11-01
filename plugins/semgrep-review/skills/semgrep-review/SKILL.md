@@ -1,4 +1,5 @@
 ---
+
 name: semgrep-review
 description: Analyze semgrep scan findings, triage real vulnerabilities vs false positives, fix real issues using framework-native escaping, and suppress false positives with properly formatted nosemgrep comments.
 ---
@@ -46,11 +47,11 @@ positive** by reading the flagged code and tracing the data source.
 
 **Common false positive categories:**
 
-| Category | Example | Why It's Safe |
-|----------|---------|---------------|
-| Test fixtures | Private keys, hashes in test files | Intentionally committed, no real system access |
-| Framework-escaped values | Variables inside Hono `html` template literals, React JSX | Framework auto-escapes interpolated values |
-| Admin-only internal tools | Values from admin DB displayed in admin panel | Not user-controlled, but still fix for defense-in-depth |
+| Category                  | Example                                                   | Why It's Safe                                           |
+| ------------------------- | --------------------------------------------------------- | ------------------------------------------------------- |
+| Test fixtures             | Private keys, hashes in test files                        | Intentionally committed, no real system access          |
+| Framework-escaped values  | Variables inside Hono `html` template literals, React JSX | Framework auto-escapes interpolated values              |
+| Admin-only internal tools | Values from admin DB displayed in admin panel             | Not user-controlled, but still fix for defense-in-depth |
 
 ### Step 3: Fix Real Issues
 
@@ -101,11 +102,11 @@ write a standard escape function:
 ```typescript
 function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 ```
 
@@ -156,7 +157,7 @@ For bcrypt hashes in tests:
 // Not real credentials - test fixtures to verify needsRehash()
 // correctly identifies legacy formats for migration.
 // nosemgrep: detected-bcrypt-hash
-expect(needsRehash('$2a$10$...')).toBe(true);
+expect(needsRehash("$2a$10$...")).toBe(true);
 ```
 
 #### Suppressing Inside Template Literals
@@ -183,8 +184,8 @@ html`<input value=${
 ```typescript
 // // comment works because it's inside a JS expression (object literal)
 html`${textarea({
-  name: 'field',
-  value: data.join('\n'), // nosemgrep: unknown-value-with-script-tag
+  name: "field",
+  value: data.join("\n"), // nosemgrep: unknown-value-with-script-tag
   rows: 2,
 })}`;
 ```
@@ -214,9 +215,9 @@ After all fixes and suppressions:
 
 Present findings as a summary table:
 
-| # | File | Rule | Verdict | Action |
-|---|------|------|---------|--------|
-| 1 | `path/to/file.ts:42` | `rule-id` | Real issue | Fix: use `html` template |
-| 2 | `path/to/test.ts:10` | `detected-private-key` | False positive | Suppress: test fixture |
+| #   | File                 | Rule                   | Verdict        | Action                   |
+| --- | -------------------- | ---------------------- | -------------- | ------------------------ |
+| 1   | `path/to/file.ts:42` | `rule-id`              | Real issue     | Fix: use `html` template |
+| 2   | `path/to/test.ts:10` | `detected-private-key` | False positive | Suppress: test fixture   |
 
 Then proceed with fixes and suppressions.

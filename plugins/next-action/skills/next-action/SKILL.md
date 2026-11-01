@@ -1,4 +1,5 @@
 ---
+
 name: next-action
 description: Find the next highest-priority action to work on. Scans local TODO files, source code TODO comments, GitHub issues, and unpushed local commits. Checks for blockers, staleness, and priority signals to recommend what to do next. Use when asked "what should I work on next", "next task", "find work", or "what's left to do".
 autouse: false
@@ -95,7 +96,7 @@ Scoring rules applied by the script:
 
 1. **Deduplication** — If a TODO comment references a tracker ID that matches a
    GitHub issue gathered in Step 4, merge them: attach the code location to the
-   GitHub issue candidate rather than creating a duplicate entry.  If multiple
+   GitHub issue candidate rather than creating a duplicate entry. If multiple
    TODO comments share the same tracker ID, group them as a single candidate
    with multiple locations.
 
@@ -184,9 +185,11 @@ were addressed locally but whose corresponding GitHub issues remain open.
 3. Cross-reference unpushed commits with GitHub issues:
    - For each issue number referenced in unpushed commit messages, check
      whether the issue is open:
+
      ```bash
      gh issue view <number> --json state --jq '.state'
      ```
+
      This lookup is self-contained — it does not depend on the GitHub issue
      candidates gathered in Step 4. This allows `/next-action unpushed` to
      work as a standalone mode without running the full GitHub issues scan.
@@ -213,7 +216,7 @@ Assign a priority score to each non-blocked, non-stale, non-in-progress
 candidate:
 
 | Source          | Priority signal                     | Score |
-|-----------------|-------------------------------------|-------|
+| --------------- | ----------------------------------- | ----- |
 | Local TODO      | High Priority section / P0 / URGENT | 100   |
 | Local TODO      | Medium Priority section / P1        | 50    |
 | Local TODO      | Low Priority section / P2           | 20    |
@@ -301,6 +304,7 @@ a task source section based on what was discovered:
 
 ```markdown
 ## Task Sources
+
 - Local: TODO.md
 - GitHub Issues: assigned to @me, state open
 ```
