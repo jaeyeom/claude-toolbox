@@ -64,7 +64,7 @@ solo, Go, Python, Jira, and full-suite installs.
 
 Start here based on the question you are trying to answer:
 
-- [Docs Index](./docs/README.md): documentation map for guides, plugin docs, and reference material
+- [Docs Index](./docs/README.md): documentation map for guides and plugin docs
 - [Vibecoding Setup Guide](./docs/vibecoding-setup-guide.md): choose a bundle and wire up an end-to-end workflow
 - [Contributing Guide](./CONTRIBUTING.md): create or submit a plugin to the marketplace
 
@@ -105,16 +105,6 @@ Other:
 
 Each plugin directory contains its own `README.md`, which is the source of truth
 for installation details, configuration, and examples.
-
-## Reference Documentation
-
-The `docs/claude/` directory mirrors Claude Code reference material used by this
-repo:
-
-- [Skills](./docs/claude/skills.md)
-- [Slash Commands](./docs/claude/slash-commands.md)
-- [Subagents](./docs/claude/sub-agents.md)
-- [Hooks](./docs/claude/hooks-guide.md)
 
 ## License
 
