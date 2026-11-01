@@ -227,11 +227,13 @@ template has one; otherwise include it in the body.
 If no template exists, write a short body that includes
 `Resolves #<issue-number>`.
 
-Write the filled body to a file and create the draft PR:
+Write the filled body to a file, create the draft PR, and assign it to
+yourself (`@me`), the same person Step 3 assigns the issue to. Do not
+hardcode a login.
 
 ```bash
 git push -u origin HEAD
-gh pr create --draft --title "<issue title>" --body-file <filled-body>
+gh pr create --draft --assignee @me --title "<issue title>" --body-file <filled-body>
 ```
 
 Pass the filled text with `--body-file`. `gh` rejects combining `--template`
@@ -239,10 +241,22 @@ with `--body` / `--body-file`, so do not pass the unfilled template path as
 `--template`.
 
 Omit `--draft` only when the user explicitly asks for a ready-for-review
-pull request.
+pull request. Keep `--assignee @me` either way.
 
-If a pull request already exists for this branch (`gh pr view`), report its
-URL instead of creating another.
+If `gh pr create` fails because the assignee cannot be added, run it again
+without `--assignee`, tell the user that assignment failed, and continue.
+Do not stop the rest of the workflow. A failure that is not about the
+assignee is still a failure.
+
+If a pull request already exists for this branch (`gh pr view`), do not
+create another. Assign that pull request to yourself:
+
+```bash
+gh pr edit --add-assignee @me
+```
+
+If that assignee update fails, say so and still report the pull request URL.
+Do not stop the workflow.
 
 Report the PR URL to the user.
 
@@ -257,6 +271,9 @@ gh issue edit $ARGUMENTS --remove-label "in progress"
 
 If the label was never added (e.g., it could not be created in Step 3), skip
 this step.
+
+Leave the issue assignee and the pull request assignee in place. This step
+only removes the label.
 
 ### Step 9 — Leave the issue open
 
