@@ -1,4 +1,5 @@
 ---
+
 name: create-lang-dev-skill
 description: Create a language-specific development skill by mining PR reviews, codebase conventions, build system patterns, and team documentation. Use when the user wants to create a new lang-dev skill (e.g., rust-dev, go-dev, python-dev) for their project.
 ---
@@ -103,22 +104,22 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments
 
 Classify each comment into one of these buckets. **Ignore** anything that a linter or formatter would catch automatically.
 
-| Category | What to Look For |
-|----------|-----------------|
-| **String/formatting patterns** | Format string conventions, logging patterns |
-| **Error handling** | Error propagation style, context/wrapping, fail-fast vs. graceful |
-| **Architecture** | Module organization, separation of concerns, layer boundaries |
-| **Naming** | Semantic naming rules, domain-specific terminology, URL/API naming |
-| **Type design** | Generic vs. concrete types, ownership/borrowing, interface design |
-| **Testing** | Test expectations, test isolation, mocking patterns, what to test |
-| **Logging/observability** | Which logging framework, structured vs. unstructured, log levels |
-| **Configuration** | Hardcoded vs. configurable, defaults, env vars vs. flags |
-| **Dependencies** | Preferred libraries, version management, internal vs. external |
-| **Code organization** | File layout, module boundaries, shared code extraction |
-| **Build system** | Build target patterns, visibility rules, CI integration |
-| **Documentation** | Doc comment expectations, what needs docs, example requirements |
-| **Performance** | Unnecessary allocations, cloning, concurrency patterns |
-| **Security** | Input validation, secret handling, auth patterns |
+| Category                       | What to Look For                                                   |
+| ------------------------------ | ------------------------------------------------------------------ |
+| **String/formatting patterns** | Format string conventions, logging patterns                        |
+| **Error handling**             | Error propagation style, context/wrapping, fail-fast vs. graceful  |
+| **Architecture**               | Module organization, separation of concerns, layer boundaries      |
+| **Naming**                     | Semantic naming rules, domain-specific terminology, URL/API naming |
+| **Type design**                | Generic vs. concrete types, ownership/borrowing, interface design  |
+| **Testing**                    | Test expectations, test isolation, mocking patterns, what to test  |
+| **Logging/observability**      | Which logging framework, structured vs. unstructured, log levels   |
+| **Configuration**              | Hardcoded vs. configurable, defaults, env vars vs. flags           |
+| **Dependencies**               | Preferred libraries, version management, internal vs. external     |
+| **Code organization**          | File layout, module boundaries, shared code extraction             |
+| **Build system**               | Build target patterns, visibility rules, CI integration            |
+| **Documentation**              | Doc comment expectations, what needs docs, example requirements    |
+| **Performance**                | Unnecessary allocations, cloning, concurrency patterns             |
+| **Security**                   | Input validation, secret handling, auth patterns                   |
 
 These are common categories, but let the actual PR comments drive the taxonomy. Create new categories if a project has a dominant pattern not listed here (e.g., "migration patterns" for a database-heavy project, or "FFI boundaries" for a mixed-language codebase).
 
@@ -169,6 +170,7 @@ Follow this template:
 
 ```markdown
 ---
+
 name: {lang}-dev
 description: Expert knowledge for {Language} development in {Project}. Includes {key topics}. Use when writing, testing, or building {Language} code.
 ---
@@ -178,27 +180,35 @@ description: Expert knowledge for {Language} development in {Project}. Includes 
 Use this skill when the user **writes, modifies, tests, or builds {Language} code**.
 
 ## 1. The Golden Rule: {Most Important Build/Workflow Rule}
+
 {Build system, canonical commands, what NOT to do}
 
 ## 2. {Highest-Frequency Convention, e.g., Error Handling}
+
 {BAD/GOOD examples, rationale}
 
 ## 3. {Second-Highest Convention, e.g., Naming}
+
 {BAD/GOOD examples, rationale}
 
 ## 4. {Third Convention, e.g., Testing Patterns}
+
 {BAD/GOOD examples, rationale}
 
 ## 5. {Fourth Convention, e.g., Architecture/Module Boundaries}
+
 {BAD/GOOD examples, rationale}
 
 ## 6. {Fifth Convention, e.g., Logging/Observability}
+
 {BAD/GOOD examples, rationale}
 
 ## 7. Workspace and Dependency Management
+
 {How to add dependencies, version management, preferred libraries}
 
 ## 8. Advanced Topics (Read These Files)
+
 {DO NOT GUESS — read the authoritative source}
 ```
 
@@ -233,16 +243,19 @@ Every skill should end with pointers to authoritative files for advanced topics.
 **DO NOT GUESS** on advanced topics. Read the authoritative source:
 
 ### `build/ci-config.yaml`
+
 Read this file when:
 - User asks about CI pipeline behavior
 - User needs to add a new build target or test job
 
 ### `.golangci.yml` (or equivalent linter config)
+
 Read this file when:
 - User asks which linters are enabled and why
 - User wants to suppress or configure a specific lint rule
 
 ### `docs/architecture.md`
+
 Read this file when:
 - User asks about module boundaries or layering
 - User proposes a new package or significant refactor

@@ -1,4 +1,5 @@
 ---
+
 name: gabyx-githooks-setup
 description: Set up shared Git hooks using gabyx/Githooks (not standard git hooks). Use when a user asks to set up githooks, apply shared hooks, or configure hook repositories in a project.
 autouse: false
@@ -125,15 +126,15 @@ git hooks shared update
 
 ### 4. Useful commands
 
-| Command | Purpose |
-|---------|---------|
-| `git hooks install` | Activate Githooks in current repo |
-| `git hooks uninstall` | Remove Githooks from current repo |
-| `git hooks shared update` | Pull latest shared hook repositories |
-| `git hooks list` | Show all hooks that will run and their status |
-| `git hooks config` | Manage Githooks settings |
-| `git hooks ignore add` | Exclude specific hooks by pattern |
-| `git hooks shared root ns:<namespace>` | Show shared repo root for a namespace |
+| Command                                | Purpose                                       |
+| -------------------------------------- | --------------------------------------------- |
+| `git hooks install`                    | Activate Githooks in current repo             |
+| `git hooks uninstall`                  | Remove Githooks from current repo             |
+| `git hooks shared update`              | Pull latest shared hook repositories          |
+| `git hooks list`                       | Show all hooks that will run and their status |
+| `git hooks config`                     | Manage Githooks settings                      |
+| `git hooks ignore add`                 | Exclude specific hooks by pattern             |
+| `git hooks shared root ns:<namespace>` | Show shared repo root for a namespace         |
 
 ### 5. Updating shared hooks
 
@@ -175,16 +176,16 @@ This is safer than `trust-all` because it only trusts hooks from a known, author
 
 **Other trust options:**
 
-| Method | Scope | Effect |
-|--------|-------|--------|
-| `git hooks trust hooks --pattern "ns:<namespace>/**"` | Per-repo, per-user | Trusts hooks matching a namespace pattern — **preferred approach** |
-| `git hooks trust hooks --all` | Per-repo, per-user | Trusts all currently active hooks |
-| `git hooks trust` | Per-repo, per-user | Marks repo as trusted for the current user (each collaborator should run this locally) |
-| `.githooks/trust-all` file | Per-repo | Marks repo as trusted — do **not** commit this file; add it to `.gitignore` instead, as trust is a per-user security decision |
-| `git hooks config trust-all --accept` | Per-repo | Auto-accepts **all** current and future hooks (use with caution — prefer namespace-based trust instead) |
-| `git hooks config trust-all --reset` | Per-repo | Reverts trust-all decision |
-| `GITHOOKS_SKIP_UNTRUSTED_HOOKS=true` | Per-session | Skips untrusted hooks silently |
-| `GITHOOKS_DISABLE=1` | Per-session | Disables all Githooks entirely |
+| Method                                                | Scope              | Effect                                                                                                                        |
+| ----------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `git hooks trust hooks --pattern "ns:<namespace>/**"` | Per-repo, per-user | Trusts hooks matching a namespace pattern — **preferred approach**                                                            |
+| `git hooks trust hooks --all`                         | Per-repo, per-user | Trusts all currently active hooks                                                                                             |
+| `git hooks trust`                                     | Per-repo, per-user | Marks repo as trusted for the current user (each collaborator should run this locally)                                        |
+| `.githooks/trust-all` file                            | Per-repo           | Marks repo as trusted — do **not** commit this file; add it to `.gitignore` instead, as trust is a per-user security decision |
+| `git hooks config trust-all --accept`                 | Per-repo           | Auto-accepts **all** current and future hooks (use with caution — prefer namespace-based trust instead)                       |
+| `git hooks config trust-all --reset`                  | Per-repo           | Reverts trust-all decision                                                                                                    |
+| `GITHOOKS_SKIP_UNTRUSTED_HOOKS=true`                  | Per-session        | Skips untrusted hooks silently                                                                                                |
+| `GITHOOKS_DISABLE=1`                                  | Per-session        | Disables all Githooks entirely                                                                                                |
 
 **For CI/automation**, either set `GITHOOKS_DISABLE=1` to skip hooks entirely, or use `trust-all --accept` so the runner auto-trusts hooks (the non-interactive runner from initial setup already handles non-fatal prompts).
 

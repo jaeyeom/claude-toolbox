@@ -21,12 +21,12 @@ Or simply provide a Figma Make zip file and ask Claude to apply the design.
 
 ## Conversion Examples
 
-| Figma Make (React) | Converts To |
-|-------------------|-------------|
-| `motion.div` with `animate` | CSS `@keyframes` |
-| `motion.div` with `whileHover` | CSS `:hover` + `transition` |
-| `[...Array(20)].map()` particles | CSS gradient backgrounds |
-| Inline `style={{}}` | Tailwind classes |
+| Figma Make (React)               | Converts To                 |
+| -------------------------------- | --------------------------- |
+| `motion.div` with `animate`      | CSS `@keyframes`            |
+| `motion.div` with `whileHover`   | CSS `:hover` + `transition` |
+| `[...Array(20)].map()` particles | CSS gradient backgrounds    |
+| Inline `style={{}}`              | Tailwind classes            |
 
 ## License
 

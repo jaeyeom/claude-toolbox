@@ -4,10 +4,10 @@ Generate GitHub Actions CI workflows that mirror local Makefile targets for cons
 
 ## Components
 
-| Component     | Type  | Description                                              |
-| ------------- | ----- | -------------------------------------------------------- |
-| `ci-workflow` | Skill | Guides generation of GitHub Actions CI workflow files     |
-| `check-ci`    | Skill | Diagnose CI failures and suggest fixes                    |
+| Component     | Type  | Description                                           |
+| ------------- | ----- | ----------------------------------------------------- |
+| `ci-workflow` | Skill | Guides generation of GitHub Actions CI workflow files |
+| `check-ci`    | Skill | Diagnose CI failures and suggest fixes                |
 
 ## Installation
 

@@ -7,8 +7,8 @@ monkeypatch as last resort.
 
 ## Components
 
-| Component    | Type  | Description                                             |
-| ------------ | ----- | ------------------------------------------------------- |
+| Component    | Type  | Description                                              |
+| ------------ | ----- | -------------------------------------------------------- |
 | `python-dev` | Skill | Guides Python development with modern toolchain defaults |
 
 ## Installation

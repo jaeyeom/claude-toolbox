@@ -1,4 +1,5 @@
 ---
+
 name: plan-project
 description: Plan a project by reading a design document and creating Jira tasks with dependencies
 argument-hint: <path/to/design.md>

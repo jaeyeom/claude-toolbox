@@ -1,4 +1,5 @@
 ---
+
 name: go-dev
 description: Expert knowledge for Go development. Includes idiomatic patterns, error handling, testing, package naming, and build system detection (go toolchain, Bazel, Makefile). Use when writing, testing, or building Go code.
 ---
@@ -89,14 +90,14 @@ x = computeValue()
 
 ### Common Analyzers
 
-| Analyzer      | Purpose                                |
-|---------------|----------------------------------------|
-| `godot`       | Comments should end with a period.     |
-| `ineffassign` | Detects ineffectual assignments.       |
-| `staticcheck` | Various Go best practices.             |
-| `govet`       | Unreachable code, format mismatches.   |
-| `errcheck`    | Unchecked error return values.         |
-| `gosimple`    | Suggests code simplifications.         |
+| Analyzer      | Purpose                              |
+| ------------- | ------------------------------------ |
+| `godot`       | Comments should end with a period.   |
+| `ineffassign` | Detects ineffectual assignments.     |
+| `staticcheck` | Various Go best practices.           |
+| `govet`       | Unreachable code, format mismatches. |
+| `errcheck`    | Unchecked error return values.       |
+| `gosimple`    | Suggests code simplifications.       |
 
 ### Unused Interfaces? Delete Them
 
@@ -148,7 +149,7 @@ bazel run //:buildifier
 ### Go Package Naming Convention
 
 | Rule               | Good          | Bad                      |
-|--------------------|---------------|--------------------------|
+| ------------------ | ------------- | ------------------------ |
 | Lowercase only     | `datastore`   | `dataStore`, `DataStore` |
 | No underscores     | `loguploader` | `log_uploader`           |
 | No hyphens         | `apiserver`   | `api-server`             |

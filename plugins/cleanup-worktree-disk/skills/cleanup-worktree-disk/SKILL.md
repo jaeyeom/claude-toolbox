@@ -1,15 +1,16 @@
 ---
+
 name: cleanup-worktree-disk
 description: >-
-  Reclaim macOS disk space by removing git worktrees whose PRs are already
-  merged (plus their branches and Bazel output bases) and by deleting orphaned
-  Bazel output bases whose workspace directory no longer exists. Use whenever
-  the user is low on disk, says "clean up disk space", "free up space", "my
-  disk is full", "clean up worktrees", "remove merged worktrees", "the bazel
-  cache is huge", or after a batch of PRs has merged and stale worktrees pile
-  up. Bazel output bases dominate disk (often 9–12 GB each), so reach for this
-  even when the user only mentions worktrees — the cache is usually the real
-  win.
+Reclaim macOS disk space by removing git worktrees whose PRs are already
+merged (plus their branches and Bazel output bases) and by deleting orphaned
+Bazel output bases whose workspace directory no longer exists. Use whenever
+the user is low on disk, says "clean up disk space", "free up space", "my
+disk is full", "clean up worktrees", "remove merged worktrees", "the bazel
+cache is huge", or after a batch of PRs has merged and stale worktrees pile
+up. Bazel output bases dominate disk (often 9–12 GB each), so reach for this
+even when the user only mentions worktrees — the cache is usually the real
+win.
 ---
 
 # Cleanup worktree + Bazel disk
@@ -84,7 +85,7 @@ everything as `NO-PR`), stop and say so rather than deleting on bad data.
 **All removal runs with the sandbox disabled.** This is not optional and it is
 the single biggest gotcha:
 
-- The sandbox denies deletion of protected paths that live *inside* every
+- The sandbox denies deletion of protected paths that live _inside_ every
   worktree — `.mcp.json`, `.claude/*`, `.git/worktrees/*/config.worktree`. A
   removal attempted in-sandbox fails with `Operation not permitted` **partway
   through**, leaving the worktree half-deleted (most files gone, admin dir and
@@ -112,7 +113,7 @@ for br in <merged-branch-names>; do git branch -D "$br"; done
 ```
 
 Remove the output bases. `rm -rf` alone fails with **`Permission denied`** —
-Bazel marks external-repo files *and their parent directories* read-only, so
+Bazel marks external-repo files _and their parent directories_ read-only, so
 you can't unlink them. Make them writable first:
 
 ```bash
@@ -137,7 +138,7 @@ State the before/after free space and the count of worktrees and bases removed.
 
 - **Merged ≠ ancestrally merged.** Squash merges mean `git branch --merged` and
   `git status` clean tell you nothing about merge state. Use `gh pr list --head
-  <remote-branch> --state all`. The remote branch name is usually *not* the
+  <remote-branch> --state all`. The remote branch name is usually _not_ the
   local branch name, so resolve it via `@{upstream}` first — the script does
   this.
 - **`gh`/`jira` need the sandbox off** (Go binary TLS). Inside the sandbox they
@@ -146,7 +147,7 @@ State the before/after free space and the count of worktrees and bases removed.
 - **Bazel bases are read-only** → `chmod -R u+w` before `rm -rf`.
 - **Never delete `install/`, `cache/`, or fresh unmapped bases.**
 - **Respect `locked` worktrees** — that lock is a deliberate human signal.
-- **zsh word-splitting**: on zsh, unquoted `$var` does *not* split on spaces.
+- **zsh word-splitting**: on zsh, unquoted `$var` does _not_ split on spaces.
   Build lists as arrays (`names=(a b c)`), or your loop runs once over the
   whole string.
 - **`git status --porcelain` hides ignored files** — good for the safety gate

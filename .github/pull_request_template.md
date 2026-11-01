@@ -27,7 +27,7 @@ Resolves #
 <!-- Reading SKILL.md is not enough. Name the prompt you used. -->
 
 - [ ] After `/plugin install <name>` (or a local install), a prompt that
-      should trigger the skill — the agent followed the new guidance
+  should trigger the skill — the agent followed the new guidance
 
 ### Hook (delete if this PR does not change a hook)
 
@@ -38,7 +38,7 @@ Resolves #
 
 - [ ] `/plugin install <name>` matches `plugin.json` name/version
 - [ ] Listed in the root README plugin directory (and a bundle guide if it
-      belongs in one)
+  belongs in one)
 
 ## Reviewer notes
 

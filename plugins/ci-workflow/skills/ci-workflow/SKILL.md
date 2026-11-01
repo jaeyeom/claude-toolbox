@@ -1,4 +1,5 @@
 ---
+
 name: ci-workflow
 description: Generate GitHub Actions CI workflows that call Makefile targets for consistent local and CI behavior. Use when a user asks about CI setup, GitHub Actions, continuous integration, or CI/CD pipelines.
 autouse: false
@@ -23,14 +24,14 @@ Before generating anything, check the repository:
 
 ### Step 2 — Choose strategy
 
-| Makefile? | Language | Strategy |
-|-----------|----------|----------|
-| Yes | Go | Makefile-first: `make check`, `make test`, `make build` |
-| Yes | Node.js | Makefile-first: `make check`, `make test`, `make build` |
-| Yes | Go + Node.js | Makefile-first: single `make check` covers both |
-| No | Go | Direct commands: `golangci-lint run`, `go test`, `go build` |
-| No | Node.js | Direct commands: `npm ci`, `npm run lint`, `npm test`, `npm run build` |
-| No | Go + Node.js | Direct commands for each language in separate steps |
+| Makefile? | Language     | Strategy                                                               |
+| --------- | ------------ | ---------------------------------------------------------------------- |
+| Yes       | Go           | Makefile-first: `make check`, `make test`, `make build`                |
+| Yes       | Node.js      | Makefile-first: `make check`, `make test`, `make build`                |
+| Yes       | Go + Node.js | Makefile-first: single `make check` covers both                        |
+| No        | Go           | Direct commands: `golangci-lint run`, `go test`, `go build`            |
+| No        | Node.js      | Direct commands: `npm ci`, `npm run lint`, `npm test`, `npm run build` |
+| No        | Go + Node.js | Direct commands for each language in separate steps                    |
 
 **Makefile-first is preferred** because it keeps CI and local behavior identical. If no Makefile exists, suggest creating one with `makefile-workflow` first.
 
@@ -241,15 +242,15 @@ After generating, summarize:
 
 ## Customization
 
-| Need | How |
-|------|-----|
-| Matrix builds | Add `strategy.matrix` with Go or Node version arrays |
-| Separate jobs per language | Split into `go:` and `node:` jobs under `jobs:` |
-| Release on tag | Add `on: push: tags: ['v*']` trigger with a `release` job |
-| Coverage upload | Add a step after tests: `uses: codecov/codecov-action@v5` |
-| Caching Go modules | `actions/setup-go@v6` caches by default; no extra step needed |
-| Caching Node modules | Use `cache: npm` (or `pnpm`) in `actions/setup-node@v6` |
-| Branch protection | Recommend requiring the `ci` job to pass before merging |
+| Need                       | How                                                           |
+| -------------------------- | ------------------------------------------------------------- |
+| Matrix builds              | Add `strategy.matrix` with Go or Node version arrays          |
+| Separate jobs per language | Split into `go:` and `node:` jobs under `jobs:`               |
+| Release on tag             | Add `on: push: tags: ['v*']` trigger with a `release` job     |
+| Coverage upload            | Add a step after tests: `uses: codecov/codecov-action@v5`     |
+| Caching Go modules         | `actions/setup-go@v6` caches by default; no extra step needed |
+| Caching Node modules       | Use `cache: npm` (or `pnpm`) in `actions/setup-node@v6`       |
+| Branch protection          | Recommend requiring the `ci` job to pass before merging       |
 
 ## Best practices
 
