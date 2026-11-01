@@ -1,8 +1,8 @@
 # Code paths → the docs that shadow them.
 # Built from both directions: plugin implementation → plugin README, then
 # each doc's named source files back to that doc.
-# Left unmatched on purpose: plugin.json version bumps, docs/claude/
-# (upstream mirrors), INSTALL.md (upstream githooks install), and
+# Left unmatched on purpose: plugin.json version bumps,
+# INSTALL.md (upstream githooks install), and
 # .githooks/README.md (no local hook scripts).
 #
 # Matching is root-anchored. No implicit **/.

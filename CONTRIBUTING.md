@@ -285,4 +285,3 @@ Do not bypass git hooks with `--no-verify`, `GITHOOKS_DISABLE`, or similar flags
 
 - Open an issue for questions or suggestions
 - Check existing plugins for examples
-- See [docs/claude/](./docs/claude/) for official documentation
