@@ -13,7 +13,7 @@ A Claude Code skill for resolving GitHub issues end-to-end using the `gh` CLI.
 - After an approved deviation, proposes a surgical issue-body edit and waits for a second yes
 - Reviews changes against the acceptance criteria
 - Commits with a message that references the issue for auto-close on merge
-- Opens a draft pull request, filling the repository PR template when one exists
+- Opens a draft pull request assigned to the same person, filling the repository PR template when one exists
 
 ## Prerequisites
 
@@ -49,6 +49,6 @@ Resolve GitHub issue #42
 7. **Issue update** — After an approved deviation, proposes a surgical body edit and waits for a second yes
 8. **Review** — Checks completeness against the acceptance criteria
 9. **Commit** — Creates a commit with `Resolves #N` for automatic issue closure on merge
-10. **Draft PR** — Pushes the feature branch and opens a draft pull request, filling the repository's default PR template when one exists
+10. **Draft PR** — Pushes the feature branch and opens a draft pull request assigned to the same person, filling the repository's default PR template when one exists. If a pull request already exists for the branch, assigns that one instead of creating another.
 
 The issue is intentionally left open — it closes automatically when the pull request is merged.
