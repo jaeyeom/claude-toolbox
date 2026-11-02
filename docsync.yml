@@ -108,6 +108,11 @@ rules:
       - path: plugins/gh-issue-resolver/README.md
         why: "workflow and usage"
 
+  - match: ["plugins/herdr-sweep/skills/**/SKILL.md"]
+    docs:
+      - path: plugins/herdr-sweep/README.md
+        why: "workflow, safety rules, and configuration"
+
   - match: ["plugins/go-dev/skills/**/SKILL.md"]
     docs:
       - path: plugins/go-dev/README.md

@@ -87,6 +87,7 @@ Task management:
 - [todo](./plugins/todo)
 - [next-action](./plugins/next-action)
 - [gh-issue-resolver](./plugins/gh-issue-resolver)
+- [herdr-sweep](./plugins/herdr-sweep)
 
 Jira:
 - [jira-cli](./plugins/jira-cli)

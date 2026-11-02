@@ -1,0 +1,43 @@
+{
+  "name": "herdr-sweep",
+  "version": "1.0.0",
+  "description": "Digest herdr agent sessions and dispatch follow-ups only after approval, one agent at a time",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["herdr", "agents", "sweep", "digest", "workflow"],
+  "userConfig": {
+    "label_pattern": {
+      "type": "string",
+      "title": "Tab label pattern",
+      "description": "Regular expression whose first capture group is the work-item ID. Example: ^([A-Z]+-\\d+). Leave empty to show raw tab labels."
+    },
+    "dispatch_commands": {
+      "type": "string",
+      "title": "External dispatch commands",
+      "description": "One entry per follow-up kind, as kind=command template. Example: rebase=my-pr-tool dispatch --rebase --pr {pr} --go. A kind with no entry uses herdr agent prompt.",
+      "multiple": true
+    },
+    "states": {
+      "type": "string",
+      "title": "States to sweep",
+      "description": "Herdr agent lifecycle states to include. The default is done and blocked.",
+      "multiple": true,
+      "default": ["done", "blocked"]
+    },
+    "include_unread_idle": {
+      "type": "boolean",
+      "title": "Include unread idle",
+      "description": "Also include idle sessions whose last turn has not been read yet.",
+      "default": false
+    },
+    "machines": {
+      "type": "string",
+      "title": "Machine profiles",
+      "description": "Herdr --machine profiles to sweep. Leave empty to sweep the local session only. Each profile is swept and dispatched on its own.",
+      "multiple": true
+    }
+  }
+}
