@@ -103,6 +103,7 @@ Safety and security:
 
 - [semgrep-review](./plugins/semgrep-review)
 - [git-guardrails](./plugins/git-guardrails)
+- [fork-keeper](./plugins/fork-keeper)
 - [review-push-loop](./plugins/review-push-loop)
 - [sandbox-helpers](./plugins/sandbox-helpers)
 

@@ -1,7 +1,7 @@
 {
   "name": "claude-toolbox",
   "metadata": {
-    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, Figma design application, semgrep security review, Go development, Python development, POSIX shell glue, Protocol Buffer development, gabyx/Githooks setup, Cloudflare macOS fix, worktree and Bazel disk cleanup, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira CLI, git guardrails, macOS sandbox helpers, Biome VCS integration, herdr session sweeps, and documentation review with docsync"
+    "description": "Claude Code plugins for development workflows: Makefile generation, CI workflow generation, CI failure diagnosis, Figma design application, semgrep security review, Go development, Python development, POSIX shell glue, Protocol Buffer development, gabyx/Githooks setup, Cloudflare macOS fix, worktree and Bazel disk cleanup, language-dev skill creation, todo management, GitHub issue resolution, next-action task discovery, CLAUDE.md authoring, Jira CLI, git guardrails, macOS sandbox helpers, Biome VCS integration, herdr session sweeps, fork upstream sync with threat review, and documentation review with docsync"
   },
   "owner": {
     "name": "Jaehyun Yeom"
@@ -246,6 +246,16 @@
       },
       "source": "./plugins/herdr-sweep",
       "category": "development"
+    },
+    {
+      "name": "fork-keeper",
+      "description": "Keep a personal fork rebased on upstream with a threat-only review of incoming changes",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jaehyun Yeom"
+      },
+      "source": "./plugins/fork-keeper",
+      "category": "security"
     }
   ]
 }

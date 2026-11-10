@@ -1,0 +1,18 @@
+{
+  "name": "fork-keeper",
+  "version": "1.0.0",
+  "description": "Keep a personal fork rebased on upstream with a threat-only review of incoming changes",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": [
+    "fork",
+    "upstream",
+    "rebase",
+    "sync",
+    "security-review",
+    "supply-chain"
+  ]
+}
