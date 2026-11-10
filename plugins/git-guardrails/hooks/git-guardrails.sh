@@ -2,7 +2,8 @@
 # PreToolUse hook: blocks dangerous git and find command patterns.
 #
 # Replaces the git shim (~/.local/shims/bin/git) and find shim
-# (~/.local/shims/bin/find) with a Claude Code PreToolUse hook.
+# (~/.local/shims/bin/find) with a PreToolUse hook. Runs under both
+# Claude Code and Antigravity (agy); the input shape tells them apart.
 #
 # Blocked patterns:
 #   - GITHOOKS_DISABLE env var  (disables all Githooks)
@@ -13,22 +14,29 @@
 #   - git add . / -A / --all  (stages unrelated files)
 #   - find -exec/-execdir/-ok/-okdir/-delete/-fls/-fprint/-fprint0/-fprintf
 #
-# Exit codes:
-#   0 = allow the command
-#   2 = block the command (JSON on stdout with decision + reason)
+# Input:
+#   Claude Code: {"tool_input": {"command": "..."}}
+#   agy:         {"toolCall": {"args": {"CommandLine": "..."}}}
+#
+# Output: always exits 0. A blocked command prints a deny decision on
+# stdout in the schema of the runner that sent the input:
+#   Claude Code: {"hookSpecificOutput": {"permissionDecision": "deny", ...}}
+#   agy:         {"decision": "deny", "reason": "..."}
 
-# Read tool input from stdin
 INPUT=$(cat)
 
-# Parse the command from tool input JSON
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
+COMMAND=$(echo "$INPUT" | jq -r '(.tool_input.command // .toolCall.args.CommandLine) // empty' 2>/dev/null || true)
+RUNNER=$(echo "$INPUT" | jq -r 'if has("toolCall") then "agy" else "claude" end' 2>/dev/null || echo claude)
 
 if [[ -z "$COMMAND" ]]; then
 	exit 0
 fi
 
-# Helper: output a PreToolUse deny decision as JSON
 deny() {
+	if [[ "$RUNNER" == "agy" ]]; then
+		jq -n --arg reason "$1" '{decision: "deny", reason: $reason}'
+		exit 0
+	fi
 	jq -n --arg reason "$1" '{
 		continue: true,
 		hookSpecificOutput: {
