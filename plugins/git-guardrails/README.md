@@ -1,6 +1,6 @@
 # git-guardrails
 
-PreToolUse hooks that block dangerous command patterns in Claude Code sessions.
+PreToolUse hooks that block dangerous command patterns in Claude Code and Antigravity (`agy`) sessions.
 
 ## What it blocks
 
@@ -23,7 +23,11 @@ PreToolUse hooks that block dangerous command patterns in Claude Code sessions.
 
 ## How it works
 
-The plugin registers a `PreToolUse` hook on the `Bash` tool. Before any shell command executes, the hook parses the command string and blocks it (exit code 2 with a JSON reason) if it matches a dangerous pattern. Safe commands pass through with no overhead beyond a fast string check.
+The plugin registers a `PreToolUse` hook on the shell tool: `Bash` in Claude Code, `run_command` in agy. Before any shell command executes, the hook parses the command string and, if it matches a dangerous pattern, prints a deny decision with a reason on stdout. Safe commands pass through with no overhead beyond a fast string check.
+
+The same hook serves both runners. It reads the command from `.tool_input.command` (Claude Code) or `.toolCall.args.CommandLine` (agy), and answers in the schema of the runner that called it: `hookSpecificOutput.permissionDecision` for Claude Code, `{"decision": "deny", "reason": ...}` for agy. The plugin root comes from `PLUGIN_ROOT` (agy) or `CLAUDE_PLUGIN_ROOT` (Claude Code).
+
+Run the fixture tests with `tests/run.sh`.
 
 ## Replaces
 
