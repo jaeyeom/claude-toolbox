@@ -78,11 +78,13 @@ x = computeValue()
 ```
 
 **When `//nolint` might be appropriate:**
+
 - Fix requires significant unrelated changes out of scope
 - Linter false positive (e.g., function used via reflection)
 - Implementing an external interface that requires a specific pattern
 
 **When `//nolint` is NOT appropriate:**
+
 - "I don't understand why it's complaining"
 - "It's easier than fixing"
 - "It is needed in the future"
@@ -210,6 +212,7 @@ func NewService(cfg Config) *Service { ... }
 ```
 
 **Why:**
+
 - Keeps library packages reusable and testable without implicit global state.
 - Makes dependency injection explicit — config flows down as parameters or structs.
 - Avoids `init()`-time side effects from `flag.Parse()` scattered across packages.

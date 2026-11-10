@@ -12,6 +12,7 @@ Apply designs exported from Figma Make to your website pages. Handles the conver
 ## When to Use
 
 This skill activates when:
+
 - User provides a Figma Make zip file
 - User says "apply this design", "use this Figma export"
 - User wants to implement a design from a `.zip` containing React components
@@ -54,6 +55,7 @@ Ask the user using AskUserQuestion:
 ```
 
 Common constraints:
+
 - **Keep existing logo** - Don't replace with design's placeholder logo
 - **Remove marketing badges** - "AI-powered", "New", etc.
 - **Preserve navigation structure** - Keep existing routes/links
@@ -72,6 +74,7 @@ Common constraints:
 | Inline `style={{}}`               | Tailwind classes or `<style>`   |
 
 **Delegate to executor:**
+
 ```
 Task(
   subagent_type="oh-my-claudecode:executor",

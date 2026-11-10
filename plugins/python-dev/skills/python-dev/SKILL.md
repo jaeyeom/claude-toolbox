@@ -37,11 +37,13 @@ legacy_name = load()  # noqa: N816  # vendor field name; rename in a follow-up
 ```
 
 **When `# noqa` might be appropriate:**
+
 - Fix requires significant unrelated changes out of scope
 - False positive
 - Matching an external API that requires a specific name
 
 **When `# noqa` is NOT appropriate:**
+
 - "I don't understand why it's complaining"
 - "It's easier than fixing"
 - The fix is within scope of the current change

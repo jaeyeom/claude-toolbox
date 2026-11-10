@@ -4,6 +4,7 @@ A curated marketplace of Claude Code plugins for building a reliable
 AI-assisted development workflow.
 
 claude-toolbox is opinionated about a few things:
+
 - Commits should be hard to mess up.
 - Local checks and CI should run the same workflow.
 - Agents should know your task flow and language conventions.
@@ -30,6 +31,7 @@ These plugins work together to create a reliable development workflow:
 ```
 
 Add the task-management layer on top:
+
 - `next-action` finds the next item worth doing.
 - `todo` tracks local work.
 - `gh-issue-resolver` can take an issue from its written plan through a draft pull request, stopping when the plan must change.
@@ -49,6 +51,7 @@ Install the marketplace and a practical starter bundle:
 ```
 
 That gives you:
+
 - safer git usage
 - a next-task workflow
 - language-aware coding guidance
@@ -71,6 +74,7 @@ Start here based on the question you are trying to answer:
 ## Plugin Directory
 
 Workflow:
+
 - [gabyx-githooks-setup](./plugins/gabyx-githooks-setup)
 - [makefile-workflow](./plugins/makefile-workflow)
 - [ci-workflow](./plugins/ci-workflow)
@@ -84,22 +88,26 @@ Workflow:
 - [docsync](./plugins/docsync)
 
 Task management:
+
 - [todo](./plugins/todo)
 - [next-action](./plugins/next-action)
 - [gh-issue-resolver](./plugins/gh-issue-resolver)
 - [herdr-sweep](./plugins/herdr-sweep)
 
 Jira:
+
 - [jira-cli](./plugins/jira-cli)
 - [jira-close-merged](./plugins/jira-close-merged)
 
 Safety and security:
+
 - [semgrep-review](./plugins/semgrep-review)
 - [git-guardrails](./plugins/git-guardrails)
 - [review-push-loop](./plugins/review-push-loop)
 - [sandbox-helpers](./plugins/sandbox-helpers)
 
 Other:
+
 - [apply-figma-make](./plugins/apply-figma-make)
 - [cloudflare-macos-fix](./plugins/cloudflare-macos-fix)
 - [cleanup-worktree-disk](./plugins/cleanup-worktree-disk)

@@ -27,6 +27,7 @@ Identify all files for the target language and map the directory structure.
 ```
 
 **What to look for:**
+
 - How many files exist? (< 50 = small footprint, 50-500 = medium, 500+ = large)
 - Are they concentrated in one area or spread across the repo?
 - Is there a workspace/monorepo structure?
@@ -34,6 +35,7 @@ Identify all files for the target language and map the directory structure.
 #### Monorepo considerations
 
 If the project is a monorepo with multiple packages, services, or crates:
+
 - Determine whether conventions are **repo-wide** or **per-package**. Some monorepos have different teams and styles per subdirectory.
 - Check for a top-level build config (e.g., root `Cargo.toml` workspace, Go workspace `go.work`, Bazel `WORKSPACE`) that unifies builds.
 - Ask the user whether the skill should cover the **entire repo** or a **specific subtree**. Scoping to a subtree keeps the skill focused and under the 500-line target.
@@ -44,12 +46,14 @@ If the project is a monorepo with multiple packages, services, or crates:
 Determine how the language is built, tested, linted, and formatted. **Do not assume** — verify each claim against actual config files and CI pipelines.
 
 **Check these in order:**
+
 1. Build config files (BUILD/BUILD.bazel, Makefile, package.json, pyproject.toml, go.mod, etc.)
 2. CI pipeline configs (.circleci/, .github/workflows/, Jenkinsfile, etc.)
 3. Formatter/linter configs (.eslintrc, .golangci.yml, clippy.toml, ruff.toml, etc.)
 4. Root-level scripts or Makefiles that wrap build commands
 
 **Key questions to answer:**
+
 - What is the canonical build command? (e.g., `bazel build`, `go build`, `npm run build`)
 - What is the canonical test command?
 - What is the canonical lint command? Is linting separate or integrated into the build?
@@ -61,6 +65,7 @@ Determine how the language is built, tested, linted, and formatted. **Do not ass
 **Always ask the user** if they have internal documentation. This is often the most valuable source.
 
 Prompt the user with:
+
 > Do you have any of the following for this language?
 > - Wiki/Confluence pages about development conventions
 > - Style guides or coding standards documents
@@ -126,6 +131,7 @@ These are common categories, but let the actual PR comments drive the taxonomy. 
 ### 2.4 Count and rank
 
 For each category, record:
+
 - **Frequency**: How many times it appeared across PRs
 - **Reviewers**: Which reviewers raised it (identifies subject-matter experts)
 - **Example quotes**: Direct quotes from the most clear/representative comments
@@ -139,6 +145,7 @@ For each category, record:
 ### 3.1 Verify build commands
 
 First, **inspect configuration files** (BUILD files, Makefiles, CI configs, `package.json` scripts, etc.) to verify every command you plan to document. Check that:
+
 - The build target exists
 - The target name is correct (e.g., `:lib_test` vs `:my_crate_test`)
 - The format command includes this language
@@ -149,6 +156,7 @@ If inspection alone is ambiguous, run the commands to confirm — but prefer rea
 ### 3.2 Verify conventions against code
 
 For each convention from PR reviews, check if the codebase actually follows it:
+
 - Search for counter-examples (code that violates the convention)
 - If violations are widespread, the convention may be aspirational, not enforced — note this
 - If violations are rare and recent PRs fix them, the convention is real
@@ -156,6 +164,7 @@ For each convention from PR reviews, check if the codebase actually follows it:
 ### 3.3 Cross-reference with documentation
 
 If the user provided wiki/docs, check for contradictions between:
+
 - What PR reviewers say
 - What the documentation says
 - What the code actually does
@@ -217,6 +226,7 @@ Adjust the number of convention sections (2-6 above) based on what the PR review
 ### 4.2 Writing guidelines
 
 **DO:**
+
 - Lead with the build system — it's the most common source of confusion
 - Rank convention sections by PR review frequency (most common first)
 - Include BAD/GOOD code examples for every convention
@@ -226,6 +236,7 @@ Adjust the number of convention sections (2-6 above) based on what the PR review
 - Keep it under 500 lines — skills should be scannable, not encyclopedic
 
 **DON'T:**
+
 - Don't document what linters/formatters already enforce
 - Don't guess build commands — verify them against BUILD files and CI
 - Don't include language basics (the reader already knows the language)
@@ -245,18 +256,21 @@ Every skill should end with pointers to authoritative files for advanced topics.
 ### `build/ci-config.yaml`
 
 Read this file when:
+
 - User asks about CI pipeline behavior
 - User needs to add a new build target or test job
 
 ### `.golangci.yml` (or equivalent linter config)
 
 Read this file when:
+
 - User asks which linters are enabled and why
 - User wants to suppress or configure a specific lint rule
 
 ### `docs/architecture.md`
 
 Read this file when:
+
 - User asks about module boundaries or layering
 - User proposes a new package or significant refactor
 ```

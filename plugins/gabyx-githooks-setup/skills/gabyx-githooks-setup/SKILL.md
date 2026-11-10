@@ -229,6 +229,7 @@ Shared repos organize hooks as:
 ```
 
 For example:
+
 ```
 .githooks/pre-commit/format-check.sh
 .githooks/commit-msg/conventional-commits.sh
