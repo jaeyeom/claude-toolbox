@@ -70,6 +70,36 @@ If no task list items or sub-issue references are found in the body, proceed
 
 ### Step 3 — Mark the issue as in progress
 
+#### Check for an existing claim
+
+Gather this session's claim fields locally. Omit any field that is not
+available rather than guessing:
+
+- **agent**: the agent name (for example `Claude Code`)
+- **host**: `hostname -s`
+- **directory**: the current working directory or worktree path (`pwd`)
+- **session**: the agent or session ID, only when the environment provides one
+- **time**: the current UTC time (`date -u +%Y-%m-%dT%H:%MZ`)
+
+Then find the latest claim comment on the issue:
+
+```bash
+gh issue view $ARGUMENTS --json comments \
+  --jq '[.comments[] | select(.body | startswith("Claimed by "))] | last | {author: .author.login, createdAt, body}'
+```
+
+If the issue already has the "in progress" label, or is assigned to someone
+other than you, when the skill starts:
+
+- If the latest claim comment names this host **and** this directory, it is
+  your own claim. Continue without asking and without posting a new claim
+  comment.
+- Otherwise, show the user the latest claim comment (author, time, and body),
+  or say that none exists, and ask whether to continue. Do not claim over it
+  until the user explicitly says yes.
+
+#### Claim the issue
+
 Assign the issue to yourself and add an "in progress" label:
 
 ```bash
@@ -85,6 +115,20 @@ gh label create "in progress" --description "Work is actively underway" --color 
 
 If label creation fails (e.g., insufficient permissions), skip labeling and
 proceed — assignment alone is sufficient to signal progress.
+
+Then post one short claim comment so a label left behind by an abandoned
+session can be traced to where the work was happening:
+
+```bash
+gh issue comment $ARGUMENTS --body "Claimed by <agent> on <host> (<directory>, session <id>) at <UTC time>."
+```
+
+- Fill in the fields gathered above; drop any that are unavailable, along
+  with their surrounding text (for example `, session <id>`).
+- Keep it to identifying facts. No plan or progress notes.
+- Never include tokens, emails, or other secrets.
+- Skip this comment when the latest claim comment is already your own (same
+  host and directory), so a second run does not add a duplicate.
 
 ### Step 3a — Create a feature branch
 
@@ -272,8 +316,9 @@ gh issue edit $ARGUMENTS --remove-label "in progress"
 If the label was never added (e.g., it could not be created in Step 3), skip
 this step.
 
-Leave the issue assignee and the pull request assignee in place. This step
-only removes the label.
+Leave the issue assignee, the pull request assignee, and the claim comment
+in place. Do not delete the claim comment; the PR link already shows how the
+claim ended. This step only removes the label.
 
 ### Step 9 — Leave the issue open
 
