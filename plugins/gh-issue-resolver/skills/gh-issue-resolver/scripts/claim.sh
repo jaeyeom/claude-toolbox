@@ -9,7 +9,9 @@
 #   claim.sh post <issue> [--agent NAME] [--session ID]
 #                                      Post a claim comment and append it to the local log
 #
-# --agent defaults to the first "_"-separated field of $AI_AGENT, else "agent".
+# --agent is a lowercase agent id (claude-code, codex, grok, antigravity); input
+# is lowercased with spaces turned into "-". It defaults to the first
+# "_"-separated field of $AI_AGENT, else "agent".
 # --session defaults to $CLAUDE_CODE_SESSION_ID when set; other agents should
 # pass their own session ID if they know it.
 #
@@ -104,6 +106,8 @@ cmd_post() {
 		*) usage ;;
 		esac
 	done
+
+	agent="$(printf %s "$agent" | tr "[:upper:] " "[:lower:]-")"
 
 	local nick repo ts body
 	nick="$(get_nickname)"

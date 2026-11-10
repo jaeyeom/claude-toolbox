@@ -135,12 +135,13 @@ proceed — assignment alone is sufficient to signal progress.
 Then post one claim comment, unless the latest claim is already your own:
 
 ```bash
-bash "${SKILL_DIR}/scripts/claim.sh" post $ARGUMENTS --agent "<agent name>" [--session <id>]
+bash "${SKILL_DIR}/scripts/claim.sh" post $ARGUMENTS --agent <agent-id> [--session <id>]
 ```
 
-Pass your own agent name (for example `Claude Code`, `Codex`, `Grok`,
-`Antigravity`). Pass `--session` with your session ID when you know it;
-otherwise the script records `$CLAUDE_CODE_SESSION_ID` if set, or no session.
+Pass your agent id in lowercase: `claude-code`, `codex`, `grok`,
+`antigravity`, and so on. The script lowercases it and turns spaces into `-`.
+Pass `--session` with your session ID when you know it; otherwise the script
+records `$CLAUDE_CODE_SESSION_ID` if set, or no session.
 
 The comment reads `Claimed by <agent> on <nickname> at <UTC time>.` and holds
 nothing else: no plan, progress notes, paths, hostnames, or secrets. The script
