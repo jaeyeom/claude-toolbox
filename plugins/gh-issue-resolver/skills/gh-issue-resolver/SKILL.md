@@ -70,30 +70,46 @@ If no task list items or sub-issue references are found in the body, proceed
 
 ### Step 3 — Mark the issue as in progress
 
-#### Check for an existing claim
+The claim helper is `${SKILL_DIR}/scripts/claim.sh`, where `${SKILL_DIR}` is
+the directory containing this SKILL.md file. It works with any agent (Claude
+Code, Codex, Grok, Antigravity, ...). If your agent runs commands in a sandbox,
+run it outside the sandbox when the sandbox blocks `gh` or writes under
+`~/.config` and `~/.local/state`.
 
-Gather this session's claim fields locally. Omit any field that is not
-available rather than guessing:
+#### Make sure this machine has a nickname
 
-- **agent**: the agent name (for example `Claude Code`)
-- **host**: `hostname -s`
-- **directory**: the current working directory or worktree path (`pwd`)
-- **session**: the agent or session ID, only when the environment provides one
-- **time**: the current UTC time (`date -u +%Y-%m-%dT%H:%MZ`)
-
-Then find the latest claim comment on the issue:
+Claim comments name the machine by a short nickname (for example `tiger` or
+`turtle`), never by hostname or path, so the same comment is safe in public
+and private repositories.
 
 ```bash
-gh issue view $ARGUMENTS --json comments \
-  --jq '[.comments[] | select(.body | startswith("Claimed by "))] | last | {author: .author.login, createdAt, body}'
+bash "${SKILL_DIR}/scripts/claim.sh" nickname
 ```
+
+If it exits with status 3 (no nickname set), ask the user for one and save it:
+
+```bash
+bash "${SKILL_DIR}/scripts/claim.sh" set-nickname <name>
+```
+
+If the user cannot be asked (an unattended run), continue without a nickname.
+The claim comment then omits it.
+
+#### Check for an existing claim
+
+```bash
+bash "${SKILL_DIR}/scripts/claim.sh" latest $ARGUMENTS
+```
+
+This prints the latest claim comment as JSON (`author`, `createdAt`, `body`,
+`own`), or nothing if there is none. `own` is true when you wrote it and it
+names this machine's nickname.
 
 If the issue already has the "in progress" label, or is assigned to someone
 other than you, when the skill starts:
 
-- If the latest claim comment names this host **and** this directory, it is
-  your own claim. Continue without asking and without posting a new claim
-  comment.
+- If `own` is true, it is this machine's claim. Continue without asking and
+  without posting a new claim comment.
 - Otherwise, show the user the latest claim comment (author, time, and body),
   or say that none exists, and ask whether to continue. Do not claim over it
   until the user explicitly says yes.
@@ -116,19 +132,23 @@ gh label create "in progress" --description "Work is actively underway" --color 
 If label creation fails (e.g., insufficient permissions), skip labeling and
 proceed — assignment alone is sufficient to signal progress.
 
-Then post one short claim comment so a label left behind by an abandoned
-session can be traced to where the work was happening:
+Then post one claim comment, unless the latest claim is already your own:
 
 ```bash
-gh issue comment $ARGUMENTS --body "Claimed by <agent> on <host> (<directory>, session <id>) at <UTC time>."
+bash "${SKILL_DIR}/scripts/claim.sh" post $ARGUMENTS --agent "<agent name>" [--session <id>]
 ```
 
-- Fill in the fields gathered above; drop any that are unavailable, along
-  with their surrounding text (for example `, session <id>`).
-- Keep it to identifying facts. No plan or progress notes.
-- Never include tokens, emails, or other secrets.
-- Skip this comment when the latest claim comment is already your own (same
-  host and directory), so a second run does not add a duplicate.
+Pass your own agent name (for example `Claude Code`, `Codex`, `Grok`,
+`Antigravity`). Pass `--session` with your session ID when you know it;
+otherwise the script records `$CLAUDE_CODE_SESSION_ID` if set, or no session.
+
+The comment reads `Claimed by <agent> on <nickname> at <UTC time>.` and holds
+nothing else: no plan, progress notes, paths, hostnames, or secrets. The script
+also appends a line to `~/.local/state/gh-issue-resolver/claims.jsonl` with
+the same timestamp, the repository, the issue, the working directory, and the
+session ID when known. To trace a claim back to its session, look on the
+named machine for the log line whose `time` exactly matches the comment's
+timestamp.
 
 ### Step 3a — Create a feature branch
 
