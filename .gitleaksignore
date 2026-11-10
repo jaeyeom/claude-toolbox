@@ -1,0 +1,7 @@
+# Fingerprints of known gitleaks false positives (commit:path:rule:line).
+# Each entry must say why it is not a secret. See .gitleaks.toml.
+
+# semgrep-review docs: truncated placeholder `-----BEGIN PRIVATE KEY-----...`
+# in nosemgrep examples, added in 8ca9a9e. Not a key.
+8ca9a9ec779d983c0756076a472af9293f5528a7:plugins/semgrep-review/skills/semgrep-review/SKILL.md:private-key:115
+8ca9a9ec779d983c0756076a472af9293f5528a7:plugins/semgrep-review/skills/semgrep-review/SKILL.md:private-key:125
