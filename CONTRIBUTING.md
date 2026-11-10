@@ -60,6 +60,7 @@ Every plugin must have this metadata file:
 ### `README.md`
 
 Document your plugin with:
+
 - What the plugin does
 - Installation instructions
 - Usage examples
@@ -88,6 +89,7 @@ Use $ARGUMENTS to access user input.
 ```
 
 **Frontmatter fields:**
+
 - `description` - Shown in `/help` (required)
 - `argument-hint` - Usage hint for arguments
 - `allowed-tools` - Tools the command can use
@@ -112,6 +114,7 @@ Detailed instructions for Claude when this skill activates.
 ```
 
 **Frontmatter fields:**
+
 - `name` - Unique identifier (lowercase, hyphens, max 64 chars)
 - `description` - When to use this skill (max 1024 chars)
 - `allowed-tools` - Restrict available tools
@@ -146,6 +149,7 @@ How to format results...
 ```
 
 **Frontmatter fields:**
+
 - `name` - Unique identifier
 - `description` - When to use (include "proactively" for auto-use)
 - `tools` - Comma-separated tool list (omit to inherit all)
@@ -192,12 +196,14 @@ Use the wrapper format above inside `hooks/hooks.json`, not `settings.json`.
 Use `${CLAUDE_PLUGIN_ROOT}` to reference files shipped with the plugin.
 
 **Hook events:**
+
 - `PreToolUse` - Before tool calls (can block)
 - `PostToolUse` - After tool calls
 - `Notification` - When notifications sent
 - `Stop` - When Claude finishes responding
 
 **Hook types:**
+
 - `command` - Run shell command
 - `prompt` - Send prompt to Claude
 
@@ -235,11 +241,13 @@ Connect to external tools via Model Context Protocol:
 ### Versioning
 
 Follow [Semantic Versioning](https://semver.org/):
+
 - MAJOR: Breaking changes
 - MINOR: New features (backward compatible)
 - PATCH: Bug fixes
 
 When you make a meaningful change to an existing plugin:
+
 - Bump the version in both `plugins/<plugin-name>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
 - Keep the versions in sync
 - If the version bump is separate from the feature or fix, use `chore(<plugin-name>): bump version to X.Y.Z`
@@ -261,6 +269,7 @@ make validate
 Use `make validate-full` when you also want Claude's plugin validator to run.
 
 These checks cover:
+
 - Biome formatting and linting
 - Marketplace and directory sync
 - Name and version consistency between plugin manifests and the marketplace

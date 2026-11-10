@@ -28,10 +28,12 @@ The plugin registers a `PreToolUse` hook on the `Bash` tool. Before any shell co
 ## Replaces
 
 This plugin replaces the following shell shims:
+
 - `~/.local/shims/bin/git` — git commit --no-verify and git add . blocking
 - `~/.local/shims/bin/find` — find -exec/-delete blocking
 
 The plugin approach is cleaner because:
+
 - No PATH ordering dependency
 - Works even if Claude uses an absolute path to the binary
 - Fires before the command runs (not after binary resolution)

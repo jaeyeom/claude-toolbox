@@ -100,6 +100,7 @@ import "google/protobuf/timestamp.proto";
 ### Document Everything
 
 All of these **MUST** have documentation comments:
+
 - Messages
 - Fields
 - Enums
@@ -231,6 +232,7 @@ package mycompany.myservice.v1;  // Changing this breaks Any compatibility
 ### Field Name Changes
 
 Field names are backward compatible for the **binary** wire format. However, they can break:
+
 - JSON serialization (field names are used as JSON keys)
 - Text proto format
 - Field masks

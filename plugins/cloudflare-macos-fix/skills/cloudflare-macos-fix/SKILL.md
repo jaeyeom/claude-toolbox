@@ -20,6 +20,7 @@ macOS Apple Silicon (darwin-arm64) with Node v25+. Sharp 0.34.x ships prebuilt
 binaries that have an ABI mismatch with Node v25's native `.node` files.
 
 Typical error symptoms:
+
 - `sharp` install fails during `pnpm install` / `npm install`
 - Native module load errors referencing `darwin-arm64`
 - `node-gyp` rebuild failures for sharp

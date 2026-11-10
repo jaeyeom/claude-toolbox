@@ -45,6 +45,7 @@ This plugin replaces the `~/.local/shims/bin/gh` shell shim.
 The `~/.local/shims/bin/claude` shim sets environment variables (`GH_TOKEN`, `SSL_CERT_FILE`, `TMPDIR`, `GOCACHE`, `GOLANGCI_LINT_CACHE`) before launching Claude Code. This **cannot** be replaced by a plugin hook because hooks run inside the already-started Claude session and cannot modify the parent process environment.
 
 Options for the env-var setup:
+
 1. **Keep a slim claude wrapper** that only handles env-var exports (recommended)
 2. **Set env vars in shell profile** (`.zshrc` / `.bashrc`)
 3. **Ansible playbook** that configures the shell environment

@@ -62,6 +62,7 @@ Create or refine Makefiles that encode a reliable developer workflow. Mirror the
 ## Output expectations
 
 When asked to create or update a Makefile:
+
 - Produce a ready-to-run Makefile tailored to the project.
 - Preserve existing targets and semantics; only add or adjust as needed.
 - Call out any assumptions (package manager, tools, coverage thresholds).

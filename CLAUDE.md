@@ -35,6 +35,7 @@ copied into `git log` even though GitHub hides them in the rendered
 description.
 
 When creating or updating a PR:
+
 - Do not copy `<!-- ... -->` hints from a PR template into the submitted
   body. They are compose-time hints only.
 - Delete unused optional sections instead of leaving them empty.
@@ -51,6 +52,7 @@ copied into `git log` even though GitHub hides them in the rendered
 description.
 
 When creating or updating a PR:
+
 - Do not copy `<!-- ... -->` hints from a PR template into the submitted
   body. They are compose-time hints only.
 - Delete unused optional sections instead of leaving them empty.

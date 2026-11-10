@@ -108,6 +108,7 @@ After installing `next-action`, give it explicit task sources in your project's
 If you use a scaffolding tool such as `roboco-cli`, keep the generated
 `CLAUDE.md` and layer claude-toolbox on top. A good division of responsibility
 is:
+
 - the scaffolder creates the project foundation
 - claude-toolbox adds task flow, quality gates, and workflow conventions
 
