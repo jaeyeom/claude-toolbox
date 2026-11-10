@@ -55,8 +55,23 @@ if [[ $first_run == false ]] && ! git merge-base --is-ancestor "$old" "$new"; th
 	review_base=$(git merge-base "$old" "$new" || true)
 fi
 
-# The user's patch stack: fork commits whose patch upstream doesn't already have.
-user_commits=$(git rev-list --reverse --no-merges --right-only --cherry-pick "$new...$fork")
+# The fork must contain the recorded head; if it doesn't (rolled back, or a
+# promotion that never landed), commits between the fork and the recorded head
+# were never accepted, so review everything upstream has that the fork lacks.
+fork_behind_recorded_head=false
+if [[ $first_run == false ]] && ! git merge-base --is-ancestor "$old" "$fork"; then
+	fork_behind_recorded_head=true
+	review_base=$(git merge-base "$fork" "$new" || true)
+fi
+
+# The user's patch stack: fork commits whose patch upstream doesn't already
+# have. Commits reachable from the recorded upstream head are upstream's, even
+# if upstream has since dropped them (a rewrite), so never treat them as the
+# user's.
+exclude_old=()
+if [[ $first_run == false ]]; then exclude_old=("^$old"); fi
+user_commits=$(git rev-list --reverse --no-merges --right-only --cherry-pick \
+	"$new...$fork" ${exclude_old[@]+"${exclude_old[@]}"})
 
 fork_has_merges=false
 if [[ -n $(git rev-list --merges "$new..$fork") ]]; then fork_has_merges=true; fi
@@ -68,6 +83,7 @@ jq -cn \
 	--arg old "$old" --arg new "$new" --arg base "$review_base" \
 	--argjson first_run "$first_run" --argjson up_to_date "$up_to_date" \
 	--argjson rewritten "$rewritten" --argjson fork_has_merges "$fork_has_merges" \
+	--argjson fork_behind_recorded_head "$fork_behind_recorded_head" \
 	--arg user_commits "$user_commits" --arg mirror "$mirror" --arg fetched "$fetched" '
 	def lines: split("\n") | map(select(length > 0));
 	def tagmap: lines | map(split("\t") | {(.[0]): .[1]}) | add // {};
@@ -81,6 +97,7 @@ jq -cn \
 		review_base: (if $base == "" then null else $base end),
 		user_commits: ($user_commits | lines),
 		fork_has_merges: $fork_has_merges,
+		fork_behind_recorded_head: $fork_behind_recorded_head,
 		moved_tags: [$m | to_entries[]
 			| select($f[.key] != null and $f[.key] != .value)
 			| {name: .key, was: .value, now: $f[.key]}],

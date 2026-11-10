@@ -79,11 +79,16 @@ change.**
 
 Here `SCRIPTS` is this skill's `scripts/` directory.
 
-1. **Find the range.** Run `"$SCRIPTS/review-range.sh" -u <remote> -b <branch>
-   > "$OUT/range.json"`. If it exits non-zero, write `report.md`explaining
-   the error, skip`verdict.json`, and stop. A missing verdict never promotes.
-   If `up_to_date`is true, set`candidate_head`to`origin/<branch>`, write
-   a `clean` verdict with empty findings and conflicts, and skip to step 5.
+0. **Clear stale outputs.** Delete `$OUT/verdict.json`, `$OUT/report.md`, and
+   `$OUT/range.json` if they exist. A verdict left over from an earlier run
+   must never stand in for this one.
+1. **Find the range.** Run
+   `"$SCRIPTS/review-range.sh" -u <remote> -b <branch> > "$OUT/range.json"`.
+   - If it exits non-zero, write `report.md` explaining the error, don't
+     write `verdict.json`, and stop. A missing verdict never promotes.
+   - If `up_to_date` is true, point `fork-keeper/candidate` at
+     `origin/<branch>` (`git branch -f fork-keeper/candidate origin/<branch>`)
+     and skip to step 5 with no findings and no conflicts.
 2. **Rebuild the stack.** Create or reset the local branch
    `fork-keeper/candidate` at `upstream_new`. Cherry-pick each SHA in
    `user_commits`, in order. When a cherry-pick conflicts, resolve it so the
@@ -105,6 +110,10 @@ Here `SCRIPTS` is this skill's `scripts/` directory.
    - `first_run` is true. A fork's first review always goes to the user.
    - `rewritten` or `fork_has_merges` is true. With merges in the fork, the
      history can't be kept linear without the user deciding.
+   - `fork_behind_recorded_head` is true. The fork doesn't contain the
+     upstream head recorded as reviewed, for example because the user rolled
+     back. Say so in the report, since upstream commits the user may have
+     rejected are back in the candidate.
    - `moved_tags` or `deleted_tags` is non-empty.
    - There is any finding.
    - There is any conflict with `confident: false`.

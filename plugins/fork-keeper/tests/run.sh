@@ -33,21 +33,19 @@ test_normal_range_uses_recorded_head() {
 	local u1 out
 	fcommit mine.txt P1 >/dev/null
 	u1=$(ucommit up.txt U1)
-	refresh
-	record_head "$u1"
+	sync_fork
 	ucommit up.txt U2 >/dev/null
 	refresh
 	out=$(run_rr)
-	assert_json "$out" '.first_run == false and .upstream_old == $u1 and .review_base == $u1 and .rewritten == false' --arg u1 "$u1"
+	assert_json "$out" '.first_run == false and .upstream_old == $u1 and .review_base == $u1 and .rewritten == false and .fork_behind_recorded_head == false' --arg u1 "$u1"
 }
 
 test_rewrite_detected() {
 	mk_fixture
-	local u1 u2 out
+	local u1 out
 	u1=$(ucommit up.txt U1)
-	u2=$(ucommit up.txt U2)
-	refresh
-	record_head "$u2"
+	ucommit up.txt U2 >/dev/null
+	sync_fork
 	g "$FX/useed" reset -q --hard "$u1"
 	ucommit up.txt U2-rewritten >/dev/null
 	refresh
@@ -90,8 +88,7 @@ test_moved_tag_detected() {
 	u1=$(ucommit up.txt U1)
 	g "$FX/useed" tag v1 "$u1"
 	g "$FX/useed" push -q origin v1
-	refresh
-	record_head "$u1"
+	sync_fork
 	g "$FX/fork" update-ref refs/fork-keeper/upstream-tags/v1 "$u1"
 	u2=$(ucommit up.txt U2)
 	g "$FX/useed" tag -f v1 "$u2" >/dev/null
@@ -104,8 +101,7 @@ test_deleted_tag_detected() {
 	mk_fixture
 	local u1
 	u1=$(ucommit up.txt U1)
-	refresh
-	record_head "$u1"
+	sync_fork
 	g "$FX/fork" update-ref refs/fork-keeper/upstream-tags/v0 "$u1"
 	assert_json "$(run_rr)" '.deleted_tags == ["v0"] and .moved_tags == []'
 }
@@ -128,6 +124,39 @@ test_missing_upstream_ref_exits_2() {
 	assert_rc 2 $?
 }
 
+test_rewrite_after_sync_excludes_removed_upstream_commits() {
+	mk_fixture
+	local u1 p1 out
+	u1=$(ucommit up.txt U1)
+	ucommit up.txt U2 >/dev/null
+	refresh
+	g "$FX/fork" merge -q --ff-only upstream/main
+	p1=$(fcommit mine.txt P1)
+	refresh
+	record_head "$(g "$FX/fork" rev-parse upstream/main)"
+	# Upstream scrubs U2 (e.g. after a compromise) and adds U3.
+	g "$FX/useed" reset -q --hard "$u1"
+	ucommit other.txt U3 >/dev/null
+	refresh
+	out=$(run_rr)
+	assert_json "$out" '.rewritten == true and .user_commits == [$p1]' --arg p1 "$p1"
+}
+
+test_fork_behind_recorded_head_flagged() {
+	mk_fixture
+	local u0 out
+	u0=$(g "$FX/fork" rev-parse HEAD)
+	ucommit up.txt U1 >/dev/null
+	ucommit up.txt U2 >/dev/null
+	refresh
+	# Recorded head says U2 was reviewed, but the fork (rolled back) is at U0.
+	record_head "$(g "$FX/fork" rev-parse upstream/main)"
+	ucommit up.txt U3 >/dev/null
+	refresh
+	out=$(run_rr)
+	assert_json "$out" '.fork_behind_recorded_head == true and .review_base == $u0' --arg u0 "$u0"
+}
+
 # ------------------------------------------------------------- validate-verdict
 
 H40=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -143,6 +172,7 @@ mk_verdict() {
 		range: {upstream_old: $b, upstream_new: $c, first_run: false,
 			up_to_date: false, rewritten: false, review_base: $b,
 			user_commits: [$h], fork_has_merges: false,
+			fork_behind_recorded_head: false,
 			moved_tags: [], deleted_tags: []},
 		conflicts: [], findings: [], summary: "looks safe"
 	} | '"${1:-.}" >"$f"
@@ -232,6 +262,66 @@ test_candidate_head_mismatch_fails() {
 
 test_candidate_head_match_passes() {
 	run_vv "$(mk_verdict)" --candidate-head "$H40"
+	assert_rc 0 $?
+}
+
+test_clean_missing_moved_tags_fails() {
+	run_vv "$(mk_verdict 'del(.range.moved_tags)')"
+	assert_rc 1 $?
+}
+
+test_clean_null_deleted_tags_fails() {
+	run_vv "$(mk_verdict '.range.deleted_tags = null')"
+	assert_rc 1 $?
+}
+
+test_clean_fork_behind_fails() {
+	run_vv "$(mk_verdict '.range.fork_behind_recorded_head = true')"
+	assert_rc 1 $?
+}
+
+test_clean_missing_fork_behind_fails() {
+	run_vv "$(mk_verdict 'del(.range.fork_behind_recorded_head)')"
+	assert_rc 1 $?
+}
+
+test_bad_user_commits_fails() {
+	run_vv "$(mk_verdict '.range.user_commits = "abc"')"
+	assert_rc 1 $?
+}
+
+test_empty_candidate_head_arg_fails() {
+	run_vv "$(mk_verdict)" --candidate-head ""
+	assert_rc 1 $?
+}
+
+test_multiple_json_values_fails() {
+	local f g
+	f=$(mk_verdict)
+	g="$FK_TEST_HOME/two-values.json"
+	{
+		cat "$f"
+		jq -c '.candidate_head = $b' --arg b "$B40" "$f"
+	} >"$g"
+	run_vv "$g"
+	assert_rc 1 $?
+}
+
+test_range_mismatch_fails() {
+	local v r
+	v=$(mk_verdict)
+	r="$FK_TEST_HOME/range-mismatch.json"
+	jq '.range | .rewritten = true' "$v" >"$r"
+	run_vv "$v" --range "$r"
+	assert_rc 1 $?
+}
+
+test_range_match_passes() {
+	local v r
+	v=$(mk_verdict)
+	r="$FK_TEST_HOME/range-match.json"
+	jq '.range' "$v" >"$r"
+	run_vv "$v" --range "$r"
 	assert_rc 0 $?
 }
 

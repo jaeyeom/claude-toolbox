@@ -82,6 +82,17 @@ refresh() {
 
 record_head() { g "$FX/fork" update-ref refs/fork-keeper/upstream-head "$1"; }
 
+# sync_fork: do what a promoted sync leaves behind -- the fork's default
+# branch is the user's stack rebased on upstream, and upstream-head records
+# the upstream it was built on.
+sync_fork() {
+	refresh
+	g "$FX/fork" rebase -q "upstream/$BR" >/dev/null
+	g "$FX/fork" push -q -f origin "HEAD:$BR"
+	refresh
+	record_head "$(g "$FX/fork" rev-parse "upstream/$BR")"
+}
+
 # run_rr [args]: run review-range.sh in the fork; JSON on stdout.
 run_rr() { (cd "$FX/fork" && bash "$RR" "$@"); }
 
