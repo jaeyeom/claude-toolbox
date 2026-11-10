@@ -1,0 +1,79 @@
+# fork-keeper verdict contract
+
+`verdict.json` is how the sync agent hands its review to the deterministic
+scheduler and promotion script in
+[jaeyeom/experimental#598](https://github.com/jaeyeom/experimental/issues/598).
+Both sides depend on this file. Change it only with a matching change there.
+
+The agent writes the file. `scripts/validate-verdict.sh` checks it. If the
+validator exits non-zero, the promotion script never promotes.
+
+## Shape
+
+```json
+{
+  "schema": 1,
+  "verdict": "clean",
+  "candidate_head": "<40-hex sha of fork-keeper/candidate>",
+  "range": {
+    "upstream_old": "<sha>",
+    "upstream_new": "<sha>",
+    "first_run": false,
+    "up_to_date": false,
+    "rewritten": false,
+    "review_base": "<sha or null>",
+    "user_commits": ["<sha>"],
+    "fork_has_merges": false,
+    "moved_tags": [{ "name": "v1", "was": "<sha>", "now": "<sha>" }],
+    "deleted_tags": ["v0"]
+  },
+  "conflicts": [{ "commit": "<sha>", "files": ["path"], "confident": true }],
+  "findings": [
+    {
+      "category": "secret-leak",
+      "file": "path",
+      "line": 12,
+      "commit": "<sha>",
+      "summary": "why this is an immediate threat to the user"
+    }
+  ],
+  "summary": "one paragraph"
+}
+```
+
+- `range` is the output of `scripts/review-range.sh`, copied as is.
+- `verdict` is either `"clean"` or `"needs-review"`.
+- `conflicts` lists every rebase conflict the agent resolved in the user's
+  commits. `confident: false` means the agent was unsure of the
+  resolution.
+- `findings[].category` must be one of `secret-leak`, `destructive`,
+  `concealment`, `supply-chain`, `repo-signal`, `agent-manipulation`, or
+  `uncertain`. See `threat-checklist.md`.
+
+## Rules enforced by `validate-verdict.sh`
+
+The validator rejects a verdict (exit 1) when any of these hold:
+
+1. The file is missing or isn't a JSON object.
+2. `schema` isn't `1`.
+3. `verdict` isn't one of the two allowed values.
+4. `candidate_head`, `range.upstream_old`, or `range.upstream_new` isn't a
+   40-hex SHA.
+5. A finding has an unknown category.
+6. `--candidate-head <sha>` was given and doesn't match `candidate_head`.
+7. The verdict is `"clean"`, but any of these is true:
+   - `findings` is non-empty
+   - a conflict isn't `confident`
+   - `range.rewritten` is true
+   - `range.fork_has_merges` is true
+   - `range.first_run` is true (a first review always goes to the user)
+   - `range.moved_tags` is non-empty
+   - `range.deleted_tags` is non-empty
+
+## What the promotion side adds (#598, not enforced here)
+
+- Promotion needs this validator to pass with `--candidate-head` set to the
+  pushed `sync/*` head. On top of that, its own deterministic tripwires on
+  the diff must find nothing.
+- A `needs-review` PR stays that way until the user labels it
+  `fork-keeper:approved` on the current head SHA.

@@ -128,6 +128,113 @@ test_missing_upstream_ref_exits_2() {
 	assert_rc 2 $?
 }
 
+# ------------------------------------------------------------- validate-verdict
+
+H40=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+B40=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+C40=cccccccccccccccccccccccccccccccccccccccc
+
+# mk_verdict <jq-update>: write a verdict (valid clean baseline + update); prints path.
+mk_verdict() {
+	local f
+	f="$(mktemp "$FK_TEST_HOME/verdict.XXXXXX")"
+	jq -n --arg h "$H40" --arg b "$B40" --arg c "$C40" '{
+		schema: 1, verdict: "clean", candidate_head: $h,
+		range: {upstream_old: $b, upstream_new: $c, first_run: false,
+			up_to_date: false, rewritten: false, review_base: $b,
+			user_commits: [$h], fork_has_merges: false,
+			moved_tags: [], deleted_tags: []},
+		conflicts: [], findings: [], summary: "looks safe"
+	} | '"${1:-.}" >"$f"
+	echo "$f"
+}
+
+FINDING='{"category":"secret-leak","file":"install.sh","line":3,"commit":"'$C40'","summary":"sends ~/.ssh to a remote host"}'
+
+run_vv() { bash "$VV" "$@" >/dev/null 2>&1; }
+
+test_valid_clean_passes() {
+	run_vv "$(mk_verdict)"
+	assert_rc 0 $?
+}
+
+test_valid_needs_review_passes() {
+	run_vv "$(mk_verdict '.verdict = "needs-review" | .findings = ['"$FINDING"']')"
+	assert_rc 0 $?
+}
+
+test_clean_with_findings_fails() {
+	run_vv "$(mk_verdict '.findings = ['"$FINDING"']')"
+	assert_rc 1 $?
+}
+
+test_clean_with_unconfident_conflict_fails() {
+	run_vv "$(mk_verdict '.conflicts = [{commit: $h, files: ["a.el"], confident: false}]')"
+	assert_rc 1 $?
+}
+
+test_clean_with_rewrite_fails() {
+	run_vv "$(mk_verdict '.range.rewritten = true')"
+	assert_rc 1 $?
+}
+
+test_clean_with_moved_tag_fails() {
+	run_vv "$(mk_verdict '.range.moved_tags = [{name: "v1", was: $b, now: $c}]')"
+	assert_rc 1 $?
+}
+
+test_clean_with_deleted_tag_fails() {
+	run_vv "$(mk_verdict '.range.deleted_tags = ["v0"]')"
+	assert_rc 1 $?
+}
+
+test_clean_with_fork_merges_fails() {
+	run_vv "$(mk_verdict '.range.fork_has_merges = true')"
+	assert_rc 1 $?
+}
+
+test_clean_on_first_run_fails() {
+	run_vv "$(mk_verdict '.range.first_run = true')"
+	assert_rc 1 $?
+}
+
+test_unknown_category_fails() {
+	run_vv "$(mk_verdict '.verdict = "needs-review" | .findings = [('"$FINDING"' | .category = "style")]')"
+	assert_rc 1 $?
+}
+
+test_unknown_verdict_value_fails() {
+	run_vv "$(mk_verdict '.verdict = "approved"')"
+	assert_rc 1 $?
+}
+
+test_bad_sha_fails() {
+	run_vv "$(mk_verdict '.candidate_head = "HEAD"')"
+	assert_rc 1 $?
+}
+
+test_missing_file_fails() {
+	run_vv "$FK_TEST_HOME/does-not-exist.json"
+	assert_rc 1 $?
+}
+
+test_not_json_fails() {
+	local f="$FK_TEST_HOME/garbage.json"
+	echo "Sure! Here is the verdict: clean" >"$f"
+	run_vv "$f"
+	assert_rc 1 $?
+}
+
+test_candidate_head_mismatch_fails() {
+	run_vv "$(mk_verdict)" --candidate-head "$B40"
+	assert_rc 1 $?
+}
+
+test_candidate_head_match_passes() {
+	run_vv "$(mk_verdict)" --candidate-head "$H40"
+	assert_rc 0 $?
+}
+
 for t in $(declare -F | awk '{print $3}' | grep '^test_'); do
 	CUR=$t
 	"$t"

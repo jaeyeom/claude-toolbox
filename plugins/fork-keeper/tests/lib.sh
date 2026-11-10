@@ -10,7 +10,7 @@
 TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_DIR="$(cd "$TESTS_DIR/../skills/fork-keeper/scripts" && pwd)"
 RR="$SCRIPTS_DIR/review-range.sh"
-# shellcheck disable=SC2034 # used by validate-verdict tests
+# shellcheck disable=SC2034 # used by tests/run.sh
 VV="$SCRIPTS_DIR/validate-verdict.sh"
 
 # Isolate git from the user's global config (identity, shared hooks).
