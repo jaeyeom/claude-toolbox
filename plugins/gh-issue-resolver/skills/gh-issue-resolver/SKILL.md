@@ -70,6 +70,52 @@ If no task list items or sub-issue references are found in the body, proceed
 
 ### Step 3 — Mark the issue as in progress
 
+The claim helper is `${SKILL_DIR}/scripts/claim.sh`, where `${SKILL_DIR}` is
+the directory containing this SKILL.md file. It works with any agent (Claude
+Code, Codex, Grok, Antigravity, ...). If your agent runs commands in a sandbox,
+run it outside the sandbox when the sandbox blocks `gh` or writes under
+`~/.config` and `~/.local/state`.
+
+#### Make sure this machine has a nickname
+
+Claim comments name the machine by a short nickname (for example `tiger` or
+`turtle`), never by hostname or path, so the same comment is safe in public
+and private repositories.
+
+```bash
+bash "${SKILL_DIR}/scripts/claim.sh" nickname
+```
+
+If it exits with status 3 (no nickname set), ask the user for one and save it:
+
+```bash
+bash "${SKILL_DIR}/scripts/claim.sh" set-nickname <name>
+```
+
+If the user cannot be asked (an unattended run), continue without a nickname.
+The claim comment then omits it.
+
+#### Check for an existing claim
+
+```bash
+bash "${SKILL_DIR}/scripts/claim.sh" latest $ARGUMENTS
+```
+
+This prints the latest claim comment as JSON (`author`, `createdAt`, `body`,
+`own`), or nothing if there is none. `own` is true when you wrote it and it
+names this machine's nickname.
+
+If the issue already has the "in progress" label, or is assigned to someone
+other than you, when the skill starts:
+
+- If `own` is true, it is this machine's claim. Continue without asking and
+  without posting a new claim comment.
+- Otherwise, show the user the latest claim comment (author, time, and body),
+  or say that none exists, and ask whether to continue. Do not claim over it
+  until the user explicitly says yes.
+
+#### Claim the issue
+
 Assign the issue to yourself and add an "in progress" label:
 
 ```bash
@@ -85,6 +131,25 @@ gh label create "in progress" --description "Work is actively underway" --color 
 
 If label creation fails (e.g., insufficient permissions), skip labeling and
 proceed — assignment alone is sufficient to signal progress.
+
+Then post one claim comment, unless the latest claim is already your own:
+
+```bash
+bash "${SKILL_DIR}/scripts/claim.sh" post $ARGUMENTS --agent <agent-id> [--session <id>]
+```
+
+Pass your agent id in lowercase: `claude-code`, `codex`, `grok`,
+`antigravity`, and so on. The script lowercases it and turns spaces into `-`.
+Pass `--session` with your session ID when you know it; otherwise the script
+records `$CLAUDE_CODE_SESSION_ID` if set, or no session.
+
+The comment reads `Claimed by <agent> on <nickname> at <UTC time>.` and holds
+nothing else: no plan, progress notes, paths, hostnames, or secrets. The script
+also appends a line to `~/.local/state/gh-issue-resolver/claims.jsonl` with
+the same timestamp, the repository, the issue, the working directory, and the
+session ID when known. To trace a claim back to its session, look on the
+named machine for the log line whose `time` exactly matches the comment's
+timestamp.
 
 ### Step 3a — Create a feature branch
 
@@ -272,8 +337,9 @@ gh issue edit $ARGUMENTS --remove-label "in progress"
 If the label was never added (e.g., it could not be created in Step 3), skip
 this step.
 
-Leave the issue assignee and the pull request assignee in place. This step
-only removes the label.
+Leave the issue assignee, the pull request assignee, and the claim comment
+in place. Do not delete the claim comment; the PR link already shows how the
+claim ended. This step only removes the label.
 
 ### Step 9 — Leave the issue open
 

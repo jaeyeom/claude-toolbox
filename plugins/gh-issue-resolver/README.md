@@ -7,7 +7,7 @@ A Claude Code skill for resolving GitHub issues end-to-end using the `gh` CLI.
 - Reads a GitHub issue and treats its plan as the execution contract
 - Uses the issue's acceptance criteria as the definition of done
 - Checks for blocking sub-issues or task list dependencies
-- Self-assigns the issue and labels it "in progress"
+- Self-assigns the issue, labels it "in progress", and posts a claim comment naming the agent, a machine nickname, and the UTC time; a local log maps that timestamp to the session. Asks before claiming over an existing claim
 - Searches the codebase for references to the issue number (TODOs, FIXMEs, etc.)
 - Executes the written plan; stops and asks before any deviation
 - After an approved deviation, proposes a surgical issue-body edit and waits for a second yes
@@ -42,7 +42,7 @@ Resolve GitHub issue #42
 
 1. **Read** — Fetches the issue via `gh issue view` and extracts the plan and acceptance criteria
 2. **Block check** — Parses body for unchecked task list items (`- [ ] #N`); rejects if any are open
-3. **In progress** — Assigns to self, adds "in progress" label
+3. **In progress** — Shows any existing claim and asks before claiming over it; assigns to self, adds "in progress" label, and posts one claim comment via `scripts/claim.sh` (machine nickname, no hostname or path)
 4. **Branch** — Creates `issue-N-slug` if currently on the default branch
 5. **Execute** — Follows the written plan; codebase search locates planned change sites
 6. **Deviation gate** — If reality differs from the plan, stops and waits for a first yes
