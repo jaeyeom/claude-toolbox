@@ -16,6 +16,7 @@ validator exits non-zero, the promotion script never promotes.
   "verdict": "clean",
   "candidate_head": "<40-hex sha of fork-keeper/candidate>",
   "range": {
+    "branch": "master",
     "upstream_old": "<sha>",
     "upstream_new": "<sha>",
     "first_run": false,
