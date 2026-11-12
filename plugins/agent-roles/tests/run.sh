@@ -1,6 +1,7 @@
 #!/bin/bash
 # Static checks for the agent-roles plugin: role skill frontmatter, links to
-# the shared conventions, and the private-name denylist.
+# the shared conventions, no copies of the conventions, and the private-name
+# denylist.
 # Usage: plugins/agent-roles/tests/run.sh
 set -u
 
@@ -23,6 +24,20 @@ check() {
 	if "$@"; then ok; else bad "$msg"; fi
 }
 in_text() { grep -q "${@:3}" -e "$1" <<<"$2"; }
+
+# One line per paragraph or list item of a Markdown file, whitespace
+# collapsed. Headings and code fences are skipped.
+units() {
+	awk '
+		function flush() { if (u != "") print u; u = "" }
+		/^```/ || /^#/ { flush(); next }
+		/^[[:space:]]*$/ { flush(); next }
+		/^[[:space:]]*- / { flush(); sub(/^[[:space:]]*- /, "") }
+		{ gsub(/^[[:space:]]+|[[:space:]]+$/, ""); u = (u == "" ? $0 : u " " $0) }
+		END { flush() }
+	' "$1"
+}
+flat() { tr '\n' ' ' <"$1" | tr -s '[:space:]' ' '; }
 
 frontmatter() { awk 'NR == 1 && /^---$/ { on = 1; next } on && /^---$/ { exit } on' "$1"; }
 
@@ -51,6 +66,14 @@ for f in ${skills[@]+"${skills[@]}"}; do
 		target=$(cd "$(dirname "$f")" && cd "$(dirname "$link")" 2>/dev/null && pwd)/$(basename "$link")
 		if [[ $target == "$CONVENTIONS" ]]; then ok; else bad "$rel: link '$link' does not resolve to references/conventions.md"; fi
 	done <<<"$links"
+
+	body=$(flat "$f")
+	copied=""
+	while IFS= read -r unit; do
+		((${#unit} >= 60)) || continue
+		if [[ $body == *"$unit"* ]]; then copied+=$'\n'"  $unit"; fi
+	done < <(units "$CONVENTIONS")
+	check "$rel: copies conventions.md instead of linking it:$copied" test -z "$copied"
 done
 
 while IFS= read -r pattern; do
