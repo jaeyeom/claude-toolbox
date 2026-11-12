@@ -1,0 +1,12 @@
+# gitleaks configuration. gitleaks loads this file automatically when it
+# scans the repository root (`make check-gitleaks`, the pre-commit hook).
+#
+# Baseline (2026-11-10): the full history (159 commits) had no real secrets.
+# Known false positives are pinned by fingerprint in .gitleaksignore, which
+# binds each one to a single commit and line. Prefer that over [[allowlists]]:
+# the private-key rule matches from one BEGIN to the next END, so a path or
+# line allowlist on a placeholder can also hide a real key placed after it.
+# Never ignore a real credential; rotate it instead.
+
+[extend]
+useDefault = true
