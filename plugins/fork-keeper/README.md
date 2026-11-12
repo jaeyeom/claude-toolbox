@@ -62,6 +62,9 @@ fine.
 
 - `/fork-keeper setup <owner/fork>`: one-time setup. It enables Issues, creates
   the labels, checks branch protection, and checks the `upstream` remote.
+  It ends with your checklist: add the fork to the scheduler, do one
+  supervised run, approve the first sync PR (the first review always needs
+  you), and turn on the schedule so it persists.
 - `/fork-keeper sync --out <dir>`: run by the scheduler in a prepared
   checkout. See `skills/fork-keeper/SKILL.md`.
 - Feature requests are Issues on the fork, worked with `gh-issue-resolver`.
