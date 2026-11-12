@@ -6,7 +6,7 @@ This guide covers installing the [jaeyeom/Githooks](https://github.com/jaeyeom/G
 
 ### Quick install (recommended)
 
-The bootstrap script downloads the release from GitHub, verifies checksums, and launches the installer:
+The bootstrap script clones [jaeyeom/Githooks](https://github.com/jaeyeom/Githooks) and builds it from that checkout. Git and Go are required. It does not download GitHub release assets.
 
 ```bash
 curl -sL https://raw.githubusercontent.com/jaeyeom/Githooks/main/scripts/install.sh | bash
@@ -17,8 +17,6 @@ For non-interactive installation (no prompts):
 ```bash
 curl -sL https://raw.githubusercontent.com/jaeyeom/Githooks/main/scripts/install.sh | bash -s -- -- --non-interactive
 ```
-
-`scripts/install.sh` downloads release binaries from `jaeyeom/githooks`. The fork publishes no GitHub releases yet, so this install fails until a release with assets is published.
 
 ### Nix
 

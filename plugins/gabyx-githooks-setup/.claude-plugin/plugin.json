@@ -1,6 +1,6 @@
 {
   "name": "gabyx-githooks-setup",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Set up shared Git hooks using the jaeyeom/Githooks manager in any repository",
   "author": {
     "name": "Jaehyun Yeom"
