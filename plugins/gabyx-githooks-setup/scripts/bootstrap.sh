@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bootstrap script for gabyx/Githooks with jaeyeom/shared-githooks.
+# Bootstrap script for jaeyeom/Githooks with jaeyeom/shared-githooks.
 #
 # Installs the githooks manager, configures global shared hooks, sets up
 # trust and non-interactive mode, and activates hooks in the current repo
@@ -76,14 +76,14 @@ ensure_tool jq    github.com/itchyny/gojq/cmd/gojq@latest        gojq
 ensure_tool unzip github.com/jaeyeom/gozip/cmd/gounzip@latest    gounzip
 
 # ------------------------------------------------------------------
-# 1. Install gabyx/Githooks if missing
+# 1. Install jaeyeom/Githooks if missing
 # ------------------------------------------------------------------
-info "Checking for gabyx/Githooks"
+info "Checking for jaeyeom/Githooks"
 if git hooks --version &>/dev/null; then
   ok "Already installed: $(git hooks --version)"
 else
-  info "Installing gabyx/Githooks (non-interactive)"
-  curl -sL https://raw.githubusercontent.com/gabyx/githooks/main/scripts/install.sh \
+  info "Installing jaeyeom/Githooks (non-interactive)"
+  curl -sL https://raw.githubusercontent.com/jaeyeom/Githooks/main/scripts/install.sh \
     | bash -s -- -- --non-interactive
   if ! git hooks --version &>/dev/null; then
     fail "Installation failed — git hooks not found on PATH"

@@ -1,23 +1,23 @@
 ---
 
 name: gabyx-githooks-setup
-description: Set up shared Git hooks using gabyx/Githooks (not standard git hooks). Use when a user asks to set up githooks, apply shared hooks, or configure hook repositories in a project.
+description: Set up shared Git hooks using jaeyeom/Githooks (not standard git hooks). Use when a user asks to set up githooks, apply shared hooks, or configure hook repositories in a project.
 autouse: false
 ---
 
-# Githooks Setup (gabyx/Githooks)
+# Githooks Setup (jaeyeom/Githooks)
 
-Set up and configure shared Git hooks using the [gabyx/Githooks](https://github.com/gabyx/Githooks) manager. This is **not** the standard `git config core.hooksPath` system — it is a dedicated hooks manager that supports shared hook repositories, parallel execution, trust verification, and more.
+Set up and configure shared Git hooks using the [jaeyeom/Githooks](https://github.com/jaeyeom/Githooks) manager, the fork of Githooks to install. This is **not** the standard `git config core.hooksPath` system — it is a dedicated hooks manager that supports shared hook repositories, parallel execution, trust verification, and more.
 
 ## Important
 
-The `git hooks` CLI (note the space) is provided by gabyx/Githooks. Do **not** confuse it with standard git hook configuration.
+The `git hooks` CLI (note the space) is provided by jaeyeom/Githooks. Do **not** confuse it with standard git hook configuration. Install and update that CLI from `https://github.com/jaeyeom/Githooks`, not from `gabyx/Githooks`.
 
 ## Instructions
 
 ### 0. Verify Githooks is installed
 
-Before proceeding, check whether gabyx/Githooks is installed:
+Before proceeding, check whether jaeyeom/Githooks is installed:
 
 ```bash
 git hooks --version 2>/dev/null
@@ -213,7 +213,7 @@ After this, running `git hooks trust hooks --pattern "ns:<namespace>/**"` in any
 
 **Caveats:**
 
-- The trust DB format is undocumented internal state. If gabyx changes it (JSON, sqlite, etc.) the symlinks will silently break.
+- The trust DB format is undocumented internal state. If that format changes (JSON, sqlite, etc.) the symlinks will silently break.
 - Local-hook SHA collisions across repos overwrite the (cosmetic) `path:` field — harmless but worth noting.
 - `git clone` and `git init` rebuild `.git/`, so the symlink must be reinstated on every new clone (a wrapper around `git clone` can automate this).
 - This widens trust scope from per-repo to per-user. It does **not** weaken the SHA-based content check itself — the same security primitive applies more broadly. Continue to trust selectively (namespace patterns, not `--all`).
