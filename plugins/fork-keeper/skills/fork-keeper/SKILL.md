@@ -30,10 +30,12 @@ The first argument selects the mode.
 ### `sync [--out <dir>] [-u <remote>] [-b <branch>]`
 
 This mode is headless and usually run by cron. The defaults are `--out
-"$FORK_KEEPER_OUT"`, `-u upstream`, and `-b main`. The current directory is a
-fork checkout the scheduler already fetched:
+"$FORK_KEEPER_OUT"`, `-u upstream`, and `-b` set to the fork's default branch,
+read from `refs/remotes/origin/HEAD`. Pass `-b` only to override it. The
+current directory is a fork checkout the scheduler already fetched:
 
 ```bash
+git remote set-head origin --auto
 git fetch origin '+refs/fork-keeper/*:refs/fork-keeper/*'
 git fetch --no-tags --prune <remote> \
   "+refs/heads/*:refs/remotes/<remote>/*" "+refs/tags/*:refs/upstream-tags/*"
@@ -50,13 +52,16 @@ change.**
    Feature requests live there.
 2. Create the labels `needs-review` and `fork-keeper:approved` with
    `gh label create`, skipping any that already exist.
-3. Check that the default branch allows force-pushes with
+3. Look up the fork's default branch `<b>` with
+   `gh repo view <owner/fork> --json defaultBranchRef --jq .defaultBranchRef.name`.
+   Never assume `main`. Check that `<b>` allows force-pushes with
    `gh api repos/<owner/fork>/branches/<b>/protection`. A 404 means it's
    unprotected, which is fine. If force-pushes are blocked, report it and
    don't change protection yourself.
 4. In the user's local clone, make sure an `upstream` remote points at the
-   real upstream. Print the fork entry the user should add to the
-   scheduler's fork list (#598).
+   real upstream and that `git symbolic-ref refs/remotes/origin/HEAD` names
+   `origin/<b>` (fix it with `git remote set-head origin --auto`). Print the
+   fork entry the user should add to the scheduler's fork list (#598).
 
 ## Hard rules (sync mode)
 
@@ -83,7 +88,9 @@ Here `SCRIPTS` is this skill's `scripts/` directory.
    `$OUT/range.json` if they exist. A verdict left over from an earlier run
    must never stand in for this one.
 1. **Find the range.** Run
-   `"$SCRIPTS/review-range.sh" -u <remote> -b <branch> > "$OUT/range.json"`.
+   `"$SCRIPTS/review-range.sh" -u <remote> [-b <branch>] > "$OUT/range.json"`,
+   passing `-b` only if you were given one. From here on, `<branch>` means
+   `range.json`'s `branch`.
    - If it exits non-zero, write `report.md` explaining the error, don't
      write `verdict.json`, and stop. A missing verdict never promotes.
    - If `up_to_date` is true, point `fork-keeper/candidate` at

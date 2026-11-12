@@ -117,6 +117,29 @@ test_master_branch() {
 	assert_json "$out" '.first_run == true and .upstream_old == $u0 and .up_to_date == false' --arg u0 "$u0"
 }
 
+test_default_branch_from_origin_head() {
+	mk_fixture master
+	local u0 out
+	u0=$(g "$FX/fork" rev-parse HEAD)
+	ucommit up.txt U1 >/dev/null
+	refresh
+	out=$(run_rr)
+	assert_json "$out" '.branch == "master" and .upstream_old == $u0 and .up_to_date == false' --arg u0 "$u0"
+}
+
+test_explicit_branch_overrides_origin_head() {
+	mk_fixture master
+	g "$FX/fork" symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/nonexistent
+	assert_json "$(run_rr -b master)" '.branch == "master"'
+}
+
+test_missing_origin_head_exits_2() {
+	mk_fixture
+	g "$FX/fork" symbolic-ref --delete refs/remotes/origin/HEAD
+	run_rr >/dev/null 2>&1
+	assert_rc 2 $?
+}
+
 test_missing_upstream_ref_exits_2() {
 	mk_fixture
 	g "$FX/fork" remote remove upstream
@@ -326,6 +349,7 @@ test_range_match_passes() {
 }
 
 for t in $(declare -F | awk '{print $3}' | grep '^test_'); do
+	# shellcheck disable=SC2034 # read by the assert helpers in lib.sh
 	CUR=$t
 	"$t"
 done
