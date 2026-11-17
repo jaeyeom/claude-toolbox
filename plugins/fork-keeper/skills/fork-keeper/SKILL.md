@@ -60,8 +60,37 @@ change.**
    don't change protection yourself.
 4. In the user's local clone, make sure an `upstream` remote points at the
    real upstream and that `git symbolic-ref refs/remotes/origin/HEAD` names
-   `origin/<b>` (fix it with `git remote set-head origin --auto`). Print the
-   fork entry the user should add to the scheduler's fork list (#598).
+   `origin/<b>` (fix it with `git remote set-head origin --auto`).
+5. End with this checklist for the user. Every item is the user's action, not
+   yours: don't run the scheduler, and never add the approval label yourself.
+   - [ ] **Add the fork to the scheduler's fork list.** Print the entry
+     (name, `owner/fork`, upstream URL, and `<b>`).
+   - [ ] **Do one supervised run** and read the sync PR it opens. The first
+     review of a fork always ends `needs-review`, even with a clean verdict,
+     because `first_run` blocks promotion.
+   - [ ] **Approve the first sync** by adding the `fork-keeper:approved`
+     label to that PR, then running the scheduler again. Later syncs promote
+     on their own when the verdict is clean and no tripwire fires.
+   - [ ] **Turn on the schedule so it stays on** across reruns of the
+     scheduler's setup.
+
+   How to do each item depends on the scheduler. The steps below are for the
+   reference scheduler in jaeyeom/experimental. Give them only when the user
+   uses that scheduler; otherwise point the user at their own scheduler's
+   docs.
+   - Fork list: `fork_keeper_forks` in
+     `devtools/setup-dev/ansible/setup-fork-keeper.yml`.
+   - Supervised run: `devtools/fork-keeper/fork-keeper.sh <name>`.
+   - Approval: on the rerun, the scheduler checks that the PR head is still
+     the fetched `sync/<date>`, tags the fork's old head as
+     `pre-sync/<date>` (so it stays reachable), and force-pushes `<b>`.
+   - Schedule: on the one machine that runs it, add
+     `fork_keeper_cron_enabled: true` to
+     `${XDG_CONFIG_HOME:-~/.config}/setup-dev/vars.yml`, then run
+     `./ensure.sh setup-fork-keeper`. That file is per machine and outside
+     the repository, so later plain runs keep the cron entry. A one-off
+     `-e fork_keeper_cron_enabled=true` does not persist. The playbook's
+     header comment is the authority if this drifts.
 
 ## Hard rules (sync mode)
 
