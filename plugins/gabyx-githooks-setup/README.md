@@ -1,13 +1,13 @@
 # Gabyx Githooks Setup Plugin
 
-A skill for setting up shared Git hooks using [gabyx/Githooks](https://github.com/gabyx/Githooks) manager.
+A skill for setting up shared Git hooks using the [jaeyeom/Githooks](https://github.com/jaeyeom/Githooks) manager.
 
 ## Components
 
-| Component              | Type   | Description                                         |
-| ---------------------- | ------ | --------------------------------------------------- |
-| `gabyx-githooks-setup` | Skill  | Guides setup of shared hooks via gabyx/Githooks CLI |
-| `scripts/bootstrap.sh` | Script | Standalone bootstrap for cloud/CI environments      |
+| Component              | Type   | Description                                               |
+| ---------------------- | ------ | --------------------------------------------------------- |
+| `gabyx-githooks-setup` | Skill  | Guides setup of shared hooks via the jaeyeom/Githooks CLI |
+| `scripts/bootstrap.sh` | Script | Standalone bootstrap for cloud/CI environments            |
 
 ## Installation
 
@@ -19,7 +19,7 @@ A skill for setting up shared Git hooks using [gabyx/Githooks](https://github.co
 
 ## Prerequisites
 
-[gabyx/Githooks](https://github.com/gabyx/Githooks) must be installed on the system. The bootstrap script handles this automatically; the skill refers to `INSTALL.md` for manual methods.
+[jaeyeom/Githooks](https://github.com/jaeyeom/Githooks) must be installed on the system. The bootstrap script handles this automatically; the skill refers to `INSTALL.md` for manual methods.
 
 ## Usage
 
@@ -49,7 +49,7 @@ For cloud environments, CI, or any case where you want a one-command setup witho
 
 The script:
 
-1. Installs gabyx/Githooks if missing (non-interactive).
+1. Installs jaeyeom/Githooks if missing (non-interactive).
 2. Enables the non-interactive runner globally.
 3. Registers `jaeyeom/shared-githooks` as a global shared hooks repo.
 4. If inside a git repo (and `--global` is not set): activates hooks, removes replaced hooks, updates shared hooks, and trusts the `jaeyeom-shared-githooks` namespace.

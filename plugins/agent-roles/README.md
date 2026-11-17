@@ -21,6 +21,15 @@ Each role is a skill. Rules every role shares live in
 | `manual-helper`     | Walks the user through human-only steps one at a time, and verifies each.                        | Does the human-only step, or asks for secrets in chat.                                      |
 | `factory-worker`    | One ticket, one draft PR, under the lease, with every background job stopped.                    | Takes a second ticket, edits outside scope, leaves jobs running, or merges.                 |
 
+## Components
+
+| Component                   | Type      | Description                                                                         |
+| --------------------------- | --------- | ----------------------------------------------------------------------------------- |
+| `product-manager`           | Skill     | Brainstorms, researches, plans, files tickets, hands off, and reviews. Never codes. |
+| `references/conventions.md` | Reference | Rules every role follows: messaging, decisions, the shared checkout, and reporting. |
+
+More roles will follow in this plugin, one skill per role.
+
 ## Installation
 
 ```text

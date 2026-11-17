@@ -1,33 +1,31 @@
-# Installing gabyx/Githooks
+# Installing jaeyeom/Githooks
 
-This guide covers installing the [gabyx/Githooks](https://github.com/gabyx/Githooks) hook manager.
+This guide covers installing the [jaeyeom/Githooks](https://github.com/jaeyeom/Githooks) hook manager.
 
 ## Installation methods
 
 ### Quick install (recommended)
 
-The bootstrap script downloads the release from GitHub, verifies checksums, and launches the installer:
+The bootstrap script clones [jaeyeom/Githooks](https://github.com/jaeyeom/Githooks) and builds it from that checkout. Git and Go are required. It does not download GitHub release assets.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/gabyx/githooks/main/scripts/install.sh | bash
+curl -sL https://raw.githubusercontent.com/jaeyeom/Githooks/main/scripts/install.sh | bash
 ```
 
 For non-interactive installation (no prompts):
 
 ```bash
-curl -sL https://raw.githubusercontent.com/gabyx/githooks/main/scripts/install.sh | bash -s -- -- --non-interactive
+curl -sL https://raw.githubusercontent.com/jaeyeom/Githooks/main/scripts/install.sh | bash -s -- -- --non-interactive
 ```
 
 ### Nix
 
 ```bash
-nix profile install "github:gabyx/githooks?dir=nix&ref=v3.0.4"
+nix profile install "github:jaeyeom/Githooks?dir=nix"
 githooks-cli installer
 ```
 
-> **Note:** `ref=v3.0.4` pins to a specific release. Check the
-> [upstream releases](https://github.com/gabyx/Githooks/releases) for the
-> latest version tag.
+> **Note:** The fork has no release tags, so this tracks the default branch.
 
 ### Ansible
 
@@ -61,5 +59,5 @@ git hooks uninstaller
 
 ## References
 
-- [gabyx/Githooks README](https://github.com/gabyx/Githooks)
+- [jaeyeom/Githooks README](https://github.com/jaeyeom/Githooks)
 - [jaeyeom/experimental Ansible playbook](https://github.com/jaeyeom/experimental/blob/main/devtools/setup-dev/ansible/githooks-cli.yml)
