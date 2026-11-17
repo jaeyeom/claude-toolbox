@@ -1,0 +1,35 @@
+{
+  "name": "agent-roles",
+  "version": "1.0.0",
+  "description": "Role skills for multi-agent setups where several agent tabs share a machine, a checkout, a message bus, and a decision inbox",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": [
+    "multi-agent",
+    "roles",
+    "product-manager",
+    "workflow",
+    "coordination"
+  ],
+  "userConfig": {
+    "tracker": {
+      "type": "string",
+      "title": "Issue tracker",
+      "description": "Where tickets are filed: github or jira.",
+      "default": "github"
+    },
+    "tracker_project": {
+      "type": "string",
+      "title": "Tracker project",
+      "description": "The GitHub repository (owner/name) or Jira project key that tickets go to. Leave empty to be asked."
+    },
+    "pipeline": {
+      "type": "string",
+      "title": "Implementation pipeline",
+      "description": "How work is handed off for implementation, for example a work-queue command or a coordinator's message-bus name. Leave empty to be asked."
+    }
+  }
+}

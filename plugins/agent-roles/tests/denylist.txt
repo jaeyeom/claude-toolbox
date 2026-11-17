@@ -1,0 +1,8 @@
+# Extended regexes, one per line, that must not appear in agent-roles.
+# Kept generic on purpose: the list itself is public, so it names patterns
+# that give away private details, not the private names themselves.
+/Users/[A-Za-z]
+/home/[A-Za-z]
+[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z0-9.-]*[A-Za-z]{2,}
+\.(internal|corp|lan)\b
+\b(10|192\.168)\.[0-9]+\.[0-9]+

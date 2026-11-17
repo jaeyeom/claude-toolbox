@@ -1,10 +1,10 @@
-.PHONY: all check format check-format lint fix validate validate-full check-agents-md test-git-guardrails test-fork-keeper check-gitleaks
+.PHONY: all check format check-format lint fix validate validate-full check-agents-md test-git-guardrails test-fork-keeper test-agent-roles check-gitleaks
 
 BIOME ?= biome
 
 all: format fix validate-full
 
-check: check-format lint validate check-agents-md test-git-guardrails test-fork-keeper check-gitleaks
+check: check-format lint validate check-agents-md test-git-guardrails test-fork-keeper test-agent-roles check-gitleaks
 
 format:
 	$(BIOME) format --write .
@@ -29,6 +29,9 @@ test-git-guardrails:
 
 test-fork-keeper:
 	./plugins/fork-keeper/tests/run.sh
+
+test-agent-roles:
+	./plugins/agent-roles/tests/run.sh
 
 # Scans every commit (the history is small; ~0.2s). Known false positives are
 # pinned by fingerprint in .gitleaksignore.

@@ -93,6 +93,7 @@ Task management:
 - [next-action](./plugins/next-action)
 - [gh-issue-resolver](./plugins/gh-issue-resolver)
 - [herdr-sweep](./plugins/herdr-sweep)
+- [agent-roles](./plugins/agent-roles)
 
 Jira:
 
