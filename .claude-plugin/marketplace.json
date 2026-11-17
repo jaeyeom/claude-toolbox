@@ -260,7 +260,7 @@
     {
       "name": "agent-roles",
       "description": "Role skills for multi-agent setups where several agent tabs share a machine, a checkout, a message bus, and a decision inbox",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Jaehyun Yeom"
       },

@@ -1,6 +1,6 @@
 {
   "name": "agent-roles",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Role skills for multi-agent setups where several agent tabs share a machine, a checkout, a message bus, and a decision inbox",
   "author": {
     "name": "Jaehyun Yeom"
@@ -11,6 +11,7 @@
     "multi-agent",
     "roles",
     "product-manager",
+    "coordinator",
     "workflow",
     "coordination"
   ],
@@ -30,6 +31,18 @@
       "type": "string",
       "title": "Implementation pipeline",
       "description": "How work is handed off for implementation, for example a work-queue command or a coordinator's message-bus name. Leave empty to be asked."
+    },
+    "max_requeues": {
+      "type": "number",
+      "title": "Maximum requeues",
+      "description": "How many times pr-merger may requeue one ejected pull request, each after a root-cause analysis.",
+      "default": 2,
+      "min": 0
+    },
+    "outbox": {
+      "type": "string",
+      "title": "Outbox name",
+      "description": "The approval-gated outbox that messaging-manager sends outgoing chat messages through. Leave empty to be asked."
     }
   }
 }
