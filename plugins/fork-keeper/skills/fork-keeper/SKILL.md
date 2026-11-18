@@ -64,15 +64,15 @@ change.**
 5. End with this checklist for the user. Every item is the user's action, not
    yours: don't run the scheduler, and never add the approval label yourself.
    - [ ] **Add the fork to the scheduler's fork list.** Print the entry
-     (name, `owner/fork`, upstream URL, and `<b>`).
+         (name, `owner/fork`, upstream URL, and `<b>`).
    - [ ] **Do one supervised run** and read the sync PR it opens. The first
-     review of a fork always ends `needs-review`, even with a clean verdict,
-     because `first_run` blocks promotion.
+         review of a fork always ends `needs-review`, even with a clean verdict,
+         because `first_run` blocks promotion.
    - [ ] **Approve the first sync** by adding the `fork-keeper:approved`
-     label to that PR, then running the scheduler again. Later syncs promote
-     on their own when the verdict is clean and no tripwire fires.
+         label to that PR, then running the scheduler again. Later syncs promote
+         on their own when the verdict is clean and no tripwire fires.
    - [ ] **Turn on the schedule so it stays on** across reruns of the
-     scheduler's setup.
+         scheduler's setup.
 
    How to do each item depends on the scheduler. The steps below are for the
    reference scheduler in jaeyeom/experimental. Give them only when the user

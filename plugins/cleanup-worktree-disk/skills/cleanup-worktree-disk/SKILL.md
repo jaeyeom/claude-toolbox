@@ -1,16 +1,7 @@
 ---
 
 name: cleanup-worktree-disk
-description: >-
-Reclaim macOS disk space by removing git worktrees whose PRs are already
-merged (plus their branches and Bazel output bases) and by deleting orphaned
-Bazel output bases whose workspace directory no longer exists. Use whenever
-the user is low on disk, says "clean up disk space", "free up space", "my
-disk is full", "clean up worktrees", "remove merged worktrees", "the bazel
-cache is huge", or after a batch of PRs has merged and stale worktrees pile
-up. Bazel output bases dominate disk (often 9–12 GB each), so reach for this
-even when the user only mentions worktrees — the cache is usually the real
-win.
+description: "Reclaim macOS disk space by removing git worktrees whose PRs are already merged (plus their branches and Bazel output bases) and by deleting orphaned Bazel output bases whose workspace directory no longer exists. Use whenever the user is low on disk, says \"clean up disk space\", \"free up space\", \"my disk is full\", \"clean up worktrees\", \"remove merged worktrees\", \"the bazel cache is huge\", or after a batch of PRs has merged and stale worktrees pile up. Bazel output bases dominate disk (often 9–12 GB each), so reach for this even when the user only mentions worktrees — the cache is usually the real win."
 ---
 
 # Cleanup worktree + Bazel disk
