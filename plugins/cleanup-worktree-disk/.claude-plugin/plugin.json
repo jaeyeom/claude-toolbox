@@ -1,6 +1,6 @@
 {
   "name": "cleanup-worktree-disk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Safely reclaim macOS and Linux disk space by reviewing and removing git worktrees, branches, and Bazel output bases",
   "author": {
     "name": "Jaehyun Yeom"

@@ -157,14 +157,17 @@ rules:
   - match:
       - "plugins/cleanup-worktree-disk/skills/**/SKILL.md"
       - "plugins/cleanup-worktree-disk/skills/**/*.sh"
+      - "plugins/cleanup-worktree-disk/skills/**/*.py"
     docs:
       - path: plugins/cleanup-worktree-disk/README.md
-        why: "inventory script and cleanup flow"
+        why: "Python implementation and cleanup flow"
 
-  - match: ["plugins/cleanup-worktree-disk/skills/**/*.sh"]
+  - match:
+      - "plugins/cleanup-worktree-disk/skills/**/*.sh"
+      - "plugins/cleanup-worktree-disk/skills/**/*.py"
     docs:
       - path: plugins/cleanup-worktree-disk/skills/cleanup-worktree-disk/SKILL.md
-        why: "inventory.sh invocation"
+        why: "Python implementation and compatible shell entry points"
 
   - match:
       - "plugins/next-action/skills/**/SKILL.md"

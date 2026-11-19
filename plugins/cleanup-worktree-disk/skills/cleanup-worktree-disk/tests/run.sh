@@ -117,3 +117,4 @@ if HOME="$tmp/home" CLEANUP_WORKTREE_BAZEL_ROOT="$tmp/empty-bazel" XDG_CONFIG_HO
 fi
 
 printf 'cleanup-worktree-disk tests passed\n'
+python3 -m unittest discover -s "$plugin_dir/tests" -p 'test_*.py'

@@ -12,7 +12,8 @@ work; the model resolves ambiguous items and presents the plan.
 
 ## Procedure
 
-Run from a main repository checkout. `gh` must be authenticated so pull
+Run from a main repository checkout. Python 3.10 or newer, Git, and `gh`
+must be installed. `gh` must be authenticated so pull
 request state can be checked. Do not continue if inventory cannot query GitHub.
 
 ### 1. Plan (read-only)
@@ -95,7 +96,8 @@ items that are still present.
 - `extra.<name>`: optional command, run only when selected by the user.
 
 For isolated runs and fixtures, `CLEANUP_WORKTREE_BAZEL_ROOT` can override the
-detected default when no config value is set.
+detected default. The `plan.sh`, `apply.sh`, and `verify.sh` shell entry points
+remain compatible and invoke `cleanup_worktree_disk.py`.
 
 ## Safety rules
 
