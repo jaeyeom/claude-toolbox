@@ -119,9 +119,23 @@ other than you, when the skill starts:
 Assign the issue to yourself and add an "in progress" label:
 
 ```bash
-gh issue edit $ARGUMENTS --add-assignee @me
-gh issue edit $ARGUMENTS --add-label "in progress"
+gh issue edit --add-assignee @me $ARGUMENTS
+gh issue edit --add-label "in progress" $ARGUMENTS
 ```
+
+In Codex, users can allow these routine claim edits with narrow command
+prefix rules:
+
+```text
+["gh", "issue", "edit", "--add-assignee", "@me"]
+["gh", "issue", "edit", "--add-label", "in progress"]
+["gh", "issue", "edit", "--remove-label", "in progress"]
+```
+
+The issue number follows the allowed prefix. These rules authorize the listed
+operations for any issue number, wherever the rules are active. Other
+`gh issue edit` operations do not match these prefixes and keep their normal
+approval flow.
 
 If the "in progress" label does not exist, attempt to create it:
 
@@ -331,7 +345,7 @@ After committing, remove the "in progress" label so it does not remain on the
 issue after it is auto-closed:
 
 ```bash
-gh issue edit $ARGUMENTS --remove-label "in progress"
+gh issue edit --remove-label "in progress" $ARGUMENTS
 ```
 
 If the label was never added (e.g., it could not be created in Step 3), skip
