@@ -38,7 +38,7 @@ check all failed ones.
 For the failing run, get the detailed log:
 
 ```bash
-gh run view <run-id> --log-failed
+gh run view --log-failed <run-id>
 ```
 
 This shows only the log output from failed steps. Parse the output to
