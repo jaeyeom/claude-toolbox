@@ -1,153 +1,108 @@
 ---
 
 name: cleanup-worktree-disk
-description: "Reclaim macOS disk space by removing git worktrees whose PRs are already merged (plus their branches and Bazel output bases) and by deleting orphaned Bazel output bases whose workspace directory no longer exists. Use whenever the user is low on disk, says \"clean up disk space\", \"free up space\", \"my disk is full\", \"clean up worktrees\", \"remove merged worktrees\", \"the bazel cache is huge\", or after a batch of PRs has merged and stale worktrees pile up. Bazel output bases dominate disk (often 9–12 GB each), so reach for this even when the user only mentions worktrees — the cache is usually the real win."
+description: "Reclaim macOS or Linux disk space by reviewing git worktrees, branches, and Bazel output bases, then removing only explicitly approved items. Use when the user is low on disk, asks to clean up disk space or worktrees, or says the Bazel cache is huge."
 ---
 
-# Cleanup worktree + Bazel disk
+# Cleanup worktree and Bazel disk
 
-## What this does and why it's tricky
-
-On a Bazel monorepo dev machine the disk is eaten by two things:
-
-1. **Git worktrees** — each is a full source checkout (often 1–2 GB).
-2. **Bazel output bases** under `/private/var/tmp/_bazel_$USER/<hash>/` — each
-   built workspace gets its own, and they run **9–12 GB each**. This is almost
-   always the bulk of the reclaimable space.
-
-The job is to find worktrees whose work is already merged, remove them along
-with their branch and their output base, and to sweep up output bases whose
-workspace was already deleted (orphans). Sounds simple; it is full of sharp
-edges that this skill exists to navigate. Read the gotchas — they each cost a
-failed attempt to discover.
-
-Run from inside the **main repo checkout**, not a worktree.
+This skill inventories worktrees and Bazel output bases, classifies each item,
+and applies only the items the user approves. The scripts do the mechanical
+work; the model resolves ambiguous items and presents the plan.
 
 ## Procedure
 
-Work in phases: **inventory → classify → confirm → remove → verify.** Never
-delete before showing the user the plan and the reclaim estimate.
+Run from a main repository checkout. `gh` must be authenticated so pull
+request state can be checked. Do not continue if inventory cannot query GitHub.
 
-### 1. Inventory (read-only)
-
-Run the bundled script. It lists every worktree with its PR state and safety
-signals, and classifies every output base. It deletes nothing.
+### 1. Plan (read-only)
 
 ```bash
-bash "${SKILL_DIR}/scripts/inventory.sh"
+plan_file="${TMPDIR:-/tmp}/cleanup-plan.json"
+bash "${SKILL_DIR}/scripts/plan.sh" > "$plan_file"
 ```
 
-where `${SKILL_DIR}` is the directory containing this SKILL.md file.
+The script prints a human table to stderr and JSON to stdout. Read the JSON and
+show the user every item, its size, class, reasons, and the estimated total
+reclaim. The classes are `remove`, `keep`, and `ask`.
 
-**Run it with the sandbox disabled.** It calls `gh`, and the Claude Code
-sandbox blocks TLS for Go binaries (gh/jira) — inside the sandbox every PR
-lookup silently returns `NO-PR`, which would make merged worktrees look
-unmerged and hide the whole point of the skill.
+- Remove merged, clean, pushed worktrees and their branches.
+- Keep the primary checkout, locked worktrees, open worktrees without
+  unpushed commits, live bases of kept
+  worktrees, and fresh unmapped bases.
+- Ask about unpushed, detached, unknown PR state, old unmapped bases, and any
+  other uncertain item. Do not resolve these by guessing.
+- Orphaned output bases and live bases belonging to a removable worktree are
+  removable.
+- Protected paths always remain `keep`.
 
-### 2. Classify
+If there is no config, defaults are used and the script prints a suggested
+config. Show it to the user and offer to save it. Only after the user agrees,
+run `bash "${SKILL_DIR}/scripts/plan.sh" --write-config`.
 
-From the inventory, sort worktrees into:
+### 2. Confirm
 
-- **Remove**: `state=MERGED`, `dirty=0`, `unpushed=0` (or `unpushed=NO-REMOTE`
-  for throwaway review checkouts of an already-merged PR).
-- **Keep**: `state=OPEN`, or `LOCKED` (a lock is an explicit "don't touch"
-  signal — respect it even if the PR is merged), or the primary checkout.
-- **Ask the user**: anything ambiguous — `unpushed>0` (commits that exist only
-  locally; deleting loses them), `NO-PR` with local-only commits, detached-HEAD
-  scratch worktrees. Do not guess on these.
+Resolve every `ask` item with the user. Show the complete selected item list
+and reclaim estimate, then get explicit approval before applying anything.
 
-For output bases:
+### 3. Apply selected items
 
-- **Remove**: `ORPHAN(safe-delete)` (workspace gone), plus the `LIVE` bases that
-  map to worktrees you're about to remove.
-- **Keep**: `install`/`cache` (shared — the script already skips them), `LIVE`
-  bases of kept worktrees, and **`UNMAPPED-FRESH`** — a base with no
-  `DO_NOT_BUILD_HERE` pointer and today's mtime is very likely a build in
-  progress or mid-setup. Never delete fresh/unmapped bases.
-
-### 3. Confirm
-
-Present a table: each item, its size, and the total estimated reclaim. Get
-explicit go-ahead before any destructive step. If `gh` couldn't run (you'll see
-everything as `NO-PR`), stop and say so rather than deleting on bad data.
-
-### 4. Remove
-
-**All removal runs with the sandbox disabled.** This is not optional and it is
-the single biggest gotcha:
-
-- The sandbox denies deletion of protected paths that live _inside_ every
-  worktree — `.mcp.json`, `.claude/*`, `.git/worktrees/*/config.worktree`. A
-  removal attempted in-sandbox fails with `Operation not permitted` **partway
-  through**, leaving the worktree half-deleted (most files gone, admin dir and
-  index intact). Do the whole removal in one out-of-sandbox pass.
-- Because of that partial-deletion failure mode, **never reach for `--force` to
-  paper over an error you don't understand.** A blind `--force` against a
-  sandbox-blocked delete is exactly what shreds a worktree. Understand the
-  refusal first.
-
-Remove worktrees (force is legitimate here — these are merged and confirmed
-clean; the only "untracked" content is regenerable build artifacts):
+Pass the plan followed by selected IDs. List worktrees before their associated
+branches and output bases so each apply-time check sees the worktree already
+removed:
 
 ```bash
-for wt in <paths-to-remove>; do
-  git worktree remove --force "$wt" || rm -rf "$wt"
-done
-git worktree prune -v
+bash "${SKILL_DIR}/scripts/apply.sh" "$plan_file" \
+  'worktree:/path/to/worktree' 'branch:/path/to/main-checkout:branch-name' \
+  'output_base:/path/to/base'
 ```
 
-Delete the now-detached branches. Use `-D`, not `-d`: squash-merged branches are
-**not** ancestrally merged and `-d` will refuse them.
+An item classified `ask` can be applied only after the user resolves it and
+explicitly approves it. The apply script rechecks locks, dirtiness, upstream
+commits, PR state, output-base ownership and freshness immediately before each
+operation. It skips items that became unsafe and reports each result. It never
+uses `--force` to bypass a failed safety check.
+
+Deletion must run outside the sandbox when it blocks Git worktree removal or
+removing read-only Bazel output trees. Bazel output files are made writable
+before removal. A failed removal is reported; do not improvise a forceful
+fallback.
+
+Configured `extra.<name>` commands appear as `extra:<name>` plan items. They
+run only when the user selects them.
+
+### 4. Verify
 
 ```bash
-for br in <merged-branch-names>; do git branch -D "$br"; done
+bash "${SKILL_DIR}/scripts/verify.sh" "$plan_file"
 ```
 
-Remove the output bases. `rm -rf` alone fails with **`Permission denied`** —
-Bazel marks external-repo files _and their parent directories_ read-only, so
-you can't unlink them. Make them writable first:
+Report disk free before and after, remaining worktrees, and planned removal
+items that are still present.
 
-```bash
-for h in <base-hashes-to-remove>; do
-  chmod -R u+w "/private/var/tmp/_bazel_$(whoami)/$h" 2>/dev/null
-  rm -rf "/private/var/tmp/_bazel_$(whoami)/$h"
-done
-```
+## Configuration
 
-### 5. Verify
+`${XDG_CONFIG_HOME:-~/.config}/cleanup-worktree-disk/config` uses simple
+`key=value` lines:
 
-Re-check free space and report the delta plainly:
+- `repos`: colon-separated main checkouts to scan; defaults to the current
+  repository.
+- `bazel_output_root`: output-base directory. Defaults to
+  `/private/var/tmp/_bazel_$USER` on macOS and
+  `~/.cache/bazel/_bazel_$USER` on Linux.
+- `protect`: colon-separated glob patterns matched against item paths.
+- `fresh_hours`: age threshold for unmapped bases; defaults to 24.
+- `extra.<name>`: optional command, run only when selected by the user.
 
-```bash
-df -h /System/Volumes/Data | tail -1
-git worktree list
-```
+For isolated runs and fixtures, `CLEANUP_WORKTREE_BAZEL_ROOT` can override the
+detected default when no config value is set.
 
-State the before/after free space and the count of worktrees and bases removed.
+## Safety rules
 
-## Gotchas (each one cost a failed attempt)
-
-- **Merged ≠ ancestrally merged.** Squash merges mean `git branch --merged` and
-  `git status` clean tell you nothing about merge state. Use `gh pr list --head
-  <remote-branch> --state all`. The remote branch name is usually _not_ the
-  local branch name, so resolve it via `@{upstream}` first — the script does
-  this.
-- **`gh`/`jira` need the sandbox off** (Go binary TLS). Inside the sandbox they
-  fail silently, not loudly.
-- **Removal needs the sandbox off** too (protected paths inside worktrees).
-- **Bazel bases are read-only** → `chmod -R u+w` before `rm -rf`.
-- **Never delete `install/`, `cache/`, or fresh unmapped bases.**
-- **Respect `locked` worktrees** — that lock is a deliberate human signal.
-- **zsh word-splitting**: on zsh, unquoted `$var` does _not_ split on spaces.
-  Build lists as arrays (`names=(a b c)`), or your loop runs once over the
-  whole string.
-- **`git status --porcelain` hides ignored files** — good for the safety gate
-  (ignored build output is regenerable), but it means a "clean" worktree can
-  still hold gigabytes of artifacts that `git worktree remove` will object to
-  without `--force`.
-
-## Scope
-
-This skill covers worktrees and Bazel output bases only. For broader macOS
-cleanup (Homebrew, Docker images, `~/Library/Caches`), that's out of scope —
-say so rather than improvising destructive commands in unfamiliar territory.
+- Never remove the primary checkout or a locked worktree.
+- Never remove dirty worktrees, worktrees with unpushed commits, or worktrees
+  whose PR is no longer confirmed merged.
+- Never remove shared `install/` or `cache/` bases, fresh unmapped bases, or
+  paths matching `protect`.
+- `gh` lookups require network access. If they fail, stop without applying the
+  plan.

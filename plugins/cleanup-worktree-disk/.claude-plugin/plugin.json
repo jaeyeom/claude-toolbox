@@ -1,7 +1,7 @@
 {
   "name": "cleanup-worktree-disk",
-  "version": "1.0.1",
-  "description": "Reclaim macOS disk space by removing git worktrees whose PRs are merged and deleting orphaned Bazel output bases",
+  "version": "1.1.0",
+  "description": "Safely reclaim macOS and Linux disk space by reviewing and removing git worktrees, branches, and Bazel output bases",
   "author": {
     "name": "Jaehyun Yeom"
   },
