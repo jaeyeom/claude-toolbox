@@ -228,8 +228,13 @@ Show that exact edit. Do **not** run `gh issue edit` until the user explicitly
 approves that edit. If they decline, leave the issue body as-is.
 
 ```bash
-gh issue edit $ARGUMENTS --body-file <updated-body>
+gh issue edit --body-file <updated-body> $ARGUMENTS
 ```
+
+Putting options before positional arguments gives these examples stable
+prefixes for narrow command authorization. For write operations, authorize
+only the specific options documented here; other `gh` edits still go through
+the normal approval flow.
 
 **No exceptions:**
 

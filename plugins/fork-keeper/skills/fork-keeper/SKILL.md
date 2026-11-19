@@ -48,12 +48,12 @@ If `--out` is missing or empty, stop with an error. Don't guess a location.
 This mode is interactive and runs once per fork. **Ask before each remote
 change.**
 
-1. Enable Issues on the fork with `gh repo edit <owner/fork> --enable-issues`.
+1. Enable Issues on the fork with `gh repo edit --enable-issues <owner/fork>`.
    Feature requests live there.
 2. Create the labels `needs-review` and `fork-keeper:approved` with
    `gh label create`, skipping any that already exist.
 3. Look up the fork's default branch `<b>` with
-   `gh repo view <owner/fork> --json defaultBranchRef --jq .defaultBranchRef.name`.
+   `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name <owner/fork>`.
    Never assume `main`. Check that `<b>` allows force-pushes with
    `gh api repos/<owner/fork>/branches/<b>/protection`. A 404 means it's
    unprotected, which is fine. If force-pushes are blocked, report it and
