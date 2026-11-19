@@ -1,0 +1,11 @@
+{
+  "name": "pr-review",
+  "version": "1.0.0",
+  "description": "Review pull requests and keep every required finding in a resolvable review discussion thread",
+  "author": {
+    "name": "Jaehyun Yeom"
+  },
+  "repository": "https://github.com/jaeyeom/claude-toolbox",
+  "license": "MIT",
+  "keywords": ["github", "pull-request", "code-review", "review-threads"]
+}
