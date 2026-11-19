@@ -92,6 +92,7 @@ Task management:
 - [todo](./plugins/todo)
 - [next-action](./plugins/next-action)
 - [gh-issue-resolver](./plugins/gh-issue-resolver)
+- [pr-review](./plugins/pr-review)
 - [herdr-sweep](./plugins/herdr-sweep)
 - [agent-roles](./plugins/agent-roles)
 
